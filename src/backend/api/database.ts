@@ -1,5 +1,6 @@
 import mysql from 'mysql';
-import {Image} from './entity/image';
+import {IImage} from './entity/IImage';
+import {IGallery} from './entity/IGallery';
 
 let connection: any;
 const GET_ALL_IMAGES = 'SELECT * from Images';
@@ -75,9 +76,34 @@ function createSettingsTable() {
     connection.query(CREATE_SETTINGS_TABLE);
 }
 
-function addImage(image: Image){
-
+export function addGallery(gallery: IGallery) {
+    connection.query(`INSERT INTO Galleries (title, description) VALUES ("${gallery.title}", "${gallery.description}")`, (err: any, res: any) => {
+        console.log('Added gallery entity successfully!');
+    });
 }
 
+export function addImage(image: IImage, gallery: IGallery) {
+    connection.query(`INSERT INTO Images (title, description, tag, gallery_id) VALUES ("${image.title}", "${image.description}", "${image.tag}", "${gallery.gallery_id}")`, (err: any, res: any) => {
+        console.log('Added image entity successfully!');
+    });
+}
+
+export function getAllImages(callback: (arg0: any) => any) {
+    connection.query(GET_ALL_IMAGES, (err: any, res: any) => {
+        return callback(res);
+    });
+}
+
+export function getImageById(id: number, callback: (arg0: any) => any) {
+    connection.query(GET_ALL_IMAGES + ` WHERE image_id=${id}`, (err: any, res: any) => {
+        return callback(res);
+    });
+}
+
+export function getImagesByGalleryId(id: number, callback: (arg0: any) => any) {
+    connection.query(GET_ALL_IMAGES + ` WHERE gallery_id=${id}`, (err: any, res: any) => {
+        return callback(res);
+    });
+}
 
 

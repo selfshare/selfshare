@@ -19,3 +19,8 @@
 - list view
 - comments, likes, (users?)
 - secured password https://www.npmjs.com/package/password-hash
+- custom order images
+
+
+check this, you idiot:
+- db colomn size too small for big images? (TEXT)

@@ -3,7 +3,7 @@
 ## MySQL installation steps:
 - run docker container
 - add user and database called selfshare (with all rights)
-- do this: ``ALTER USER 'selfshare' IDENTIFIED WITH mysql_native_password BY 'xs6HZKdc5YEi6';`` and ``flush previleges;`` to allow password authentication.
+- do this inside MYSQL console: ``ALTER USER 'selfshare' IDENTIFIED WITH mysql_native_password BY 'xs6HZKdc5YEi6';`` and ``flush privileges;`` to allow password authentication.
 
 ## Features
 - There is a main view for guests, and an admin view for the admin.

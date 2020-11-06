@@ -1,13 +1,10 @@
 <div class="container">
   <br>
   <div class="row row-cols-1 row-cols-md-3">
-    <div class="col mb-4" *ngFor="let item of galleries; index as i">
+    <div class="col mb-4" *ngFor="let gallery of galleries; index as i">
       <div class="card">
-        <div class="titleBox">{{item}}</div>
-        <img [src]="images[i%3]" class="card-img-top modalImage" alt="...">
-<!--        <div class="card-body">-->
-<!--          <h5 class="card-title">{{item}}</h5>-->
-<!--        </div>-->
+        <div class="titleBox">{{this.getGalleryTitleAndResize(i)}}</div>
+        <img [src]="images[i%3]" class="card-img-top modalImage" alt="{{gallery.title}}">
       </div>
     </div>
   </div>

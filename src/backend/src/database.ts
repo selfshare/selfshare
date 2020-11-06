@@ -6,9 +6,9 @@ let connection: any;
 const GET_ALL_IMAGES = 'SELECT * from Images';
 const GET_ALL_GALLERIES = 'SELECT * from Galleries';
 const GET_ALL_SETTINGS = 'SELECT * from Settings';
-const CREATE_IMAGES_TABLE = 'CREATE TABLE Images (image_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, gallery_id INT UNSIGNED, CONSTRAINT fk_gallery FOREIGN KEY (gallery_id) REFERENCES Galleries(gallery_id), title VARCHAR(64), description VARCHAR(512), tag VARCHAR(32), upload_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP )';
-const CREATE_GALLERIES_TABLE = 'CREATE TABLE Galleries (gallery_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, title VARCHAR(64), description VARCHAR(512), thumbnail_id INT, order_nr INT)';
-const CREATE_SETTINGS_TABLE = 'CREATE TABLE Settings (settings_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, username VARCHAR(32) NOT NULL, password_hash BINARY(64) NOT NULL, author_name VARCHAR(64), author_description VARCHAR(2058), author_pic_base64 TEXT, site_background_base64 TEXT, site_color VARCHAR(32), allow_download BIT, water_mark_base64 TEXT, login_hash BINARY(64))';
+const CREATE_IMAGES_TABLE = 'CREATE TABLE Images (image_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, gallery_id INT UNSIGNED, CONSTRAINT fk_gallery FOREIGN KEY (gallery_id) REFERENCES Galleries(gallery_id), title VARCHAR(64), description VARCHAR(512), tag VARCHAR(32), upload_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, base64 LONGTEXT not null)';
+const CREATE_GALLERIES_TABLE = 'CREATE TABLE Galleries (gallery_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, title VARCHAR(64), description VARCHAR(512), thumbnail_base64 LONGTEXT, order_nr INT)';
+const CREATE_SETTINGS_TABLE = 'CREATE TABLE Settings (settings_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, username VARCHAR(32) NOT NULL, password_hash BINARY(64) NOT NULL, author_name VARCHAR(64), author_description VARCHAR(2058), author_pic_base64 LONGTEXT, site_background_base64 LONGTEXT, site_color VARCHAR(32), allow_download BIT, water_mark_base64 LONGTEXT, login_hash BINARY(64))';
 
 
 export function connect() {
@@ -88,6 +88,12 @@ export function addImage(image: IImage, gallery: IGallery) {
     });
 }
 
+export function getAllGalleries(callback: (arg0: any) => any) {
+    connection.query(GET_ALL_GALLERIES, (err: any, res: IGallery[]) => {
+        return callback(res);
+    });
+}
+
 export function getAllImages(callback: (arg0: any) => any) {
     connection.query(GET_ALL_IMAGES, (err: any, res: any) => {
         return callback(res);
@@ -96,7 +102,7 @@ export function getAllImages(callback: (arg0: any) => any) {
 
 export function getImageById(id: number, callback: (arg0: any) => any) {
     connection.query(GET_ALL_IMAGES + ` WHERE image_id=${id}`, (err: any, res: any) => {
-        return callback(res);
+        return callback(res[0]);
     });
 }
 

@@ -1,9 +1,19 @@
-import express from 'express';
+import express, {response} from 'express';
 import bodyParser from 'body-parser';
-import {addGallery, addImage, checkIfAllTablesExist, connect, getAllImages, getImageById, getImagesByGalleryId} from './database';
+import {
+    addGallery,
+    addImage,
+    checkIfAllTablesExist,
+    connect,
+    getAllGalleries,
+    getAllImages,
+    getImageById,
+    getImagesByGalleryId
+} from './database';
 import {IImage} from './entity/IImage';
 import {IGallery} from './entity/IGallery';
 import path from 'path';
+import cors from 'cors';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -15,22 +25,24 @@ console.log();
 
 app.listen(port, () => console.log(`${process.env.npm_package_name} ${process.env.npm_package_version} running on http://localhost:${port}/`));
 
+app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.get('/addimage', (req, res) => {
     const gallery: IGallery = {description: '', order_nr: 0, thumbnail_id: 0, title: '', gallery_id: 2};
-    const image: IImage = {gallery_id: gallery, image_id: 0, upload_timestamp: 0, title: 'asd', description: 'test', tag: '#nice'};
+    const image: IImage = {base64: '', gallery_id: gallery, image_id: 0, upload_timestamp: 0, title: 'asd', description: 'test', tag: '#nice'};
 
     addImage(image, gallery);
     res.send();
 });
 
 app.get('/gallery', (req, res) => {
-    const gallery: IGallery = {gallery_id: 0, order_nr: 0, thumbnail_id: 0, title: 'asd', description: 'test'};
-
-    addGallery(gallery);
-    res.send();
+    // const gallery: IGallery = {gallery_id: 0, order_nr: 0, thumbnail_id: 0, title: 'asd', description: 'test'};
+    // addGallery(gallery);
+    getAllGalleries( response => {
+        res.send(response);
+    });
 });
 
 app.get('/images', (req, res) => {
@@ -40,9 +52,10 @@ app.get('/images', (req, res) => {
 });
 
 app.get('/images/:id', (req, res) => {
-
     getImageById(+req.params.id, response => {
-        res.send(response);
+        const image = response as IImage;
+        console.log(image);
+        res.send('<img src="' + image.base64 + '">');
     });
 });
 

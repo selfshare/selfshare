@@ -20,6 +20,7 @@
 - comments, likes, (users?)
 - secured password https://www.npmjs.com/package/password-hash
 - custom order images
+- statistics dashboard
 
 
 check this, you idiot:

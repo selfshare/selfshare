@@ -94,6 +94,16 @@ export function getAllGalleries(callback: (arg0: any) => any) {
     });
 }
 
+export function getGalleryByTitle(title: string, callback: (arg0: any) => any) {
+    connection.query(GET_ALL_GALLERIES + ` WHERE title="${title}"`, (err: any, res: any) => {
+        if(res.length > 0){
+            return callback(res[0] as IGallery);
+        }
+        return callback(null);
+    });
+}
+
+
 export function getAllImages(callback: (arg0: any) => any) {
     connection.query(GET_ALL_IMAGES, (err: any, res: any) => {
         return callback(res);

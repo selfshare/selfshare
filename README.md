@@ -21,6 +21,8 @@
 - secured password https://www.npmjs.com/package/password-hash
 - custom order images
 - statistics dashboard
+- multiple pages
+- multiple languages
 
 
 check this, you idiot:

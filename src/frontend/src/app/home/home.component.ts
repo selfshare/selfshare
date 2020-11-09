@@ -10,6 +10,7 @@ import {IGallery} from '../entity/IGallery';
 
 
 export class HomeComponent implements OnInit {
+
   constructor(private galleryService: GalleryService) { }
 
   galleries: IGallery[];

@@ -6,7 +6,7 @@ import {
     checkIfAllTablesExist,
     connect,
     getAllGalleries,
-    getAllImages,
+    getAllImages, getGalleryByTitle,
     getImageById,
     getImagesByGalleryId
 } from './database';
@@ -45,21 +45,24 @@ app.get('/gallery', (req, res) => {
     });
 });
 
-app.get('/images', (req, res) => {
+app.get('/gallery/:title', (req, res) => {
+    getGalleryByTitle(req.params.title, response => {
+        if(response != null){
+            res.send(response);
+        }else{
+            res.status(404).send('Not found');
+        }
+
+    });
+});
+
+app.get('/image', (req, res) => {
     getAllImages(response => {
         res.send(response);
     });
 });
 
-app.get('/images/:id', (req, res) => {
-    getImageById(+req.params.id, response => {
-        const image = response as IImage;
-        console.log(image);
-        res.send('<img src="' + image.base64 + '">');
-    });
-});
-
-app.get('/gallery/images/:id', (req, res) => {
+app.get('/image/:id', (req, res) => {
     getImagesByGalleryId(+req.params.id, response => {
         res.send(response);
     });

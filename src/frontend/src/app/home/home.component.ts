@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {GalleryService} from '../service/gallery.service';
+import {GalleryService} from '../service/gallery/gallery.service';
 import {IGallery} from '../entity/IGallery';
 
 @Component({
@@ -13,11 +13,12 @@ export class HomeComponent implements OnInit {
   constructor(private galleryService: GalleryService) { }
 
   galleries: IGallery[];
-  images = ['/assets/IMG_20200919_181732.jpg', '/assets/IMG_20200913_151547.jpg', '/assets/DSC_0052.JPG'];
 
   ngOnInit(): void {
     this.galleryService.getAllGalleries().subscribe(galleries => {
       this.galleries = galleries;
+      this.hideSpinner();
+      this.checkIfEmptyShowText();
     });
 
     window.addEventListener('resize', ev => {
@@ -25,7 +26,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  resizeImages(): void {
+  private resizeImages(): void {
     const cardWidth: number = document.getElementsByClassName('card')[0].clientWidth;
     const galleryImages: any = document.querySelectorAll('.modalImage');
     galleryImages.forEach((img) => {
@@ -35,10 +36,22 @@ export class HomeComponent implements OnInit {
   }
 
 
-  getGalleryTitleAndResize(galleryIndex: number): string {
+  private getGalleryTitleAndResize(galleryIndex: number): string {
     if (galleryIndex === 0){
       this.resizeImages();
     }
     return this.galleries[galleryIndex].title;
+  }
+
+  private hideSpinner(): void{
+    const spinner: any = document.getElementById('loading-spinner');
+    spinner.style.display = 'none';
+  }
+
+  private checkIfEmptyShowText(): void{
+    if (this.galleries.length === 0){
+      const text: any = document.getElementById('emptyText');
+      text.style.display = 'block';
+    }
   }
 }

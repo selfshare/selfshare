@@ -20,11 +20,32 @@
   opacity: 0;
   user-select:none;
   transition: all 0.1s ease-out;
+  cursor: pointer;
 }
 
 .titleBox:hover{
   background: rgba(0, 0, 0, 0.5);
   opacity: 1;
   transition: all 0.2s ease-in-out;
+}
+
+.titleBoxNoText:hover{
+  opacity: 0;
+}
+
+#loading-spinner{
+  display: flex;
+  margin-top: 30%;
+}
+
+.description{
+  color: gray;
+  margin-left: 1px;
+}
+
+#emptyText{
+  display: none;
+  margin-top: 30%;
+  text-align: center;
 }
 

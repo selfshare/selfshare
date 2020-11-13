@@ -5,6 +5,10 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import {HeaderUserComponent} from './header-user/header-user.component';
+import {HeaderAdminComponent} from './header-admin/header-admin.component';
+import {AppRoutingModule} from './app-routing.module';
+import {ManageComponent} from './manage/manage.component';
 
 @NgModule({
   declarations: [

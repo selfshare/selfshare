@@ -7,7 +7,7 @@ declare var $: any;
 @Component({
   selector: 'app-add-image-dialog',
   templateUrl: './add-image-dialog.component.html',
-  styleUrls: ['./add-image-dialog.component.css']
+  styleUrls: ['./add-image-dialog.component.scss']
 })
 export class AddImageDialogComponent implements OnInit {
 

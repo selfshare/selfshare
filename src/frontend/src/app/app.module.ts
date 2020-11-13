@@ -7,7 +7,6 @@ import { LoginComponent } from './components/login/login.component';
 import {HeaderUserComponent} from './components/header/header-user/header-user.component';
 import {HeaderAdminComponent} from './components/header/header-admin/header-admin.component';
 import {AppRoutingModule} from './app-routing.module';
-import {ManageComponent} from './components/manage/manage.component';
 import {GalleryComponent} from './components/gallery/gallery.component';
 import { AboutComponent } from './components/about/about.component';
 import { DashboardContentComponent } from './components/dashboards/dashboard-content/dashboard-content.component';
@@ -25,7 +24,6 @@ import { AddImageDialogComponent } from './add-image-dialog/add-image-dialog.com
     DashboardComponent,
     HeaderUserComponent,
     HeaderAdminComponent,
-    ManageComponent,
     GalleryComponent,
     AboutComponent,
     DashboardContentComponent,

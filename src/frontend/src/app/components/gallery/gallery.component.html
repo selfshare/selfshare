@@ -1,0 +1,17 @@
+<h1>{{this.gallery.title}}</h1>
+<p class="description">{{this.gallery.description}}</p>
+<div id="loading-spinner" class="justify-content-center">
+  <div class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+<h2 id="emptyText">There are no images in this gallery!</h2>
+<div class="row row-cols-1 row-cols-md-3">
+  <div class="col mb-4" *ngFor="let image of images; index as i">
+    <div class="card">
+      <div [ngClass]="image.title.length > 0 ? 'titleBox' : 'titleBox titleBoxNoText'" >{{this.getImageTitleAndResize(i)}}</div>
+      <img src="{{image.base64}}" class="card-img-top modalImage" alt="{{image.title}}">
+    </div>
+  </div>
+</div>
+

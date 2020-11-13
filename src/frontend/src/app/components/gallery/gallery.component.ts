@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {GalleryService} from '../service/gallery/gallery.service';
-import {IGallery} from '../entity/IGallery';
-import {IImage} from '../entity/IImage';
-import {ImageService} from '../service/image/image.service';
+import {GalleryService} from '../../service/gallery/gallery.service';
+import {IGallery} from '../../entity/IGallery';
+import {IImage} from '../../entity/IImage';
+import {ImageService} from '../../service/image/image.service';
 
 @Component({
   selector: 'app-gallery',
@@ -12,7 +12,7 @@ import {ImageService} from '../service/image/image.service';
 })
 export class GalleryComponent implements OnInit {
 
-  gallery: IGallery = {gallery_id: 0, order_nr: 0, thumbnail_base64: '', title: '', description: ''};
+  gallery: IGallery = {images: [], gallery_id: 0, order_nr: 0, thumbnail_base64: '', title: '', description: ''};
   images: IImage[] = [];
 
   constructor(
@@ -66,7 +66,6 @@ export class GalleryComponent implements OnInit {
 
   private checkIfEmptyShowText(): void{
     if (this.images.length === 0){
-      console.log(this.images);
       const text: any = document.getElementById('emptyText');
       text.style.display = 'block';
     }

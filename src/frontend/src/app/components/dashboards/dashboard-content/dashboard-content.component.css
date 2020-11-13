@@ -1,0 +1,16 @@
+.btn-link:hover{
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mr-auto{
+  font-size: large;
+}
+
+.material-icons{
+  user-select: none;
+}
+
+.row{
+  margin: 10px 0px;
+}

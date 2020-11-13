@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {GalleryService} from '../service/gallery/gallery.service';
-import {IGallery} from '../entity/IGallery';
+import {GalleryService} from '../../service/gallery/gallery.service';
+import {IGallery} from '../../entity/IGallery';
 
 @Component({
   selector: 'app-home',
@@ -10,6 +10,7 @@ import {IGallery} from '../entity/IGallery';
 
 
 export class HomeComponent implements OnInit {
+
   constructor(private galleryService: GalleryService) { }
 
   galleries: IGallery[];

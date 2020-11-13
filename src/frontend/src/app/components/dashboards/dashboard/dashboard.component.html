@@ -1,0 +1,29 @@
+<h1>Dashboard</h1>
+<ul id="tabs" class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" (click)="changeView(0)">Content</a>
+    <!--    manage galleries (upload new,  -->
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" (click)="changeView(1)">About me</a>
+    <!--    author_name, author_description, author_pic -->
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" (click)="changeView(2)">Security</a>
+    <!--    username, password, allow_download-->
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" (click)="changeView(3)">Design</a>
+    <!--    site_color, site_background, -->
+  </li>
+</ul>
+<br>
+<div [ngSwitch]="selectedIndex">
+<!-- the same view can be shown in more than one case -->
+<app-dashboard-content *ngSwitchCase="0"></app-dashboard-content>
+<app-dashboard-about-me *ngSwitchCase="1"></app-dashboard-about-me>
+<app-dashboard-security *ngSwitchCase="2"></app-dashboard-security>
+<app-dashboard-design *ngSwitchCase="3"></app-dashboard-design>
+<app-dashboard-content *ngSwitchDefault></app-dashboard-content>
+</div>
+

@@ -1,0 +1,33 @@
+<div class="accordion" id="accordion">
+  <div class="card" *ngFor="let gallery of galleries; index as i">
+    <div class="card-header" id="heading" >
+      <div class="row">
+        <a class="btn-link col-auto mr-auto" data-toggle="collapse" [attr.data-target]="'#gallery_' + i">{{gallery.title}}</a>
+        <a class="btn-link col-auto material-icons">edit</a>
+        <a class="btn-link col-auto material-icons" data-toggle="modal" data-target="#addImageModal" (click)="changeCurrentGallery(gallery)">add_photo_alternate</a>
+        <a class="btn-link col-auto material-icons">keyboard_arrow_down</a>
+        <a class="btn-link col-auto material-icons">keyboard_arrow_up</a>
+      </div>
+    </div>
+
+    <div id="gallery_{{i}}" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+        <div class="accordion" id="accordion{{i}}">
+          <div class="card" *ngFor="let image of gallery.images; index as i">
+            <div class="card-header" id="heading2">
+              <div class="row">
+                <img src="{{image.base64}}" height="25px">
+                <a class="btn-link col-auto mr-auto">{{image.title}}</a>
+
+                <a class="btn-link col-auto material-icons">edit</a>
+                <a class="btn-link col-auto material-icons">keyboard_arrow_down</a>
+                <a class="btn-link col-auto material-icons">keyboard_arrow_up</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-add-image-dialog [currentGallery]="currentGallery"></app-add-image-dialog>

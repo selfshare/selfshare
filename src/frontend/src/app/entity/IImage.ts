@@ -2,7 +2,7 @@ import {IGallery} from './IGallery';
 
 export interface IImage {
     image_id: number;
-    gallery_id: IGallery;
+    gallery_id: number;
     title: string;
     description: string;
     tag: string;

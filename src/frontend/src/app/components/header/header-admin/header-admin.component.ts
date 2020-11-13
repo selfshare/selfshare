@@ -21,7 +21,6 @@ export class HeaderAdminComponent implements OnInit {
           }
 
           if (navText === routerUrl){
-            console.log(navText);
             parent.classList.add('active');
           }else{
             parent.classList.remove('active');

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {GalleryService} from '../../service/gallery/gallery.service';
 import {IGallery} from '../../entity/IGallery';
 import {IImage} from '../../entity/IImage';
@@ -17,6 +17,7 @@ export class GalleryComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private galleryService: GalleryService,
     private imageService: ImageService
   ) {
@@ -31,6 +32,7 @@ export class GalleryComponent implements OnInit {
     }, error => {
       if (error.status === 404) {
         console.log(error.statusText);
+        this.router.navigate(['/']);
       }
     });
   }

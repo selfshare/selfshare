@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {IGallery} from '../../entity/IGallery';
 import {IImage} from '../../entity/IImage';
 
 @Injectable({
@@ -15,5 +14,13 @@ export class ImageService {
 
   getImagesByGalleryId(id: number): Observable<IImage[]> {
     return this.http.get<IImage[]>(this.url + '/' + id);
+  }
+
+  uploadImage(image: IImage): Observable<object>{
+    return this.http.post<object>(this.url, image);
+  }
+
+  deleteImageById(id: number): Observable<object>{
+    return this.http.delete<object>(this.url + '/' + id);
   }
 }

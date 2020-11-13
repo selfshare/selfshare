@@ -1,14 +1,14 @@
-import express, {response} from 'express';
+import express from 'express';
 import bodyParser from 'body-parser';
 import {
-    addGallery,
     addImage,
     checkIfAllTablesExist,
-    connect,
+    connect, deleteImageById,
     getAllGalleries,
-    getAllImages, getGalleryByTitle,
-    getImageById,
-    getImagesByGalleryId
+    getAllImages,
+    getGalleryByTitle,
+    getImagesByGalleryId,
+    uploadImageToGallery
 } from './database';
 import {IImage} from './entity/IImage';
 import {IGallery} from './entity/IGallery';
@@ -20,36 +20,36 @@ const port = process.env.PORT || 3000;
 const jsonParser = bodyParser.json();
 connect();
 checkIfAllTablesExist();
-console.log();
 
 
-app.listen(port, () => console.log(`${process.env.npm_package_name} ${process.env.npm_package_version} running on http://localhost:${port}/`));
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json({
+    limit: '50mb'
+}));
 
+app.listen(port, () => console.log(`${process.env.npm_package_name} ${process.env.npm_package_version} running on http://localhost:${port}/`));
 
-app.get('/addimage', (req, res) => {
-    const gallery: IGallery = {description: '', order_nr: 0, thumbnail_id: 0, title: '', gallery_id: 2};
-    const image: IImage = {base64: '', gallery_id: gallery, image_id: 0, upload_timestamp: 0, title: 'asd', description: 'test', tag: '#nice'};
-
-    addImage(image, gallery);
-    res.send();
-});
+function logIncoming(req: any){
+    const date = new Date();
+    const time = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+    console.log(`${time} - ${req.method} request on ${req.originalUrl} from ${req.hostname}`);
+}
 
 app.get('/gallery', (req, res) => {
-    // const gallery: IGallery = {gallery_id: 0, order_nr: 0, thumbnail_id: 0, title: 'asd', description: 'test'};
-    // addGallery(gallery);
-    getAllGalleries( response => {
+    logIncoming(req);
+    getAllGalleries(response => {
         res.send(response);
     });
 });
 
 app.get('/gallery/:title', (req, res) => {
+    logIncoming(req);
     getGalleryByTitle(req.params.title, response => {
-        if(response != null){
+        if (response != null) {
             res.send(response);
-        }else{
+        } else {
             res.status(404).send('Not found');
         }
 
@@ -57,13 +57,33 @@ app.get('/gallery/:title', (req, res) => {
 });
 
 app.get('/image', (req, res) => {
+    logIncoming(req);
     getAllImages(response => {
         res.send(response);
     });
 });
 
+app.post('/image', jsonParser, (req, res) => {
+    logIncoming(req);
+    uploadImageToGallery(req.body, response => {
+        if (response != null) {
+            res.send(response);
+        } else {
+            res.sendStatus(505);
+        }
+    });
+});
+
 app.get('/image/:id', (req, res) => {
+    logIncoming(req);
     getImagesByGalleryId(+req.params.id, response => {
+        res.send(response);
+    });
+});
+
+app.delete('/image/:id', jsonParser, (req, res) => {
+    logIncoming(req);
+    deleteImageById(+req.params.id, response => {
         res.send(response);
     });
 });

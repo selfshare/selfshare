@@ -17,9 +17,13 @@ export class DashboardContentComponent implements OnInit {
   constructor(private galleryService: GalleryService, private imageService: ImageService) { }
 
   ngOnInit(): void {
+    this.loadGalleries();
+  }
+
+  private loadGalleries(): void{
     this.galleryService.getAllGalleries().subscribe(galleries => {
       this.galleries = galleries.sort((a, b) => a.order_nr - b.order_nr);
-
+      this.currentGallery = {description: '', gallery_id: 0, images: [], order_nr: 0, thumbnail_base64: '', title: ''};
       this.galleries.forEach(gallery => {
         this.getImagesByGallery(gallery);
       });
@@ -34,5 +38,12 @@ export class DashboardContentComponent implements OnInit {
 
   changeCurrentGallery(gallery: IGallery): void {
     this.currentGallery = gallery;
+  }
+
+  deleteImage(id: number): void {
+    this.imageService.deleteImageById(id).subscribe(code => {
+      console.log(code);
+      this.loadGalleries();
+    });
   }
 }

@@ -25,7 +25,6 @@ export class DashboardComponent implements OnInit {
     for (const i in tabs){
       if (tabs[i] instanceof HTMLElement){
         if (+i === this.selectedIndex){
-          console.log(i);
           tabs[i].children[0].classList.add('active');
         }else{
           tabs[i].children[0].classList.remove('active');

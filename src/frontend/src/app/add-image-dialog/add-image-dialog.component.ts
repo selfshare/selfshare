@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {IGallery} from '../entity/IGallery';
 import {ImageService} from '../service/image/image.service';
+import {IImage} from '../entity/IImage';
 
 declare var $: any;
 
@@ -39,14 +40,25 @@ export class AddImageDialogComponent implements OnInit {
     fileReader.onload = (ev) => {
       const base64 = ev.target.result.toString();
       const type = base64.substring(5, 15);
-      if (type === 'image/png;' || type === 'image/jpeg') {
+      if (type === 'image/png;' || type === 'image/jpeg' || type === 'image/gif;') {
         this.imageSource = base64;
       }
     };
   }
 
-  uploadImage(): void{
-
+  uploadImage(): void {
+    const image: IImage = {
+      base64: this.imageSource,
+      description: '',
+      gallery_id: this.currentGallery.gallery_id,
+      tag: '',
+      title: '',
+      image_id: 0,
+      upload_timestamp: null
+    };
+    this.imageService.uploadImage(image).subscribe(status => {
+      console.log(status);
+      location.reload();
+    });
   }
-
 }

@@ -1,0 +1,17 @@
+
+<app-about></app-about>
+<div id="loading-spinner" class="justify-content-center">
+  <div class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+<h2 id="emptyText">There are no galleries in this portfolio!</h2>
+<div class="row row-cols-1 row-cols-md-3">
+  <div class="col mb-4" *ngFor="let gallery of galleries; index as i">
+    <div class="card">
+      <div class="titleBox" routerLink="/{{gallery.title.toLowerCase()}}">{{this.getGalleryTitleAndResize(i)}}</div>
+      <img src="{{gallery.thumbnail_base64}}" class="card-img-top modalImage" alt="{{gallery.title}}">
+    </div>
+  </div>
+</div>
+

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {IGallery} from '../entity/IGallery';
-import {GalleryService} from '../service/gallery/gallery.service';
+import {IGallery} from '../../entity/IGallery';
+import {GalleryService} from '../../service/gallery/gallery.service';
 
 @Component({
   selector: 'app-manage',

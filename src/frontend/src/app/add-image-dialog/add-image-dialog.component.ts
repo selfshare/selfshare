@@ -14,6 +14,9 @@ export class AddImageDialogComponent implements OnInit {
 
   @Input() currentGallery: IGallery;
   imageSource: string;
+  title: string = "";
+  description: string = "";
+
 
   constructor(private imageService: ImageService) {
   }
@@ -49,10 +52,10 @@ export class AddImageDialogComponent implements OnInit {
   uploadImage(): void {
     const image: IImage = {
       base64: this.imageSource,
-      description: '',
+      description: this.description,
       gallery_id: this.currentGallery.gallery_id,
       tag: '',
-      title: '',
+      title: this.title,
       image_id: 0,
       upload_timestamp: null
     };

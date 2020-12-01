@@ -15,6 +15,7 @@ import { DashboardSecurityComponent } from './components/dashboards/dashboard-se
 import { DashboardDesignComponent } from './components/dashboards/dashboard-design/dashboard-design.component';
 import {DashboardComponent} from './components/dashboards/dashboard/dashboard.component';
 import { AddImageDialogComponent } from './add-image-dialog/add-image-dialog.component';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -32,11 +33,12 @@ import { AddImageDialogComponent } from './add-image-dialog/add-image-dialog.com
     DashboardDesignComponent,
     AddImageDialogComponent
   ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    AppRoutingModule
-  ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        AppRoutingModule,
+        FormsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

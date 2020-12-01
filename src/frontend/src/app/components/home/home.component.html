@@ -10,7 +10,7 @@
   <div class="col mb-4" *ngFor="let gallery of galleries; index as i">
     <div class="card">
       <div class="titleBox" routerLink="/{{gallery.title.toLowerCase()}}">{{this.getGalleryTitleAndResize(i)}}</div>
-      <img src="{{gallery.thumbnail_base64}}" class="card-img-top modalImage" alt="{{gallery.title}}">
+      <img src="{{gallery.base64}}" class="card-img-top modalImage" alt="{{gallery.title}}">
     </div>
   </div>
 </div>

@@ -14,7 +14,14 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="uploadImage()">Upload</button>
+        <div *ngIf="this.conversionsDone else elseBlock">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="uploadImage()">Upload</button>
+        </div>
+        <ng-template #elseBlock>
+          <button type="button" class="btn btn-primary" disabled>Upload</button>
+
+        </ng-template>
+
       </div>
     </div>
   </div>

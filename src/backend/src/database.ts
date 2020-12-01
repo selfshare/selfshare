@@ -6,9 +6,20 @@ let connection: any;
 const GET_ALL_IMAGES = 'SELECT * from Images';
 const GET_ALL_GALLERIES = 'SELECT * from Galleries';
 const GET_ALL_SETTINGS = 'SELECT * from Settings';
-const CREATE_IMAGES_TABLE = 'CREATE TABLE Images (image_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, gallery_id INT UNSIGNED, CONSTRAINT fk_gallery FOREIGN KEY (gallery_id) REFERENCES Galleries(gallery_id), title VARCHAR(64), description VARCHAR(512), tag VARCHAR(32), upload_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, base64 LONGTEXT not null)';
-const CREATE_GALLERIES_TABLE = 'CREATE TABLE Galleries (gallery_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, title VARCHAR(64), description VARCHAR(512), thumbnail_base64 LONGTEXT, order_nr INT)';
+
+
+const GET_ALL_IMAGES_LARGE = 'SELECT image_id, title, description, tag, upload_timestamp, base64_large AS base64 FROM Images'
+const GET_ALL_IMAGES_MEDIUM = 'SELECT image_id, title, description, tag, upload_timestamp, base64_medium AS base64 FROM Images'
+const GET_ALL_IMAGES_SMALL = 'SELECT image_id, title, description, tag, upload_timestamp, base64_small AS base64 FROM Images'
+
+const GET_ALL_GALLERIES_INFO = 'SELECT gallery_id, title, description FROM Galleries';
+const GET_ALL_GALLERIES_MEDIUM = 'SELECT gallery_id, title, description, base64_medium as base64, order_nr FROM Galleries';
+const GET_ALL_GALLERIES_SMALL = 'SELECT gallery_id, title, description, base64_small as base64, order_nr FROM Galleries';
+
+const CREATE_IMAGES_TABLE = 'CREATE TABLE Images (image_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, gallery_id INT UNSIGNED, CONSTRAINT fk_gallery FOREIGN KEY (gallery_id) REFERENCES Galleries(gallery_id), title VARCHAR(64), description VARCHAR(512), tag VARCHAR(32), upload_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, base64_large LONGTEXT not null, base64_medium LONGTEXT not null, base64_small LONGTEXT not null)';
+const CREATE_GALLERIES_TABLE = 'CREATE TABLE Galleries (gallery_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, title VARCHAR(64), description VARCHAR(512), base64_medium LONGTEXT, base64_small LONGTEXT, order_nr INT)';
 const CREATE_SETTINGS_TABLE = 'CREATE TABLE Settings (settings_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, username VARCHAR(32) NOT NULL, password_hash BINARY(64) NOT NULL, author_name VARCHAR(64), author_description VARCHAR(2058), author_pic_base64 LONGTEXT, site_background_base64 LONGTEXT, site_color VARCHAR(32), allow_download BIT, water_mark_base64 LONGTEXT, login_hash BINARY(64))';
+
 const DELETE_IMAGE_ROW = 'DELETE from Images';
 
 
@@ -89,14 +100,20 @@ export function addImage(image: IImage, gallery: IGallery) {
     });
 }
 
-export function getAllGalleries(callback: (arg0: any) => any) {
-    connection.query(GET_ALL_GALLERIES, (err: any, res: IGallery[]) => {
+export function getAllGalleriesMedium(callback: (arg0: any) => any) {
+    connection.query(GET_ALL_GALLERIES_MEDIUM, (err: any, res: IGallery[]) => {
+        return callback(res);
+    });
+}
+
+export function getAllGalleriesSmall(callback: (arg0: any) => any) {
+    connection.query(GET_ALL_GALLERIES_SMALL, (err: any, res: IGallery[]) => {
         return callback(res);
     });
 }
 
 export function getGalleryByTitle(title: string, callback: (arg0: any) => any) {
-    connection.query(GET_ALL_GALLERIES + ` WHERE title="${title}"`, (err: any, res: any) => {
+    connection.query(GET_ALL_GALLERIES_INFO + ` WHERE title="${title}"`, (err: any, res: any) => {
         if(res.length > 0){
             return callback(res[0] as IGallery);
         }
@@ -105,26 +122,26 @@ export function getGalleryByTitle(title: string, callback: (arg0: any) => any) {
 }
 
 
-export function getAllImages(callback: (arg0: any) => any) {
-    connection.query(GET_ALL_IMAGES, (err: any, res: any) => {
-        return callback(res);
-    });
-}
-
 export function getImageById(id: number, callback: (arg0: any) => any) {
-    connection.query(GET_ALL_IMAGES + ` WHERE image_id=${id}`, (err: any, res: any) => {
+    connection.query(GET_ALL_IMAGES_LARGE + ` WHERE image_id=${id}`, (err: any, res: any) => {
         return callback(res[0]);
     });
 }
 
-export function getImagesByGalleryId(id: number, callback: (arg0: any) => any) {
-    connection.query(GET_ALL_IMAGES + ` WHERE gallery_id=${id}`, (err: any, res: any) => {
+export function getMediumImagesByGalleryId(id: number, callback: (arg0: any) => any) {
+    connection.query(GET_ALL_IMAGES_MEDIUM + ` WHERE gallery_id=${id}`, (err: any, res: any) => {
+        return callback(res);
+    });
+}
+
+export function getSmallImagesByGalleryId(id: number, callback: (arg0: any) => any) {
+    connection.query(GET_ALL_IMAGES_SMALL + ` WHERE gallery_id=${id}`, (err: any, res: any) => {
         return callback(res);
     });
 }
 
 export function uploadImageToGallery(image: IImage, callback: (arg0: any) => any) {
-    connection.query(`INSERT INTO Images (title, description, tag, gallery_id, base64) VALUES ("${image.title}", "${image.description}", "${image.tag}", "${image.gallery_id}", "${image.base64}")`, (err: any, res: any) => {
+    connection.query(`INSERT INTO Images (title, description, tag, gallery_id, base64_large, base64_medium, base64_small) VALUES ("${image.title}", "${image.description}", "${image.tag}", "${image.gallery_id}", "${image.base64_large}", "${image.base64_medium}", "${image.base64_small}")`, (err: any, res: any) => {
         if(err !== null){
             console.log(err.message);
             return callback(null);

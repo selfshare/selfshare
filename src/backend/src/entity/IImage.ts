@@ -7,5 +7,7 @@ export interface IImage {
     description: string;
     tag: string;
     upload_timestamp: number;
-    base64: string;
+    base64_large: string;
+    base64_medium: string;
+    base64_small: string;
 }

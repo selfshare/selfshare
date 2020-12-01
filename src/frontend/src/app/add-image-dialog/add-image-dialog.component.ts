@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {IGallery} from '../entity/IGallery';
 import {ImageService} from '../service/image/image.service';
-import {IImage} from '../entity/IImage';
 
 declare var $: any;
 
@@ -14,6 +13,9 @@ export class AddImageDialogComponent implements OnInit {
 
   @Input() currentGallery: IGallery;
   imageSource: string;
+  mediumSource: string;
+  smallSource: string;
+  conversionsDone = false;
 
   constructor(private imageService: ImageService) {
   }
@@ -42,13 +44,23 @@ export class AddImageDialogComponent implements OnInit {
       const type = base64.substring(5, 15);
       if (type === 'image/png;' || type === 'image/jpeg' || type === 'image/gif;') {
         this.imageSource = base64;
+
+        this.compressImage(this.imageSource, 350, (compressed1) => {
+          this.mediumSource = compressed1;
+          this.compressImage(this.imageSource, 25, (compressed2) => {
+            this.smallSource = compressed2;
+            this.conversionsDone = true;
+          });
+        });
       }
     };
   }
 
   uploadImage(): void {
-    const image: IImage = {
-      base64: this.imageSource,
+    const image: any = {
+      base64_large: this.imageSource,
+      base64_medium: this.mediumSource,
+      base64_small: this.smallSource,
       description: '',
       gallery_id: this.currentGallery.gallery_id,
       tag: '',
@@ -60,5 +72,27 @@ export class AddImageDialogComponent implements OnInit {
       console.log(status);
       location.reload();
     });
+  }
+
+  private compressImage(base64: string, size: number, callback: any): any {
+    const canvas = document.createElement('canvas');
+    canvas.height = size;
+    canvas.width = size;
+    canvas.style.display = 'none';
+    const context = canvas.getContext('2d');
+    const image = new Image();
+
+    image.src = base64;
+    image.onload = () => {
+      if (image.width > image.height) {
+        const ratio = size / image.height;
+        const width = image.width * ratio;
+        const startX = (width - size) / 2;
+        context.drawImage(image, -startX, 0, width, size);
+        return callback(canvas.toDataURL());
+      } else {
+        return '';
+      }
+    };
   }
 }

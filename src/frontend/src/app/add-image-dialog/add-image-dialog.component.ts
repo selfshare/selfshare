@@ -16,6 +16,9 @@ export class AddImageDialogComponent implements OnInit {
   mediumSource: string;
   smallSource: string;
   conversionsDone = false;
+  title: string = "";
+  description: string = "";
+
 
   constructor(private imageService: ImageService) {
   }
@@ -61,10 +64,10 @@ export class AddImageDialogComponent implements OnInit {
       base64_large: this.imageSource,
       base64_medium: this.mediumSource,
       base64_small: this.smallSource,
-      description: '',
+      description: this.description,
       gallery_id: this.currentGallery.gallery_id,
       tag: '',
-      title: '',
+      title: this.title,
       image_id: 0,
       upload_timestamp: null
     };

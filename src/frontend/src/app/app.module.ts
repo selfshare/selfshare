@@ -16,6 +16,7 @@ import { DashboardDesignComponent } from './components/dashboards/dashboard-desi
 import {DashboardComponent} from './components/dashboards/dashboard/dashboard.component';
 import { AddImageDialogComponent } from './add-image-dialog/add-image-dialog.component';
 import { LargeImageDialogComponent } from './large-image-dialog/large-image-dialog.component';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -34,11 +35,12 @@ import { LargeImageDialogComponent } from './large-image-dialog/large-image-dial
     AddImageDialogComponent,
     LargeImageDialogComponent
   ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    AppRoutingModule
-  ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        AppRoutingModule,
+        FormsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

@@ -12,11 +12,15 @@ export class GalleryService {
 
   constructor(private http: HttpClient) { }
 
-  getAllGalleries(): Observable<IGallery[]> {
-    return this.http.get<IGallery[]>(this.url);
+  getAllGalleriesMedium(): Observable<IGallery[]> {
+    return this.http.get<IGallery[]>(this.url + '/m');
+  }
+
+  getAllGalleriesSmall(): Observable<IGallery[]> {
+    return this.http.get<IGallery[]>(this.url + '/s');
   }
 
   getGalleryByTitle(name: string): Observable<IGallery> {
-    return this.http.get<IGallery>(this.url + '/' + name);
+    return this.http.get<IGallery>(this.url + '/info/' + name);
   }
 }

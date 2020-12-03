@@ -15,6 +15,7 @@ import { DashboardSecurityComponent } from './components/dashboards/dashboard-se
 import { DashboardDesignComponent } from './components/dashboards/dashboard-design/dashboard-design.component';
 import {DashboardComponent} from './components/dashboards/dashboard/dashboard.component';
 import { AddImageDialogComponent } from './add-image-dialog/add-image-dialog.component';
+import { LargeImageDialogComponent } from './large-image-dialog/large-image-dialog.component';
 import {FormsModule} from "@angular/forms";
 
 @NgModule({
@@ -31,7 +32,8 @@ import {FormsModule} from "@angular/forms";
     DashboardAboutMeComponent,
     DashboardSecurityComponent,
     DashboardDesignComponent,
-    AddImageDialogComponent
+    AddImageDialogComponent,
+    LargeImageDialogComponent
   ],
     imports: [
         BrowserModule,

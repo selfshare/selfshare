@@ -12,8 +12,16 @@ export class ImageService {
 
   constructor(private http: HttpClient) { }
 
-  getImagesByGalleryId(id: number): Observable<IImage[]> {
-    return this.http.get<IImage[]>(this.url + '/' + id);
+  getLargeImageById(id: number): Observable<IImage> {
+    return this.http.get<IImage>(this.url + '/l/' + id);
+  }
+
+  getMediumImagesByGalleryId(id: number): Observable<IImage[]> {
+    return this.http.get<IImage[]>(this.url + '/m/' + id);
+  }
+
+  getSmallImagesByGalleryId(id: number): Observable<IImage[]> {
+    return this.http.get<IImage[]>(this.url + '/s/' + id);
   }
 
   uploadImage(image: IImage): Observable<object>{

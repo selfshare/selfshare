@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
   galleries: IGallery[];
 
   ngOnInit(): void {
-    this.galleryService.getAllGalleries().subscribe(galleries => {
+    this.galleryService.getAllGalleriesMedium().subscribe(galleries => {
       this.galleries = galleries;
       this.hideSpinner();
       this.checkIfEmptyShowText();

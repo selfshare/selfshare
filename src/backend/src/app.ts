@@ -4,10 +4,10 @@ import {
     addImage,
     checkIfAllTablesExist,
     connect, deleteImageById,
-    getAllGalleries,
-    getAllImages,
-    getGalleryByTitle,
-    getImagesByGalleryId,
+    getAllGalleriesMedium, getAllGalleriesSmall,
+    getGalleryByTitle, getImageById,
+    getMediumImagesByGalleryId,
+    getSmallImagesByGalleryId,
     uploadImageToGallery
 } from './database';
 import {IImage} from './entity/IImage';
@@ -37,14 +37,23 @@ function logIncoming(req: any){
     console.log(`${time} - ${req.method} request on ${req.originalUrl} from ${req.hostname}`);
 }
 
-app.get('/gallery', (req, res) => {
+// Galleries
+
+app.get('/gallery/m', (req, res) => {
     logIncoming(req);
-    getAllGalleries(response => {
+    getAllGalleriesMedium(response => {
         res.send(response);
     });
 });
 
-app.get('/gallery/:title', (req, res) => {
+app.get('/gallery/s', (req, res) => {
+    logIncoming(req);
+    getAllGalleriesSmall(response => {
+        res.send(response);
+    });
+});
+
+app.get('/gallery/info/:title', (req, res) => {
     logIncoming(req);
     getGalleryByTitle(req.params.title, response => {
         if (response != null) {
@@ -56,28 +65,38 @@ app.get('/gallery/:title', (req, res) => {
     });
 });
 
-app.get('/image', (req, res) => {
+// Images
+
+app.get('/image/l/:id', (req, res) => {
     logIncoming(req);
-    getAllImages(response => {
+    getImageById(+req.params.id, response => {
+        res.send(response);
+    });
+});
+
+app.get('/image/m/:id', (req, res) => {
+    logIncoming(req);
+    getMediumImagesByGalleryId(+req.params.id, response => {
+        res.send(response);
+    });
+});
+
+app.get('/image/s/:id', (req, res) => {
+    logIncoming(req);
+    getSmallImagesByGalleryId(+req.params.id, response => {
         res.send(response);
     });
 });
 
 app.post('/image', jsonParser, (req, res) => {
     logIncoming(req);
+    console.log(req.body);
     uploadImageToGallery(req.body, response => {
         if (response != null) {
             res.send(response);
         } else {
             res.sendStatus(505);
         }
-    });
-});
-
-app.get('/image/:id', (req, res) => {
-    logIncoming(req);
-    getImagesByGalleryId(+req.params.id, response => {
-        res.send(response);
     });
 });
 

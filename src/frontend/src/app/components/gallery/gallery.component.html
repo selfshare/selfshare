@@ -8,10 +8,10 @@
 <h2 id="emptyText">There are no images in this gallery!</h2>
 <div class="row row-cols-1 row-cols-md-3">
   <div class="col mb-4" *ngFor="let image of images; index as i">
-    <div class="card">
+    <div class="card" data-toggle="modal" data-target="#addImageModal" (click)="setCurrentImage(image.image_id)">
       <div [ngClass]="image.title.length > 0 ? 'titleBox' : 'titleBox titleBoxNoText'" >{{this.getImageTitleAndResize(i)}}</div>
       <img src="{{image.base64}}" class="card-img-top modalImage" alt="{{image.title}}">
     </div>
   </div>
 </div>
-
+<app-large-image-dialog [image]="currentImage"></app-large-image-dialog>

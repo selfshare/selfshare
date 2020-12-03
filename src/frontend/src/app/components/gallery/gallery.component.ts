@@ -12,8 +12,9 @@ import {ImageService} from '../../service/image/image.service';
 })
 export class GalleryComponent implements OnInit {
 
-  gallery: IGallery = {images: [], gallery_id: 0, order_nr: 0, thumbnail_base64: '', title: '', description: ''};
+  gallery: IGallery = {images: [], gallery_id: 0, order_nr: 0, base64: '', title: '', description: ''};
   images: IImage[] = [];
+  currentImage: IImage = {description: '', gallery_id: 0, image_id: 0, tag: '', title: '', upload_timestamp: 0, base64: ''};
 
   constructor(
     private route: ActivatedRoute,
@@ -38,8 +39,9 @@ export class GalleryComponent implements OnInit {
   }
 
   private loadImages(): void {
-    this.imageService.getImagesByGalleryId(this.gallery.gallery_id).subscribe(images => {
+    this.imageService.getMediumImagesByGalleryId(this.gallery.gallery_id).subscribe(images => {
       this.images = images;
+      console.log(images);
       this.hideSpinner();
       this.checkIfEmptyShowText();
     });
@@ -73,4 +75,10 @@ export class GalleryComponent implements OnInit {
     }
   }
 
+  private setCurrentImage(imageId: number): void {
+    this.currentImage = this.images.find(value => value.image_id === imageId);
+    this.imageService.getLargeImageById(imageId).subscribe(image => {
+      this.currentImage = image;
+    });
+  }
 }

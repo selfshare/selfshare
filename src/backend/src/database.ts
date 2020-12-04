@@ -25,7 +25,7 @@ const DELETE_IMAGE_ROW = 'DELETE from Images';
 
 export function connect() {
     connection = mysql.createConnection({
-        host: 'localhost',
+        host: 'docker',
         user: 'selfshare',
         password: 'xs6HZKdc5YEi6',
         database: 'selfshare'

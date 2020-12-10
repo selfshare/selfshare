@@ -6,6 +6,7 @@ Share your images on your own server. Sort them by galleries and tags.
 - If not already installed, download Node.js at https://nodejs.org/en/download
 
 ### 1. MySQL Database
+- If needed refer to [How to install MySQL Server in Docker Container](DOCKER_MYSQL.md)
 - add user and database called selfshare (with all rights)
 - do this inside MYSQL console: ``ALTER USER 'selfshare' IDENTIFIED WITH mysql_native_password BY 'xs6HZKdc5YEi6';`` and ``flush privileges;`` to allow password authentication.
 
@@ -50,3 +51,4 @@ check this, you idiot:
 - db column size too small for big images? (TEXT)
     - seems ok, with longtext
 - on dashboard content page, it loads the galleries more than once 
+- gallery navigation (back button)

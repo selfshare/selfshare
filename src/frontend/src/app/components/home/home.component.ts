@@ -55,4 +55,26 @@ export class HomeComponent implements OnInit {
       text.style.display = 'block';
     }
   }
+
+  getGalleryImage(gallery: IGallery): string {
+    if (gallery.base64 == null) {
+      return '';
+    }
+    if (gallery.base64.match(/data:image(.)*;base64/)) {
+      return gallery.base64;
+    } else {
+      return '';
+    }
+  }
+
+  showGalleryImage(gallery: IGallery): string {
+    if (gallery.base64 == null){
+      return 'visibility: hidden';
+    }
+    if (gallery.base64.match(/data:image(.)*;base64/)) {
+      return 'visibility: visible';
+    } else {
+      return 'visibility: hidden';
+    }
+  }
 }

@@ -8,7 +8,7 @@
 <h2 id="emptyText">There are no images in this gallery!</h2>
 <div class="row row-cols-1 row-cols-md-3">
   <div class="col mb-4" *ngFor="let image of images; index as i">
-    <div class="card" data-toggle="modal" data-target="#addImageModal" (click)="setCurrentImage(image.image_id)">
+    <div [id]="'image_' + image.image_id" class="card" data-toggle="modal" data-target="#largeImageModal" (click)="openLargeImage(image.image_id)">
       <div [ngClass]="image.title.length > 0 ? 'titleBox' : 'titleBox titleBoxNoText'" >{{this.getImageTitleAndResize(i)}}</div>
       <img src="{{image.base64}}" class="card-img-top modalImage" alt="{{image.title}}">
     </div>

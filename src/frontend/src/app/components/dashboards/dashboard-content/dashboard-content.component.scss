@@ -14,3 +14,26 @@
 .row{
   margin: 10px 0px;
 }
+
+.add-new{
+  margin: 4.75px 0px;
+}
+
+.add-btn{
+  padding-left: 0px;
+  padding-right: 0px;
+  margin: 6px 0px;
+}
+
+.save-clear-btn{
+  margin: 6px 0px;
+}
+
+.unclickable{
+  pointer-events: none;
+  color: lightgray
+}
+
+.hidden{
+  display: none;
+}

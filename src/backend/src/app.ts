@@ -1,13 +1,14 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import {
+    addGallery,
     addImage,
     checkIfAllTablesExist,
-    connect, deleteImageById,
+    connect, deleteGalleryById, deleteImageById,
     getAllGalleriesMedium, getAllGalleriesSmall,
     getGalleryByTitle, getImageById,
     getMediumImagesByGalleryId,
-    getSmallImagesByGalleryId,
+    getSmallImagesByGalleryId, setGalleryThumbnailById, updateGalleryById,
     uploadImageToGallery
 } from './database';
 import {IImage} from './entity/IImage';
@@ -17,6 +18,7 @@ import cors from 'cors';
 
 const app = express();
 const port = process.env.PORT || 3000;
+const backendPath = process.env.backend_path || "";
 const jsonParser = bodyParser.json();
 connect();
 checkIfAllTablesExist();
@@ -29,7 +31,7 @@ app.use(bodyParser.json({
     limit: '50mb'
 }));
 
-app.listen(port, () => console.log(`${process.env.npm_package_name} ${process.env.npm_package_version} running on http://localhost:${port}/`));
+app.listen(port, () => console.log(`${process.env.npm_package_name} ${process.env.npm_package_version} running on http://localhost:${port}${backendPath}`));
 
 function logIncoming(req: any){
     const date = new Date();
@@ -39,21 +41,21 @@ function logIncoming(req: any){
 
 // Galleries
 
-app.get('/gallery/m', (req, res) => {
+app.get(backendPath + '/gallery/m', (req, res) => {
     logIncoming(req);
     getAllGalleriesMedium(response => {
         res.send(response);
     });
 });
 
-app.get('/gallery/s', (req, res) => {
+app.get(backendPath + '/gallery/s', (req, res) => {
     logIncoming(req);
     getAllGalleriesSmall(response => {
         res.send(response);
     });
 });
 
-app.get('/gallery/info/:title', (req, res) => {
+app.get(backendPath + '/gallery/info/:title', (req, res) => {
     logIncoming(req);
     getGalleryByTitle(req.params.title, response => {
         if (response != null) {
@@ -65,32 +67,71 @@ app.get('/gallery/info/:title', (req, res) => {
     });
 });
 
+app.post(backendPath + '/gallery', (req, res) => {
+   logIncoming(req);
+   addGallery(req.body, response => {
+        if (response != null) {
+            res.send(response);
+        } else {
+            res.sendStatus(505);
+        }
+    });
+});
+
+app.put(backendPath + '/gallery/:id', (req, res) => {
+    logIncoming(req);
+    updateGalleryById(req.params.id, req.body, response => {
+        if (response != null) {
+            res.send(response);
+        } else {
+            res.sendStatus(505);
+        }
+    });
+});
+
+app.put(backendPath + '/gallery/thumbnail/:id', (req, res) => {
+    logIncoming(req);
+    setGalleryThumbnailById(req.params.id, req.body, response => {
+        if (response != null) {
+            res.send(response);
+        } else {
+            res.sendStatus(505);
+        }
+    });
+});
+
+app.delete(backendPath + '/gallery/:id', jsonParser, (req, res) => {
+    logIncoming(req);
+    deleteGalleryById(+req.params.id, response => {
+        res.send(response);
+    });
+});
+
 // Images
 
-app.get('/image/l/:id', (req, res) => {
+app.get(backendPath + '/image/l/:id', (req, res) => {
     logIncoming(req);
     getImageById(+req.params.id, response => {
         res.send(response);
     });
 });
 
-app.get('/image/m/:id', (req, res) => {
+app.get(backendPath + '/image/m/:id', (req, res) => {
     logIncoming(req);
     getMediumImagesByGalleryId(+req.params.id, response => {
         res.send(response);
     });
 });
 
-app.get('/image/s/:id', (req, res) => {
+app.get(backendPath + '/image/s/:id', (req, res) => {
     logIncoming(req);
     getSmallImagesByGalleryId(+req.params.id, response => {
         res.send(response);
     });
 });
 
-app.post('/image', jsonParser, (req, res) => {
+app.post(backendPath + '/image', jsonParser, (req, res) => {
     logIncoming(req);
-    console.log(req.body);
     uploadImageToGallery(req.body, response => {
         if (response != null) {
             res.send(response);
@@ -100,11 +141,17 @@ app.post('/image', jsonParser, (req, res) => {
     });
 });
 
-app.delete('/image/:id', jsonParser, (req, res) => {
+app.delete(backendPath + '/image/:id', jsonParser, (req, res) => {
     logIncoming(req);
     deleteImageById(+req.params.id, response => {
         res.send(response);
     });
+});
+
+// Redirect to frontend
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
 

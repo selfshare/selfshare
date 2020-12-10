@@ -3,5 +3,6 @@ export interface IGallery {
     title: string;
     description: string;
     order_nr: number;
-    base64: string;
+    base64_medium: string;
+    base64_small: string;
 }

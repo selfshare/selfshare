@@ -1,11 +1,16 @@
 FROM node:latest
 
+# ENV VARS
+ENV npm_package_name=selfshare
+ENV npm_package_version=1.0.1
+ENV backend_path="/api"
+
 ## FRONTEND
 WORKDIR /app/frontend
 COPY src/frontend .
 RUN ls -a
 RUN npm install
-RUN npx ng build
+RUN npx ng build --prod
 
 
 ## BACKEND
@@ -24,9 +29,9 @@ RUN npm install
 RUN npx tslint -c tslint.json -p tsconfig.json --fix
 RUN npx tsc
 
-RUN cp -r /app-frontend/dist/ dist/
+## COPY FRONTEND FILES TO BACKEND
+RUN cp -r /app/frontend/dist/frontend/ /app/backend/dist/public
 
 EXPOSE 3000
 
-#CMD "ls"
 CMD service mysql start ; node ./dist/app.js

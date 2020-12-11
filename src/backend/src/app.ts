@@ -4,7 +4,7 @@ import {
     addGallery,
     addImage,
     checkIfAllTablesExist,
-    connect, deleteGalleryById, deleteImageById,
+    connectDB, deleteGalleryById, deleteImageById,
     getAllGalleriesMedium, getAllGalleriesSmall,
     getGalleryByTitle, getImageById,
     getMediumImagesByGalleryId,
@@ -20,8 +20,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const backendPath = process.env.backend_path || "";
 const jsonParser = bodyParser.json();
-connect();
-checkIfAllTablesExist();
+connectDB();
 
 
 

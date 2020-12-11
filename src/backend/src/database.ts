@@ -1,4 +1,4 @@
-import mysql, {OkPacket} from 'mysql';
+import mysql from 'mysql';
 import {IImage} from './entity/IImage';
 import {IGallery} from './entity/IGallery';
 
@@ -26,12 +26,17 @@ const DELETE_GALLERY_ROW = 'DELETE from Galleries';
 const GET_MAX_ORDER_NR = 'SELECT MAX(order_nr) as "maxValue" FROM Galleries';
 
 
-export function connect() {
+export function connectDB() {
     connection = mysql.createConnection({
         host: process.env.db_host || "docker",
         user: 'selfshare',
-        password: 'xs6HZKdc5YEi6',
+        password: 'xs6HZKdc5YEi6', // it's recommended to change the password for production builds (here and inside the db)
         database: 'selfshare'
+    });
+    connection.connect((err: any) => {
+        if (err) throw err;
+        console.log("Successfully connected to database!");
+        checkIfAllTablesExist();
     });
 }
 
@@ -91,27 +96,27 @@ function createSettingsTable() {
     connection.query(CREATE_SETTINGS_TABLE);
 }
 
-function getMaxOrderNr(callback: (max: number) => any){
+function getMaxOrderNr(callback: (max: number) => any) {
     connection.query(GET_MAX_ORDER_NR, (err: any, res: any) => {
-        if(res[0].maxValue == null){
+        if (res[0].maxValue == null) {
             return callback(-1);
         }
         return callback(res[0].maxValue);
     });
 }
 
-function getGalleryByOrderNr(orderNr: number, callback: (gallery: IGallery) => any){
+function getGalleryByOrderNr(orderNr: number, callback: (gallery: IGallery) => any) {
     connection.query(GET_ALL_GALLERIES + ` WHERE order_nr=${orderNr}`, (err: any, res: any) => {
-        if(res.length > 0){
+        if (res.length > 0) {
             return callback(res[0] as IGallery);
         }
         return callback(null);
     });
 }
 
-function getGalleryById(id: number, callback: (gallery: IGallery) => any){
+function getGalleryById(id: number, callback: (gallery: IGallery) => any) {
     connection.query(GET_ALL_GALLERIES + ` WHERE gallery_id=${id}`, (err: any, res: any) => {
-        if(res.length > 0){
+        if (res.length > 0) {
             return callback(res[0] as IGallery);
         }
         return callback(null);
@@ -132,7 +137,7 @@ export function addGallery(gallery: IGallery, callback: (arg0: any) => any) {
         max++;
 
         connection.query(`INSERT INTO Galleries (title, description, order_nr) VALUES ("${gallery.title}", "${gallery.description}", ${max})`, (err: any, res: any) => {
-            if(err !== null){
+            if (err !== null) {
                 console.log(err.message);
                 return callback(null);
             }
@@ -145,21 +150,21 @@ export function updateGalleryById(id: string, updatedGallery: IGallery, callback
     console.log(updatedGallery);
     const newOrderNr = updatedGallery.order_nr;
     getGalleryByOrderNr(newOrderNr, swapGallery => {
-        if(swapGallery.gallery_id !== updatedGallery.gallery_id){
+        if (swapGallery.gallery_id !== updatedGallery.gallery_id) {
             getGalleryById(updatedGallery.gallery_id, galleryByTitle => {
                 const oldNr = galleryByTitle.order_nr;
-                connection.query(`UPDATE Galleries SET title="${swapGallery.title}", description="${swapGallery.description}", order_nr="${oldNr}", base64_medium="${swapGallery.base64_medium}", base64_small="${swapGallery.base64_small}" WHERE gallery_id=${swapGallery.gallery_id}`);
-                connection.query(`UPDATE Galleries SET title="${galleryByTitle.title}", description="${galleryByTitle.description}", order_nr="${updatedGallery.order_nr}", base64_medium="${galleryByTitle.base64_medium}", base64_small="${galleryByTitle.base64_small}" WHERE gallery_id=${galleryByTitle.gallery_id}`, (err: any, res: any) => {
-                    if(err !== null){
+                connection.query(`UPDATE Galleries SET title="${swapGallery.title}", description="${swapGallery.description}", order_nr="${oldNr}" WHERE gallery_id=${swapGallery.gallery_id}`);
+                connection.query(`UPDATE Galleries SET title="${galleryByTitle.title}", description="${galleryByTitle.description}", order_nr="${updatedGallery.order_nr}" WHERE gallery_id=${galleryByTitle.gallery_id}`, (err: any, res: any) => {
+                    if (err !== null) {
                         console.log(err.message);
                         return callback(null);
                     }
                     return callback({code: 200});
                 });
             });
-        }else{
-            connection.query(`UPDATE Galleries SET title="${updatedGallery.title}", description="${updatedGallery.description}", order_nr="${updatedGallery.order_nr}", base64_medium="${updatedGallery.base64_medium}", base64_small="${updatedGallery.base64_small}" WHERE gallery_id=${updatedGallery.gallery_id}`, (err: any, res: any) => {
-                if(err !== null){
+        } else {
+            connection.query(`UPDATE Galleries SET title="${updatedGallery.title}", description="${updatedGallery.description}", order_nr="${updatedGallery.order_nr}", WHERE gallery_id=${updatedGallery.gallery_id}`, (err: any, res: any) => {
+                if (err !== null) {
                     console.log(err.message);
                     return callback(null);
                 }
@@ -172,7 +177,7 @@ export function updateGalleryById(id: string, updatedGallery: IGallery, callback
 export function setGalleryThumbnailById(galleryId: string, sentImage: IImage, callback: (response: any) => any) {
     getFullImageById(sentImage.image_id, image => {
         connection.query(`UPDATE Galleries SET base64_medium="${image.base64_medium}", base64_small="${image.base64_small}" WHERE gallery_id=${galleryId}`, (err: any, res: any) => {
-            if(err !== null){
+            if (err !== null) {
                 console.log(err.message);
                 return callback(null);
             }
@@ -211,7 +216,7 @@ export function getAllGalleriesSmall(callback: (arg0: any) => any) {
 
 export function getGalleryByTitle(title: string, callback: (gallery: IGallery) => any) {
     connection.query(GET_ALL_GALLERIES_INFO + ` WHERE title="${title}"`, (err: any, res: any) => {
-        if(res.length > 0){
+        if (res.length > 0) {
             return callback(res[0] as IGallery);
         }
         return callback(null);
@@ -239,7 +244,7 @@ export function getSmallImagesByGalleryId(id: number, callback: (arg0: any) => a
 
 export function uploadImageToGallery(image: IImage, callback: (arg0: any) => any) {
     connection.query(`INSERT INTO Images (title, description, tag, gallery_id, base64_large, base64_medium, base64_small) VALUES ("${image.title}", "${image.description}", "${image.tag}", "${image.gallery_id}", "${image.base64_large}", "${image.base64_medium}", "${image.base64_small}")`, (err: any, res: any) => {
-        if(err !== null){
+        if (err !== null) {
             console.log(err.message);
             return callback(null);
         }

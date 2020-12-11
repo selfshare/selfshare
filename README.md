@@ -30,12 +30,12 @@ Share your images on your own server. Sort them by galleries and tags.
 ## Features
 - There is a main view for guests, and an admin view for the admin.
 - Admin can:
-    - Upload images into galleries
-    - create, remove, edit, organize galleries
+    - Upload images into galleries ✓
+    - create, remove, edit, organize galleries ✓
     - change look of the site (color, background)
     - enable/disable watermark/lower quality/copyright stuff
     - allow / disable download button
-    - edit his author page
+    - edit author page
     
 (optional ideas)
 - list view

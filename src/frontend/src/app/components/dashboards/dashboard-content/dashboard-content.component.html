@@ -12,10 +12,10 @@
       </div>
       <div class="row add-new edit-row hidden" [id]="'gallery_row_edit_' + gallery.gallery_id">
         <div class="col-3">
-          <input type="text" class="form-control" placeholder="Title" [(ngModel)]="gallery.title">
+          <input type="text" class="form-control" placeholder="Title" [(ngModel)]="editGalleryTitle">
         </div>
         <div class="col">
-          <input type="text" class="form-control" placeholder="Description" [(ngModel)]="gallery.description">
+          <input type="text" class="form-control" placeholder="Description" [(ngModel)]="editGalleryDesc">
         </div>
         <div class="col-0">
           <a class="btn-link col-auto material-icons save-clear-btn" (click)="exitExit(true, gallery)">save</a>

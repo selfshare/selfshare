@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {GalleryService} from '../../../service/gallery/gallery.service';
 import {IGallery} from '../../../entity/IGallery';
 import {ImageService} from '../../../service/image/image.service';
-import {IImage} from "../../../entity/IImage";
+import {IImage} from '../../../entity/IImage';
 
 @Component({
   selector: 'app-dashboard-content',
@@ -16,6 +16,9 @@ export class DashboardContentComponent implements OnInit {
 
   addGalleryTitle = '';
   addGalleryDesc = '';
+
+  editGalleryTitle = '';
+  editGalleryDesc = '';
 
   minOrderNr: number;
   maxOrderNr: number;
@@ -155,9 +158,9 @@ export class DashboardContentComponent implements OnInit {
 
   editGallery(gallery: IGallery): void {
     this.resetEditMode();
-    console.log(gallery);
-    this.currentGallery = Object.create(gallery);
-    console.table(this.currentGallery);
+    this.editGalleryTitle = gallery.title;
+    this.editGalleryDesc = gallery.description;
+
     document.getElementById('gallery_row_default_' + gallery.gallery_id).classList.add('hidden');
     document.getElementById('gallery_row_edit_' + gallery.gallery_id).classList.remove('hidden');
     console.log('min: ' + this.minOrderNr);
@@ -170,7 +173,16 @@ export class DashboardContentComponent implements OnInit {
     console.log(this.currentGallery);
 
     if (save){
-      this.galleryService.updateGalleryById(this.currentGallery.gallery_id, this.currentGallery).subscribe(code => {
+      const newGallery: IGallery = {
+        base64: '',
+        description: this.editGalleryDesc,
+        gallery_id: gallery.gallery_id,
+        images: [],
+        order_nr: gallery.order_nr,
+        title: this.editGalleryTitle
+      };
+
+      this.galleryService.updateGalleryById(newGallery.gallery_id, newGallery).subscribe(code => {
         console.log(code);
         this.loadGalleries();
       });

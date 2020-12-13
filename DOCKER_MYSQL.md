@@ -1,6 +1,6 @@
 ## How to start an MySQL database for development in docker
 
-1. Make sure docker in installed
+1. Make sure docker is installed
 2. Run ``docker pull mysql``
 3. Run ``docker run --name mysql-server --restart always -p 3306:3306 -p 33060:33060 -e MYSQL_ROOT_PASSWORD=mysql -d mysql``
 4. Run ``docker exec -it mysql-server bash``

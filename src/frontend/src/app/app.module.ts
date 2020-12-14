@@ -17,6 +17,7 @@ import {DashboardComponent} from './components/dashboards/dashboard/dashboard.co
 import { AddImageDialogComponent } from './components/dialogs/add-image-dialog/add-image-dialog.component';
 import { LargeImageDialogComponent } from './components/dialogs/large-image-dialog/large-image-dialog.component';
 import {FormsModule} from "@angular/forms";
+import { DisclaimerComponent } from './components/disclaimer/disclaimer.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import {FormsModule} from "@angular/forms";
     DashboardSecurityComponent,
     DashboardDesignComponent,
     AddImageDialogComponent,
-    LargeImageDialogComponent
+    LargeImageDialogComponent,
+    DisclaimerComponent
   ],
     imports: [
         BrowserModule,

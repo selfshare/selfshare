@@ -6,7 +6,7 @@ import {
     getAllGalleriesMedium, getAllGalleriesSmall,
     getGalleryByTitle, getImageById,
     getMediumImagesByGalleryId,
-    getSmallImagesByGalleryId, setGalleryThumbnailById, updateGalleryById, updateImageById,
+    getSmallImagesByGalleryId, setGalleryThumbnailById, updateAboutInfos, updateGalleryById, updateImageById,
     uploadImageToGallery
 } from './database';
 import {IImage} from './entity/IImage';
@@ -42,6 +42,17 @@ app.get(backendPath + '/about', (req, res) => {
     logIncoming(req);
     getAboutInfos(response => {
         res.send(response);
+    });
+});
+
+app.put(backendPath + '/about', (req, res) => {
+    logIncoming(req);
+    updateAboutInfos(req.body, response => {
+        if (response != null) {
+            res.send(response);
+        } else {
+            res.sendStatus(505);
+        }
     });
 });
 

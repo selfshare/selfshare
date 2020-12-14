@@ -8,7 +8,7 @@ const GET_ALL_IMAGES = 'SELECT * from Images';
 const GET_ALL_GALLERIES = 'SELECT * from Galleries';
 const GET_ALL_SETTINGS = 'SELECT * from Settings';
 
-const GET_ABOUT_INFOS = 'SELECT author_name AS name, author_description AS description, author_pic_base64 AS picture FROM Settings';
+const GET_ABOUT_INFOS = 'SELECT author_name AS name, author_description AS description, author_pic_base64 AS picture, author_email as email FROM Settings';
 
 
 const GET_ALL_IMAGES_LARGE = 'SELECT image_id, title, description, tag, upload_timestamp, base64_large AS base64, order_nr FROM Images';
@@ -21,7 +21,7 @@ const GET_ALL_GALLERIES_SMALL = 'SELECT gallery_id, title, description, base64_s
 
 const CREATE_IMAGES_TABLE = 'CREATE TABLE Images (image_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, gallery_id INT UNSIGNED, CONSTRAINT fk_gallery FOREIGN KEY (gallery_id) REFERENCES Galleries(gallery_id), title VARCHAR(64), description VARCHAR(512), tag VARCHAR(32), upload_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, base64_large LONGTEXT not null, base64_medium LONGTEXT not null, base64_small LONGTEXT not null, order_nr INT DEFAULT 0)';
 const CREATE_GALLERIES_TABLE = 'CREATE TABLE Galleries (gallery_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, title VARCHAR(64) UNIQUE, description VARCHAR(512), base64_medium LONGTEXT, base64_small LONGTEXT, order_nr INT DEFAULT 0)';
-const CREATE_SETTINGS_TABLE = 'CREATE TABLE Settings (settings_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, site_title VARCHAR(64), site_description VARCHAR(2048), username VARCHAR(32) NOT NULL, password_hash BINARY(64) NOT NULL, author_name VARCHAR(64), author_description VARCHAR(2058), author_pic_base64 LONGTEXT, site_background_base64 LONGTEXT, site_color VARCHAR(32), allow_download BIT, water_mark_base64 LONGTEXT, login_hash BINARY(64))';
+const CREATE_SETTINGS_TABLE = 'CREATE TABLE Settings (settings_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, site_title VARCHAR(64), site_description VARCHAR(2048), username VARCHAR(32) NOT NULL, password_hash BINARY(64) NOT NULL, author_name VARCHAR(64), author_description VARCHAR(2058), author_pic_base64 LONGTEXT, author_email VARCHAR(320), site_background_base64 LONGTEXT, site_color VARCHAR(32), allow_download BIT, water_mark_base64 LONGTEXT, login_hash BINARY(64))';
 
 const DELETE_IMAGE_ROW = 'DELETE from Images';
 const DELETE_GALLERY_ROW = 'DELETE from Galleries';
@@ -159,6 +159,16 @@ export function getAboutInfos(callback: (response: IAbout) => any) {
             return callback(res[0] as IAbout);
         }
         return callback(null);
+    });
+}
+
+export function updateAboutInfos(about: IAbout, callback: (response: any) => any) {
+    connection.query(`UPDATE Settings SET author_name="${about.name}", author_description="${about.description}", author_pic_base64="${about.picture}", author_email="${about.email}"`, (err: any, res: any) => {
+        if (err !== null) {
+            console.log(err.message);
+            return callback(null);
+        }
+        return callback({code: 200});
     });
 }
 

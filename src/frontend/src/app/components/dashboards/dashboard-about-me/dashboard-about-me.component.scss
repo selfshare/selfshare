@@ -1,0 +1,49 @@
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hidden{
+  display: none;
+}
+
+h1{
+  text-align: center;
+}
+
+.images-box{
+  width: 10em;
+  height: 10em;
+}
+
+.profile-pic {
+  width: 10em;
+  height: 10em;
+  border-radius: 50%;
+  box-shadow: 5px 5px 10px grey;
+}
+
+.upload-click{
+  width: 10em;
+  height: 10em;
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.0;
+  transition: all 0.1s;
+}
+
+.upload-click:hover{
+  transition: all 0.1s;
+  opacity: 1.0;
+  cursor: pointer;
+}
+
+form{
+  width: 70%;
+  white-space: pre-line;
+}
+
+.col-0{
+  margin-left: 1em;
+}

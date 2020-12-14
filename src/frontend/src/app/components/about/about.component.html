@@ -1,8 +1,10 @@
 <img class="center" src="{{about.picture}}">
 <br>
 <h1 class="center">{{about.name}}</h1>
+<a href="mailto:{{about.email}}" class="center"><h3>{{about.email}}</h3></a>
 <br>
 <div class="center">
-  <p>{{decodeNewLine(about.description)}}</p>
+  <p>{{about.description}}</p>
+  <p>{{getDescription()}}</p>
 </div>
 

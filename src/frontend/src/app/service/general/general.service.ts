@@ -16,4 +16,8 @@ export class GeneralService {
   getAboutInformation(): Observable<IAbout> {
     return this.http.get<IAbout>(this.url + '/about');
   }
+
+  updateAboutInformation(about: IAbout): Observable<object> {
+    return this.http.put<object>(this.url + '/about', about);
+  }
 }

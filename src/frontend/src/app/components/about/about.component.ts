@@ -9,7 +9,7 @@ import {GeneralService} from "../../service/general/general.service";
 })
 export class AboutComponent implements OnInit {
 
-  about: IAbout = {description: '', name: '', picture: ''};
+  about: IAbout = {email: '', description: '', name: '', picture: ''};
 
   constructor(private generalService: GeneralService) {
   }
@@ -20,7 +20,7 @@ export class AboutComponent implements OnInit {
     });
   }
 
-  decodeNewLine(description: string):string {
-    return description.replace('\n', '<br>');
-  }
+  getDescription(): string{
+    return '<a>hello</a>'; // implement a links to click
+}
 }

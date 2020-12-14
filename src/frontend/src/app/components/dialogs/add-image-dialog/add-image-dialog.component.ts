@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {IGallery} from '../entity/IGallery';
-import {ImageService} from '../service/image/image.service';
+import {IGallery} from '../../../entity/IGallery';
+import {ImageService} from '../../../service/image/image.service';
 
 declare var $: any;
 

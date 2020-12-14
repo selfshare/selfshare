@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import {
     addGallery,
-    connectDB, deleteGalleryById, deleteImageById,
+    connectDB, deleteGalleryById, deleteImageById, getAboutInfos,
     getAllGalleriesMedium, getAllGalleriesSmall,
     getGalleryByTitle, getImageById,
     getMediumImagesByGalleryId,
@@ -35,6 +35,16 @@ function logIncoming(req: any){
     const time = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
     console.log(`${time} - ${req.method} request on ${req.originalUrl} from ${req.hostname}`);
 }
+
+// General
+
+app.get(backendPath + '/about', (req, res) => {
+    logIncoming(req);
+    getAboutInfos(response => {
+        res.send(response);
+    });
+});
+
 
 // Galleries
 

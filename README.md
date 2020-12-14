@@ -54,3 +54,5 @@ TODOs:
 - Dashboard content: Keep galleries open when updating
 - loading animation when opening images in full size
 - think about where to put the title and description (and tags) on full size 
+- restrict title with special characters
+- https://getbootstrap.com/docs/5.0/components/carousel/ for full size

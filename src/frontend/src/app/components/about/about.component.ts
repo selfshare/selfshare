@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {IAbout} from '../../entity/IAbout';
+import {GeneralService} from "../../service/general/general.service";
 
 @Component({
   selector: 'app-about',
@@ -7,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AboutComponent implements OnInit {
 
-  constructor() { }
+  about: IAbout = {description: '', name: '', picture: ''};
 
-  ngOnInit(): void {
+  constructor(private generalService: GeneralService) {
   }
 
+  ngOnInit(): void {
+    this.generalService.getAboutInformation().subscribe(about => {
+      this.about = about;
+    });
+  }
+
+  decodeNewLine(description: string):string {
+    return description.replace('\n', '<br>');
+  }
 }

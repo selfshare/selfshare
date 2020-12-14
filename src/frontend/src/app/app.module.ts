@@ -14,8 +14,8 @@ import { DashboardAboutMeComponent } from './components/dashboards/dashboard-abo
 import { DashboardSecurityComponent } from './components/dashboards/dashboard-security/dashboard-security.component';
 import { DashboardDesignComponent } from './components/dashboards/dashboard-design/dashboard-design.component';
 import {DashboardComponent} from './components/dashboards/dashboard/dashboard.component';
-import { AddImageDialogComponent } from './add-image-dialog/add-image-dialog.component';
-import { LargeImageDialogComponent } from './large-image-dialog/large-image-dialog.component';
+import { AddImageDialogComponent } from './components/dialogs/add-image-dialog/add-image-dialog.component';
+import { LargeImageDialogComponent } from './components/dialogs/large-image-dialog/large-image-dialog.component';
 import {FormsModule} from "@angular/forms";
 
 @NgModule({

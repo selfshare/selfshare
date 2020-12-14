@@ -43,9 +43,33 @@ export class DashboardContentComponent implements OnInit {
     });
   }
 
+  private updateGalleries(): void {
+    this.galleryService.getAllGalleriesSmall().subscribe(galleries => {
+      galleries = galleries.sort((a, b) => a.order_nr - b.order_nr);
+      this.currentGallery = {description: '', gallery_id: 0, images: [], order_nr: 0, base64: '', title: ''};
+      let counter = 0;
+      this.minOrderNr = null;
+      this.maxOrderNr = null;
+
+      this.galleryOrders.clear();
+
+      galleries.forEach(gallery => {
+        Object.assign(this.galleries[counter++], gallery);
+        this.minOrderNr = Math.min(this.minOrderNr != null ? this.minOrderNr : gallery.order_nr, gallery.order_nr);
+        this.maxOrderNr = Math.max(this.maxOrderNr != null ? this.maxOrderNr : gallery.order_nr, gallery.order_nr);
+        this.getImagesByGallery(gallery);
+      });
+    });
+  }
+
+  private setMinMaxOrderNr(gallery: IGallery): void {
+    this.minOrderNr = Math.min(this.minOrderNr != null ? this.minOrderNr : gallery.order_nr, gallery.order_nr);
+    this.maxOrderNr = Math.max(this.maxOrderNr != null ? this.maxOrderNr : gallery.order_nr, gallery.order_nr);
+  }
+
   getImagesByGallery(gallery: IGallery): void {
     this.imageService.getSmallImagesByGalleryId(gallery.gallery_id).subscribe(images => {
-      gallery.images = images;
+      this.galleries.find(value => value.gallery_id === gallery.gallery_id).images = images;
       images.forEach(image => {
         image.gallery_id = gallery.gallery_id;
 
@@ -90,6 +114,7 @@ export class DashboardContentComponent implements OnInit {
   updateGallery(): void {
     this.galleryService.updateGalleryById(this.currentGallery.gallery_id, this.currentGallery).subscribe(resp => {
       this.loadGalleries();
+      // this.updateGalleries();
     });
   }
 
@@ -251,19 +276,22 @@ export class DashboardContentComponent implements OnInit {
   }
 
   moveImageDown(image: IImage): void {
+    this.toggleButtons();
     image.order_nr = image.order_nr + 1;
     this.imageService.updateImageById(image.image_id, image).subscribe(code => {
       console.log(code);
-      this.loadGalleries();
+      this.updateGalleries();
     });
   }
 
   moveImageUp(image: IImage): void {
+    this.toggleButtons();
     image.order_nr = image.order_nr - 1;
     this.imageService.updateImageById(image.image_id, image).subscribe(code => {
       console.log(code);
-      this.loadGalleries();
+      this.updateGalleries();
     });
+    this.toggleButtons();
   }
 
   private isImageAtBottom(image: IImage): boolean {
@@ -272,5 +300,16 @@ export class DashboardContentComponent implements OnInit {
 
   private isImageAtTop(image: IImage): boolean {
     return image.order_nr === this.galleryOrders.get(image.gallery_id).min;
+  }
+
+  private toggleButtons(): void {
+    let buttons = document.querySelectorAll('.btn-link')
+    let unclickables = document.querySelectorAll('.unclickable')
+    buttons.forEach(button => {
+      button.classList.add("unclickable");
+    });
+    // unclickables.forEach(button => {
+    //   button.classList.remove("unclickable");
+    // });
   }
 }

@@ -47,8 +47,10 @@ Share your images on your own server. Sort them by galleries and tags.
 - multiple languages
 
 
-check this, you idiot:
+TODOs:
 - db column size too small for big images? (TEXT)
     - seems ok, with longtext
-- on dashboard content page, it loads the galleries more than once 
 - gallery navigation (back button)
+- Dashboard content: Keep galleries open when updating
+- loading animation when opening images in full size
+- think about where to put the title and description (and tags) on full size 

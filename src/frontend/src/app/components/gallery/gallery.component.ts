@@ -18,7 +18,7 @@ export class GalleryComponent implements OnInit {
 
   gallery: IGallery = {images: [], gallery_id: 0, order_nr: 0, base64: '', title: '', description: ''};
   images: IImage[] = [];
-  currentImage: IImage = {description: '', gallery_id: 0, image_id: 0, tag: '', title: '', upload_timestamp: 0, base64: ''};
+  currentImage: IImage = {order_nr: 0, description: '', gallery_id: 0, image_id: 0, tag: '', title: '', upload_timestamp: 0, base64: ''};
 
   constructor(
     private route: ActivatedRoute,

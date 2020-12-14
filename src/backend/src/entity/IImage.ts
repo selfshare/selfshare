@@ -10,4 +10,5 @@ export interface IImage {
     base64_large: string;
     base64_medium: string;
     base64_small: string;
+    order_nr: number;
 }

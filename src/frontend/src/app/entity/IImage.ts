@@ -8,4 +8,5 @@ export interface IImage {
     tag: string;
     upload_timestamp: number;
     base64: string;
+    order_nr: number;
 }

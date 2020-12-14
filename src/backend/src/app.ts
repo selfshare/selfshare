@@ -2,13 +2,11 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import {
     addGallery,
-    addImage,
-    checkIfAllTablesExist,
     connectDB, deleteGalleryById, deleteImageById,
     getAllGalleriesMedium, getAllGalleriesSmall,
     getGalleryByTitle, getImageById,
     getMediumImagesByGalleryId,
-    getSmallImagesByGalleryId, setGalleryThumbnailById, updateGalleryById,
+    getSmallImagesByGalleryId, setGalleryThumbnailById, updateGalleryById, updateImageById,
     uploadImageToGallery
 } from './database';
 import {IImage} from './entity/IImage';
@@ -132,6 +130,17 @@ app.get(backendPath + '/image/s/:id', (req, res) => {
 app.post(backendPath + '/image', jsonParser, (req, res) => {
     logIncoming(req);
     uploadImageToGallery(req.body, response => {
+        if (response != null) {
+            res.send(response);
+        } else {
+            res.sendStatus(505);
+        }
+    });
+});
+
+app.put(backendPath + '/image/:id', (req, res) => {
+    logIncoming(req);
+    updateImageById(req.params.id, req.body, response => {
         if (response != null) {
             res.send(response);
         } else {

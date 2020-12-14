@@ -31,4 +31,8 @@ export class ImageService {
   deleteImageById(id: number): Observable<object>{
     return this.http.delete<object>(this.url + '/' + id);
   }
+
+  updateImageById(id: number, image: IImage): Observable<object> {
+    return this.http.put<object>(this.url + '/' + id, image);
+  }
 }

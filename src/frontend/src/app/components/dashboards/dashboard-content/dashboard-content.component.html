@@ -3,8 +3,9 @@
     <div class="card-header" id="heading" >
       <div class="row default-row" [id]="'gallery_row_default_' + gallery.gallery_id">
         <img [src]="getGalleryImage(gallery)" height="25px" width="25px" [style]="showGalleryImage(gallery)">
-        <a class="btn-link col-auto mr-auto" data-toggle="collapse" [attr.data-target]="'#gallery_' + i">{{gallery.title}}</a>
-        <a class="btn-link col-auto material-icons" title="Edit Gallery" (click)="editGallery(gallery)">edit</a>
+        <a class="btn-link col-auto gallery-title" data-toggle="collapse" [attr.data-target]="'#gallery_' + i">{{gallery.title}}</a>
+        <a class="btn-link col-auto gallery-desc no-effect" data-toggle="collapse" [attr.data-target]="'#gallery_' + i">{{gallery.description}}</a>
+        <a class="btn-link col-auto material-icons ml-auto" title="Edit Gallery" (click)="editGallery(gallery)">edit</a>
         <a class="btn-link col-auto material-icons" title="Upload Image" data-toggle="modal" data-target="#addImageModal" (click)="changeCurrentGallery(gallery)">add_photo_alternate</a>
         <a class="btn-link col-auto material-icons" [ngClass]="isNotClickableUp(gallery)" title="Move Gallery Up" (click)="moveGalleryDown(gallery)" >keyboard_arrow_down</a>
         <a class="btn-link col-auto material-icons" [ngClass]="isNotClickableDown(gallery)" title="Move Gallery Down" (click)="moveGalleryUp(gallery)">keyboard_arrow_up</a>
@@ -12,32 +13,45 @@
       </div>
       <div class="row add-new edit-row hidden" [id]="'gallery_row_edit_' + gallery.gallery_id">
         <div class="col-3">
-          <input type="text" class="form-control" placeholder="Title" [(ngModel)]="editGalleryTitle">
+          <input type="text" class="form-control" placeholder="Title" [(ngModel)]="editTitle">
         </div>
         <div class="col">
-          <input type="text" class="form-control" placeholder="Description" [(ngModel)]="editGalleryDesc">
+          <input type="text" class="form-control" placeholder="Description" [(ngModel)]="editDesc">
         </div>
         <div class="col-0">
-          <a class="btn-link col-auto material-icons save-clear-btn" (click)="exitExit(true, gallery)">save</a>
-          <a class="btn-link col-auto material-icons save-clear-btn" (click)="exitExit(false, gallery)">clear</a>
+          <a class="btn-link col-auto material-icons save-clear-btn" (click)="editGalleryExit(true, gallery)" title="Save Changes">save</a>
+          <a class="btn-link col-auto material-icons save-clear-btn" (click)="editGalleryExit(false, gallery)" title="Discard Changes">clear</a>
         </div>
       </div>
     </div>
 
     <div id="gallery_{{i}}" class="collapse" data-parent="#accordion">
       <div class="card-body">
+        <p class="image-counter">Images in gallery: {{getImageCount(gallery)}}</p>
         <div class="accordion" id="accordion{{i}}">
           <div class="card" *ngFor="let image of gallery.images; index as i">
             <div class="card-header" id="heading2">
-              <div class="row">
+              <div class="row default-row" [id]="'image_row_default_' + image.image_id">
                 <img src="{{image.base64}}" height="25px" width="25px">
-                <a class="btn-link col-auto mr-auto">{{image.title}}</a>
-
-                <a class="btn-link col-auto material-icons">edit</a>
-                <a class="btn-link col-auto material-icons" title="Set as gallery image" (click)="setAsGalleryImage(gallery, image)">wallpaper</a>
-                <a class="btn-link col-auto material-icons">keyboard_arrow_down</a>
-                <a class="btn-link col-auto material-icons">keyboard_arrow_up</a>
-                <a class="btn-link col-auto material-icons" (click)="deleteImage(image.image_id)">delete</a>
+                <a class="btn-link col-auto image-title no-effect">{{image.title}}</a>
+                <a class="btn-link col-auto image-desc no-effect">{{image.description}}</a>
+                <a class="btn-link col-auto ml-auto material-icons" (click)="editImage(image)">edit</a>
+                <a class="btn-link col-auto material-icons" title="Set as Gallery Image" (click)="setAsGalleryImage(gallery, image)">wallpaper</a>
+                <a class="btn-link col-auto material-icons" [ngClass]="isImageNotClickableUp(image)" title="Move Image Up" (click)="moveImageDown(image)" >keyboard_arrow_down</a>
+                <a class="btn-link col-auto material-icons" [ngClass]="isImageNotClickableDown(image)" title="Move Image Down" (click)="moveImageUp(image)">keyboard_arrow_up</a>
+                <a class="btn-link col-auto material-icons" title="Delete image from gallery" (click)="deleteImage(image.image_id)">delete</a>
+              </div>
+              <div class="row add-new edit-row hidden" [id]="'image_row_edit_' + image.image_id">
+                <div class="col-3">
+                  <input type="text" class="form-control" placeholder="Title" [(ngModel)]="editTitle">
+                </div>
+                <div class="col">
+                  <input type="text" class="form-control" placeholder="Description" [(ngModel)]="editDesc">
+                </div>
+                <div class="col-0">
+                  <a class="btn-link col-auto material-icons save-clear-btn" (click)="editImageExit(true, image)" title="Save Changes">save</a>
+                  <a class="btn-link col-auto material-icons save-clear-btn" (click)="editImageExit(false, image)" title="Discard Changes">clear</a>
+                </div>
               </div>
             </div>
           </div>
@@ -56,7 +70,7 @@
             <input type="text" class="form-control" placeholder="Description" [(ngModel)]="addGalleryDesc">
           </div>
           <div class="col-0">
-            <a class="btn-link col-auto material-icons add-btn" (click)="addGallery()">add</a>
+            <a class="btn-link col-auto material-icons add-btn" (click)="addGallery()" title="Add Gallery">add</a>
           </div>
         </div>
     </div>

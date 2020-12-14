@@ -3,8 +3,15 @@
   cursor: pointer;
 }
 
-.mr-auto{
+.gallery-title{
   font-size: large;
+  font-weight: bold;
+}
+
+.gallery-desc{
+  margin-top: 5px;
+  font-size: small;
+  font-style: italic;
 }
 
 .material-icons{
@@ -36,4 +43,24 @@
 
 .hidden{
   display: none;
+}
+
+.image-counter{
+  margin-left: 10px;
+  color: gray;
+}
+
+.image-title{
+  font-weight: bold;
+}
+
+.image-desc{
+  margin-top: 3px;
+  font-size: small;
+  font-style: italic;
+}
+
+.no-effect:hover{
+  cursor: default;
+  color: #18bc9c;
 }

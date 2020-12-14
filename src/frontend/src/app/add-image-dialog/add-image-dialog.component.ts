@@ -94,7 +94,11 @@ export class AddImageDialogComponent implements OnInit {
         context.drawImage(image, -startX, 0, width, size);
         return callback(canvas.toDataURL());
       } else {
-        return '';
+        const ratio = size / image.width;
+        const height = image.height * ratio;
+        const startY = (height - size) / 2;
+        context.drawImage(image, 0, -startY, size, height);
+        return callback(canvas.toDataURL());
       }
     };
   }

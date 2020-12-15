@@ -11,9 +11,9 @@ const GET_ALL_SETTINGS = 'SELECT * from Settings';
 const GET_ABOUT_INFOS = 'SELECT author_name AS name, author_description AS description, author_pic_base64 AS picture FROM Settings';
 
 
-const GET_ALL_IMAGES_LARGE = 'SELECT image_id, title, description, tag, upload_timestamp, base64_large AS base64, order_nr FROM Images';
-const GET_ALL_IMAGES_MEDIUM = 'SELECT image_id, title, description, tag, upload_timestamp, base64_medium AS base64, order_nr FROM Images';
-const GET_ALL_IMAGES_SMALL = 'SELECT image_id, title, description, tag, upload_timestamp, base64_small AS base64, order_nr FROM Images';
+const GET_ALL_IMAGES_LARGE = 'SELECT image_id, title, description, tag, upload_timestamp, base64_large AS base64, order_nr, gallery_id FROM Images';
+const GET_ALL_IMAGES_MEDIUM = 'SELECT image_id, title, description, tag, upload_timestamp, base64_medium AS base64, order_nr, gallery_id FROM Images';
+const GET_ALL_IMAGES_SMALL = 'SELECT image_id, title, description, tag, upload_timestamp, base64_small AS base64, order_nr, gallery_id FROM Images';
 
 const GET_ALL_GALLERIES_INFO = 'SELECT gallery_id, title, description FROM Galleries';
 const GET_ALL_GALLERIES_MEDIUM = 'SELECT gallery_id, title, description, base64_medium as base64, order_nr FROM Galleries ORDER BY order_nr';
@@ -251,20 +251,20 @@ export function getGalleryByTitle(title: string, callback: (gallery: IGallery) =
 }
 
 
-export function getImageById(id: number, callback: (arg0: any) => any) {
+export function getImageById(id: number, callback: (image: IImage) => any) {
     connection.query(GET_ALL_IMAGES_LARGE + ` WHERE image_id=${id}`, (err: any, res: any) => {
         return callback(res[0]);
     });
 }
 
 export function getMediumImagesByGalleryId(id: number, callback: (arg0: any) => any) {
-    connection.query(GET_ALL_IMAGES_MEDIUM + ` WHERE gallery_id=${id} ORDER BY order_nr`, (err: any, res: any) => {
+    connection.query(GET_ALL_IMAGES_MEDIUM + ` WHERE gallery_id=${id} ORDER BY order_nr DESC`, (err: any, res: any) => {
         return callback(res);
     });
 }
 
 export function getSmallImagesByGalleryId(id: number, callback: (arg0: any) => any) {
-    connection.query(GET_ALL_IMAGES_SMALL + ` WHERE gallery_id=${id} ORDER BY order_nr`, (err: any, res: any) => {
+    connection.query(GET_ALL_IMAGES_SMALL + ` WHERE gallery_id=${id} ORDER BY order_nr DESC`, (err: any, res: any) => {
         return callback(res);
     });
 }
@@ -313,8 +313,33 @@ export function updateImageById(id: string, updatedImage: IImage, callback: (arg
 }
 
 export function deleteImageById(id: number, callback: (arg0: any) => any) {
-    connection.query(DELETE_IMAGE_ROW + ` WHERE image_id=${id}`, (err: any, res: any) => {
-        return callback(res);
+    getImageById(id, image => {
+        let command = '';
+        getMaxOrderImages(String(image.gallery_id), max => {
+
+            connection.query(DELETE_IMAGE_ROW + ` WHERE image_id=${id}`, (err1: any, res1: any) => {
+
+                if (err1 != null){
+                    console.log(err1);
+                }
+
+                for (let counter = image.order_nr; counter < max; counter++){
+                    command += `UPDATE Images SET order_nr=${counter} WHERE order_nr=${counter+1} AND gallery_id=${image.gallery_id};`
+                }
+
+                console.log(command);
+
+                if(command.length > 0){
+                    connection.query(command, (err2: any, res2: any) => {
+                        if (err2 != null){
+                            console.log(err2);
+                        }
+                        return callback(res1);
+                    });
+                }
+                return callback(res1);
+            });
+        });
     });
 }
 

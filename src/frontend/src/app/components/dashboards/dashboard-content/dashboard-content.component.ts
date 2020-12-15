@@ -13,7 +13,7 @@ export class DashboardContentComponent implements OnInit {
 
   galleries: IGallery[] = [];
   galleryOrders = new Map();
-  currentGallery: IGallery = {description: '', gallery_id: 0, images: [], order_nr: 0, base64: '', title: ''};
+  currentGallery: IGallery = {} as IGallery;
 
   addGalleryTitle = '';
   addGalleryDesc = '';
@@ -34,44 +34,44 @@ export class DashboardContentComponent implements OnInit {
   private loadGalleries(): void {
     this.galleryService.getAllGalleriesSmall().subscribe(galleries => {
       this.galleries = galleries.sort((a, b) => a.order_nr - b.order_nr);
-      this.currentGallery = {description: '', gallery_id: 0, images: [], order_nr: 0, base64: '', title: ''};
+      this.currentGallery = {} as IGallery;
       this.galleries.forEach(gallery => {
-        this.minOrderNr = Math.min(this.minOrderNr != null ? this.minOrderNr : gallery.order_nr, gallery.order_nr);
-        this.maxOrderNr = Math.max(this.maxOrderNr != null ? this.maxOrderNr : gallery.order_nr, gallery.order_nr);
-        this.getImagesByGallery(gallery);
+        this.calculateMinMaxAndGetImages(gallery);
       });
     });
   }
 
+  /*
+    Updates every gallery one by one instead of all to prevent closing of the accordion.
+   */
   private updateGalleries(): void {
     this.galleryService.getAllGalleriesSmall().subscribe(galleries => {
       galleries = galleries.sort((a, b) => a.order_nr - b.order_nr);
-      this.currentGallery = {description: '', gallery_id: 0, images: [], order_nr: 0, base64: '', title: ''};
-      let counter = 0;
+
+      // reset
+      this.currentGallery = {} as IGallery;
       this.minOrderNr = null;
       this.maxOrderNr = null;
+      //this.galleryOrders.clear();
 
-      this.galleryOrders.clear();
-
+      let counter = 0;
       galleries.forEach(gallery => {
         Object.assign(this.galleries[counter++], gallery);
-        this.minOrderNr = Math.min(this.minOrderNr != null ? this.minOrderNr : gallery.order_nr, gallery.order_nr);
-        this.maxOrderNr = Math.max(this.maxOrderNr != null ? this.maxOrderNr : gallery.order_nr, gallery.order_nr);
-        this.getImagesByGallery(gallery);
+        this.calculateMinMaxAndGetImages(gallery);
       });
     });
   }
 
-  private setMinMaxOrderNr(gallery: IGallery): void {
+  private calculateMinMaxAndGetImages(gallery: IGallery): void{
     this.minOrderNr = Math.min(this.minOrderNr != null ? this.minOrderNr : gallery.order_nr, gallery.order_nr);
     this.maxOrderNr = Math.max(this.maxOrderNr != null ? this.maxOrderNr : gallery.order_nr, gallery.order_nr);
+    this.getImagesByGallery(gallery);
   }
 
-  getImagesByGallery(gallery: IGallery): void {
+  private getImagesByGallery(gallery: IGallery): void {
     this.imageService.getSmallImagesByGalleryId(gallery.gallery_id).subscribe(images => {
       this.galleries.find(value => value.gallery_id === gallery.gallery_id).images = images;
       images.forEach(image => {
-        image.gallery_id = gallery.gallery_id;
 
         const minExists = this.galleryOrders.has(gallery.gallery_id) ? this.galleryOrders.get(gallery.gallery_id).min : image.order_nr;
         const maxExists = this.galleryOrders.has(gallery.gallery_id) ? this.galleryOrders.get(gallery.gallery_id).max : image.order_nr;
@@ -82,7 +82,6 @@ export class DashboardContentComponent implements OnInit {
         this.galleryOrders.set(gallery.gallery_id, {min, max});
 
       });
-
     });
   }
 
@@ -93,16 +92,14 @@ export class DashboardContentComponent implements OnInit {
   deleteImage(id: number): void {
     this.imageService.deleteImageById(id).subscribe(code => {
       console.log(code);
-      this.loadGalleries();
+      this.updateGalleries();
     });
   }
 
   addGallery(): void {
-    const gallery: IGallery = {
-      base64: null, gallery_id: null, images: null, order_nr: null,
-      title: this.addGalleryTitle,
-      description: this.addGalleryDesc
-    };
+    const gallery = {} as IGallery;
+    gallery.title = this.addGalleryTitle;
+    gallery.description = this.addGalleryDesc;
 
     this.galleryService.addGallery(gallery).subscribe(resp => {
       this.loadGalleries();
@@ -111,10 +108,9 @@ export class DashboardContentComponent implements OnInit {
     });
   }
 
-  updateGallery(): void {
+  updateGalleryChanges(): void {
     this.galleryService.updateGalleryById(this.currentGallery.gallery_id, this.currentGallery).subscribe(resp => {
       this.loadGalleries();
-      // this.updateGalleries();
     });
   }
 
@@ -122,7 +118,7 @@ export class DashboardContentComponent implements OnInit {
     if (!this.isGalleryAtTop(gallery)) {
       this.currentGallery = gallery;
       this.currentGallery.order_nr = gallery.order_nr - 1;
-      this.updateGallery();
+      this.updateGalleryChanges();
     }
   }
 
@@ -130,7 +126,7 @@ export class DashboardContentComponent implements OnInit {
     if (!this.isGalleryAtBottom(gallery)) {
       this.currentGallery = gallery;
       this.currentGallery.order_nr = gallery.order_nr + 1;
-      this.updateGallery();
+      this.updateGalleryChanges();
     }
   }
 
@@ -276,40 +272,30 @@ export class DashboardContentComponent implements OnInit {
   }
 
   moveImageDown(image: IImage): void {
-    this.toggleButtons();
-    image.order_nr = image.order_nr + 1;
-    this.imageService.updateImageById(image.image_id, image).subscribe(code => {
-      console.log(code);
-      this.updateGalleries();
-    });
+    if (!this.isImageAtBottom(image)) {
+      image.order_nr = image.order_nr - 1;
+      this.imageService.updateImageById(image.image_id, image).subscribe(code => {
+        console.log(code);
+        this.updateGalleries();
+      });
+    }
   }
 
   moveImageUp(image: IImage): void {
-    this.toggleButtons();
-    image.order_nr = image.order_nr - 1;
-    this.imageService.updateImageById(image.image_id, image).subscribe(code => {
-      console.log(code);
-      this.updateGalleries();
-    });
-    this.toggleButtons();
+    if (!this.isImageAtTop(image)) {
+      image.order_nr = image.order_nr + 1;
+      this.imageService.updateImageById(image.image_id, image).subscribe(code => {
+        console.log(code);
+        this.updateGalleries();
+      });
+    }
   }
 
   private isImageAtBottom(image: IImage): boolean {
-    return image.order_nr === this.galleryOrders.get(image.gallery_id).max;
-  }
-
-  private isImageAtTop(image: IImage): boolean {
     return image.order_nr === this.galleryOrders.get(image.gallery_id).min;
   }
 
-  private toggleButtons(): void {
-    let buttons = document.querySelectorAll('.btn-link')
-    let unclickables = document.querySelectorAll('.unclickable')
-    buttons.forEach(button => {
-      button.classList.add("unclickable");
-    });
-    // unclickables.forEach(button => {
-    //   button.classList.remove("unclickable");
-    // });
+  private isImageAtTop(image: IImage): boolean {
+    return image.order_nr === this.galleryOrders.get(image.gallery_id).max;
   }
 }

@@ -53,4 +53,5 @@ TODOs:
 - gallery navigation (back button)
 - Dashboard content: Keep galleries open when updating
 - loading animation when opening images in full size
-- think about where to put the title and description (and tags) on full size 
+- think about where to put the title and description (and tags) on full size
+- change method for min max in dashboard content

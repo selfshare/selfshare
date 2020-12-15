@@ -19,11 +19,12 @@
   </div>
   <div class="form-group">
     <label for="inputDescription">Description</label>
-    <textarea class="form-control" id="inputDescription" placeholder="e.g. I like dogs" rows="20" [(ngModel)]="about.description" name="description"></textarea>
+    <textarea class="form-control" id="inputDescription" placeholder="e.g. I like dogs" rows="20" [(ngModel)]="about.description" name="description" maxlength="2048"></textarea>
+    <small id="DescHelp" class="form-text text-muted">HTML code is possible. Emails and URLs (format: http:// and https://) will be formatted automatically.</small>
   </div>
   <div class="d-flex flex-row-reverse">
-    <button type="button" class="col-0 btn btn-secondary" (click)="dismiss()">Dismiss</button>
-    <button type="submit" class="col-0 btn btn-primary" (click)="save()">Save</button>
+    <button type="button" class="col-0 btn btn-secondary" (click)="dismiss()" [disabled]="!textChanged">Dismiss</button>
+    <button type="submit" class="col-0 btn btn-primary" (click)="save()" [disabled]="!textChanged">Save</button>
   </div>
 </form>
 

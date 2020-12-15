@@ -16,8 +16,8 @@ export class AddImageDialogComponent implements OnInit {
   mediumSource: string;
   smallSource: string;
   conversionsDone = false;
-  title: string = "";
-  description: string = "";
+  title = '';
+  description = '';
 
 
   constructor(private imageService: ImageService) {

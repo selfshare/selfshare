@@ -56,3 +56,5 @@ TODOs:
 - think about where to put the title and description (and tags) on full size 
 - restrict title with special characters
 - https://getbootstrap.com/docs/5.0/components/carousel/ for full size
+- Remove duplicated upload code and make one (compress) image service
+- In dashboard-content replace currentGallery with something better

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {IAbout} from "../../../entity/IAbout";
-import {GeneralService} from "../../../service/general/general.service";
+import {IAbout} from '../../../entity/IAbout';
+import {GeneralService} from '../../../service/general/general.service';
 
 @Component({
   selector: 'app-dashboard-about-me',
@@ -9,12 +9,17 @@ import {GeneralService} from "../../../service/general/general.service";
 })
 export class DashboardAboutMeComponent implements OnInit {
 
-  about: IAbout = {email: '', description: '', name: '', picture: ''};
+  about: IAbout = {} as IAbout;
+  textChanged = false;
 
   constructor(private generalService: GeneralService) {
   }
 
   ngOnInit(): void {
+    document.getElementById('inputDescription').addEventListener('input', ev => {
+      this.textChanged = true;
+    });
+
     this.generalService.getAboutInformation().subscribe(about => {
       this.about = about;
     });
@@ -76,12 +81,17 @@ export class DashboardAboutMeComponent implements OnInit {
     console.log('restore');
     this.generalService.getAboutInformation().subscribe(about => {
       this.about = about;
+      this.textChanged = false;
     });
   }
 
   save(): void {
-    this.generalService.updateAboutInformation(this.about).subscribe(code => {
+    const about: IAbout = {} as IAbout;
+    Object.assign(about, this.about);
+    about.description = about.description.replace(/"/g, '\\"');
+    this.generalService.updateAboutInformation(about).subscribe(code => {
       console.log(code);
+      this.textChanged = false;
     });
   }
 }

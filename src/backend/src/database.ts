@@ -11,9 +11,10 @@ const GET_ALL_SETTINGS = 'SELECT * from Settings';
 const GET_ABOUT_INFOS = 'SELECT author_name AS name, author_description AS description, author_pic_base64 AS picture, author_email as email FROM Settings';
 
 
-const GET_ALL_IMAGES_LARGE = 'SELECT image_id, title, description, tag, upload_timestamp, base64_large AS base64, order_nr FROM Images';
-const GET_ALL_IMAGES_MEDIUM = 'SELECT image_id, title, description, tag, upload_timestamp, base64_medium AS base64, order_nr FROM Images';
-const GET_ALL_IMAGES_SMALL = 'SELECT image_id, title, description, tag, upload_timestamp, base64_small AS base64, order_nr FROM Images';
+
+const GET_ALL_IMAGES_LARGE = 'SELECT image_id, title, description, tag, upload_timestamp, base64_large AS base64, order_nr, gallery_id FROM Images';
+const GET_ALL_IMAGES_MEDIUM = 'SELECT image_id, title, description, tag, upload_timestamp, base64_medium AS base64, order_nr, gallery_id FROM Images';
+const GET_ALL_IMAGES_SMALL = 'SELECT image_id, title, description, tag, upload_timestamp, base64_small AS base64, order_nr, gallery_id FROM Images';
 
 const GET_ALL_GALLERIES_INFO = 'SELECT gallery_id, title, description FROM Galleries';
 const GET_ALL_GALLERIES_MEDIUM = 'SELECT gallery_id, title, description, base64_medium as base64, order_nr FROM Galleries ORDER BY order_nr';
@@ -25,9 +26,6 @@ const CREATE_SETTINGS_TABLE = 'CREATE TABLE Settings (settings_id INT UNSIGNED A
 
 const DELETE_IMAGE_ROW = 'DELETE from Images';
 const DELETE_GALLERY_ROW = 'DELETE from Galleries';
-
-const GET_MAX_ORDER_GALLERIES = 'SELECT MAX(order_nr) as "maxValue" FROM Galleries';
-const GET_MAX_ORDER_IMAGES = 'SELECT MAX(order_nr) as "maxValue" FROM Images';
 
 
 export function connectDB() {
@@ -101,20 +99,20 @@ function createSettingsTable() {
 }
 
 function getMaxOrderGalleries(callback: (max: number) => any) {
-    connection.query(GET_MAX_ORDER_GALLERIES, (err: any, res: any) => {
-        if (res[0].maxValue == null) {
+    connection.query(GET_ALL_GALLERIES_INFO, (err: any, res: any) => {
+        if (res == null) {
             return callback(-1);
         }
-        return callback(res[0].maxValue);
+        return callback(res.length - 1);
     });
 }
 
 function getMaxOrderImages(galleryId: string, callback: (max: number) => any) {
-    connection.query(GET_MAX_ORDER_IMAGES + ` WHERE gallery_id=${galleryId}`, (err: any, res: any) => {
-        if (res[0].maxValue == null) {
+    connection.query(GET_ALL_IMAGES + ` WHERE gallery_id=${galleryId}`, (err: any, res: any) => {
+        if (res == null) {
             return callback(-1);
         }
-        return callback(res[0].maxValue);
+        return callback(res.length - 1);
     });
 }
 
@@ -230,9 +228,39 @@ export function setGalleryThumbnailById(galleryId: string, sentImage: IImage, ca
 }
 
 export function deleteGalleryById(id: number, callback: (arg0: any) => any) {
-    connection.query(DELETE_IMAGE_ROW + ` WHERE gallery_id=${id}`, (err: any, res: any) => {
-        connection.query(DELETE_GALLERY_ROW + ` WHERE gallery_id=${id}`, (err1: any, res1: any) => {
-            return callback(res1);
+    getGalleryById(id, gallery => {
+        const prefix = `UPDATE Galleries
+                        SET order_nr = CASE order_nr `;
+        let command = '';
+        const suffix = `ELSE order_nr END`;
+        getMaxOrderGalleries(max => {
+
+            connection.query(DELETE_IMAGE_ROW + ` WHERE gallery_id=${id}`, (err0: any, res0: any) => {
+                if (err0 != null) {
+                    console.log(err0);
+                }
+                connection.query(DELETE_GALLERY_ROW + ` WHERE gallery_id=${id}`, (err1: any, res1: any) => {
+                    if (err1 != null) {
+                        console.log(err1);
+                    }
+
+                    for (let counter = gallery.order_nr; counter < max; counter++) {
+                        command += `WHEN ${counter + 1} THEN ${counter} `;
+                    }
+
+                    if (command.length > 0) {
+                        connection.query(prefix + command + suffix, (err2: any, res2: any) => {
+                            if (err2 != null) {
+                                console.log(err2);
+                            }
+                            return callback(res1);
+                        });
+                    } else {
+                        return callback(res1);
+                    }
+
+                });
+            });
         });
     });
 }
@@ -261,20 +289,20 @@ export function getGalleryByTitle(title: string, callback: (gallery: IGallery) =
 }
 
 
-export function getImageById(id: number, callback: (arg0: any) => any) {
+export function getImageById(id: number, callback: (image: IImage) => any) {
     connection.query(GET_ALL_IMAGES_LARGE + ` WHERE image_id=${id}`, (err: any, res: any) => {
         return callback(res[0]);
     });
 }
 
-export function getMediumImagesByGalleryId(id: number, callback: (arg0: any) => any) {
-    connection.query(GET_ALL_IMAGES_MEDIUM + ` WHERE gallery_id=${id} ORDER BY order_nr`, (err: any, res: any) => {
+export function getMediumImagesByGalleryId(id: number, callback: (images: IImage[]) => any) {
+    connection.query(GET_ALL_IMAGES_MEDIUM + ` WHERE gallery_id=${id} ORDER BY order_nr DESC`, (err: any, res: any) => {
         return callback(res);
     });
 }
 
-export function getSmallImagesByGalleryId(id: number, callback: (arg0: any) => any) {
-    connection.query(GET_ALL_IMAGES_SMALL + ` WHERE gallery_id=${id} ORDER BY order_nr`, (err: any, res: any) => {
+export function getSmallImagesByGalleryId(id: number, callback: (images: IImage[]) => any) {
+    connection.query(GET_ALL_IMAGES_SMALL + ` WHERE gallery_id=${id} ORDER BY order_nr DESC`, (err: any, res: any) => {
         return callback(res);
     });
 }
@@ -295,7 +323,7 @@ export function uploadImageToGallery(image: IImage, callback: (arg0: any) => any
 
 export function updateImageById(id: string, updatedImage: IImage, callback: (arg0: any) => any) {
     const newOrderNr = updatedImage.order_nr;
-    getImageByOrderNrAndGalleryId(newOrderNr, String(updatedImage.gallery_id),  swapImage => {
+    getImageByOrderNrAndGalleryId(newOrderNr, String(updatedImage.gallery_id), swapImage => {
         if (swapImage.image_id !== updatedImage.image_id) {
             console.log("Changed order");
             getImageById(updatedImage.image_id, imageByTitle => {
@@ -323,8 +351,36 @@ export function updateImageById(id: string, updatedImage: IImage, callback: (arg
 }
 
 export function deleteImageById(id: number, callback: (arg0: any) => any) {
-    connection.query(DELETE_IMAGE_ROW + ` WHERE image_id=${id}`, (err: any, res: any) => {
-        return callback(res);
+    getImageById(id, image => {
+        const prefix = `UPDATE Images
+                        SET order_nr = CASE order_nr `;
+        let command = '';
+        const suffix = `ELSE order_nr END WHERE gallery_id=${image.gallery_id};`;
+        getMaxOrderImages(String(image.gallery_id), max => {
+
+            connection.query(DELETE_IMAGE_ROW + ` WHERE image_id=${id}`, (err1: any, res1: any) => {
+
+                if (err1 != null) {
+                    console.log(err1);
+                }
+
+                for (let counter = image.order_nr; counter < max; counter++) {
+                    command += `WHEN ${counter + 1} THEN ${counter} `;
+                }
+
+                if (command.length > 0) {
+                    connection.query(prefix + command + suffix, (err2: any, res2: any) => {
+                        if (err2 != null) {
+                            console.log(err2);
+                        }
+                        return callback(res1);
+                    });
+                } else {
+                    return callback(res1);
+                }
+
+            });
+        });
     });
 }
 

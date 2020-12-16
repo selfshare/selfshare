@@ -2,15 +2,22 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import {
     addGallery,
-    connectDB, deleteGalleryById, deleteImageById, getAboutInfos,
-    getAllGalleriesMedium, getAllGalleriesSmall,
-    getGalleryByTitle, getImageById,
+    connectDB,
+    deleteGalleryById,
+    deleteImageById,
+    getAboutInfos,
+    getAllGalleriesMedium,
+    getAllGalleriesSmall,
+    getGalleryByTitle,
+    getImageById,
     getMediumImagesByGalleryId,
-    getSmallImagesByGalleryId, setGalleryThumbnailById, updateAboutInfos, updateGalleryById, updateImageById,
+    getSmallImagesByGalleryId,
+    setGalleryThumbnailById,
+    updateAboutInfos,
+    updateGalleryById,
+    updateImageById,
     uploadImageToGallery
 } from './database';
-import {IImage} from './entity/IImage';
-import {IGallery} from './entity/IGallery';
 import path from 'path';
 import cors from 'cors';
 

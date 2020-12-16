@@ -8,8 +8,8 @@
         <div class="ml-auto col-auto">
           <a class="btn-link col-auto material-icons" title="Edit Gallery" (click)="editGallery(gallery)">edit</a>
           <a class="btn-link col-auto material-icons" title="Upload Image" data-toggle="modal" data-target="#addImageModal" (click)="changeCurrentGallery(gallery)">add_photo_alternate</a>
-          <a class="btn-link col-auto material-icons" [ngClass]="isNotClickableUp(gallery)" title="Move Gallery Up" (click)="moveGalleryDown(gallery)" >keyboard_arrow_down</a>
-          <a class="btn-link col-auto material-icons" [ngClass]="isNotClickableDown(gallery)" title="Move Gallery Down" (click)="moveGalleryUp(gallery)">keyboard_arrow_up</a>
+          <a class="btn-link col-auto material-icons" [ngClass]="isNotClickableUp(gallery)" title="Move Gallery Down" (click)="moveGalleryDown(gallery)" >keyboard_arrow_down</a>
+          <a class="btn-link col-auto material-icons" [ngClass]="isNotClickableDown(gallery)" title="Move Gallery Up" (click)="moveGalleryUp(gallery)">keyboard_arrow_up</a>
           <a class="btn-link col-auto material-icons" title="Delete Gallery" (click)="deleteGallery(gallery)">delete</a>
         </div>
       </div>
@@ -38,8 +38,8 @@
                 <a class="btn-link col-auto image-desc no-effect">{{image.description}}</a>
                 <a class="btn-link col-auto ml-auto material-icons" (click)="editImage(image)">edit</a>
                 <a class="btn-link col-auto material-icons" title="Set as Gallery Image" (click)="setAsGalleryImage(gallery, image)">wallpaper</a>
-                <a class="btn-link col-auto material-icons" [ngClass]="isImageNotClickableUp(image)" title="Move Image Up" (click)="moveImageDown(image)" >keyboard_arrow_down</a>
-                <a class="btn-link col-auto material-icons" [ngClass]="isImageNotClickableDown(image)" title="Move Image Down" (click)="moveImageUp(image)">keyboard_arrow_up</a>
+                <a class="btn-link col-auto material-icons" [ngClass]="isImageNotClickableUp(image)" title="Move Image Down" (click)="moveImageDown(image)" >keyboard_arrow_down</a>
+                <a class="btn-link col-auto material-icons" [ngClass]="isImageNotClickableDown(image)" title="Move Image Up" (click)="moveImageUp(image)">keyboard_arrow_up</a>
                 <a class="btn-link col-auto material-icons" title="Delete image from gallery" (click)="deleteImage(image.image_id)">delete</a>
               </div>
               <div class="row add-new edit-row hidden" [id]="'image_row_edit_' + image.image_id">

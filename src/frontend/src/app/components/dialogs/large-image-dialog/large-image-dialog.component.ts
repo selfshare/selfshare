@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {IImage} from '../entity/IImage';
+import {IImage} from '../../../entity/IImage';
 import {PlatformLocation} from '@angular/common';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';

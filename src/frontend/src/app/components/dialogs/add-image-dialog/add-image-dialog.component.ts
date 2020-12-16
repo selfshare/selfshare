@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {IGallery} from '../entity/IGallery';
-import {ImageService} from '../service/image/image.service';
+import {IGallery} from '../../../entity/IGallery';
+import {ImageService} from '../../../service/image/image.service';
 
 declare var $: any;
 
@@ -16,8 +16,8 @@ export class AddImageDialogComponent implements OnInit {
   mediumSource: string;
   smallSource: string;
   conversionsDone = false;
-  title: string = "";
-  description: string = "";
+  title = '';
+  description = '';
 
 
   constructor(private imageService: ImageService) {

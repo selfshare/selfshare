@@ -2,11 +2,11 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import {
     addGallery,
-    connectDB, deleteGalleryById, deleteImageById,
+    connectDB, deleteGalleryById, deleteImageById, getAboutInfos,
     getAllGalleriesMedium, getAllGalleriesSmall,
     getGalleryByTitle, getImageById,
     getMediumImagesByGalleryId,
-    getSmallImagesByGalleryId, setGalleryThumbnailById, updateGalleryById, updateImageById,
+    getSmallImagesByGalleryId, setGalleryThumbnailById, updateAboutInfos, updateGalleryById, updateImageById,
     uploadImageToGallery
 } from './database';
 import {IImage} from './entity/IImage';
@@ -35,6 +35,27 @@ function logIncoming(req: any){
     const time = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
     console.log(`${time} - ${req.method} request on ${req.originalUrl} from ${req.hostname}`);
 }
+
+// General
+
+app.get(backendPath + '/about', (req, res) => {
+    logIncoming(req);
+    getAboutInfos(response => {
+        res.send(response);
+    });
+});
+
+app.put(backendPath + '/about', (req, res) => {
+    logIncoming(req);
+    updateAboutInfos(req.body, response => {
+        if (response != null) {
+            res.send(response);
+        } else {
+            res.sendStatus(505);
+        }
+    });
+});
+
 
 // Galleries
 

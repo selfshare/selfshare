@@ -2,6 +2,8 @@ import mysql from 'mysql';
 import {IImage} from './entity/IImage';
 import {IGallery} from './entity/IGallery';
 import {IAbout} from "./entity/IAbout";
+import {ISecurity} from "./entity/ISecurity";
+import {PRIVATE_KEY} from  './key';
 
 let connection: any;
 const GET_ALL_IMAGES = 'SELECT * from Images';
@@ -9,7 +11,6 @@ const GET_ALL_GALLERIES = 'SELECT * from Galleries';
 const GET_ALL_SETTINGS = 'SELECT * from Settings';
 
 const GET_ABOUT_INFOS = 'SELECT author_name AS name, author_description AS description, author_pic_base64 AS picture, author_email as email FROM Settings';
-
 
 
 const GET_ALL_IMAGES_LARGE = 'SELECT image_id, title, description, tag, upload_timestamp, base64_large AS base64, order_nr, gallery_id FROM Images';
@@ -168,6 +169,34 @@ export function updateAboutInfos(about: IAbout, callback: (response: any) => any
         }
         return callback({code: 200});
     });
+}
+
+export function updateSecurityInfo(security: ISecurity, callback: (response: any) => any) {
+    if (security.password != null && security.password.length > 0) {
+        const privateKey = Buffer.from(PRIVATE_KEY);
+        const buffer = Buffer.from(security.password);
+        for (let i = 0; i < buffer.length; i++) {
+            // tslint:disable-next-line:no-bitwise
+            buffer[i] = buffer[i] ^ privateKey[buffer[i]];
+        }
+        const hash = buffer.toString('base64');
+
+        connection.query(`UPDATE Settings SET username="${security.username}", password_hash="${hash}"`, (err: any, res: any) => {
+            if (err !== null) {
+                console.log(err.message);
+                return callback(null);
+            }
+            return callback({code: 200});
+        });
+    } else {
+        connection.query(`UPDATE Settings SET username="${security.username}"`, (err: any, res: any) => {
+            if (err !== null) {
+                console.log(err.message);
+                return callback(null);
+            }
+            return callback({code: 200});
+        });
+    }
 }
 
 

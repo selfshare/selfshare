@@ -15,7 +15,7 @@ import {
     setGalleryThumbnailById,
     updateAboutInfos,
     updateGalleryById,
-    updateImageById,
+    updateImageById, updateSecurityInfo,
     uploadImageToGallery
 } from './database';
 import path from 'path';
@@ -55,6 +55,17 @@ app.get(backendPath + '/about', (req, res) => {
 app.put(backendPath + '/about', (req, res) => {
     logIncoming(req);
     updateAboutInfos(req.body, response => {
+        if (response != null) {
+            res.send(response);
+        } else {
+            res.sendStatus(505);
+        }
+    });
+});
+
+app.put(backendPath + '/security', (req, res) => {
+    logIncoming(req);
+    updateSecurityInfo(req.body, response => {
         if (response != null) {
             res.send(response);
         } else {

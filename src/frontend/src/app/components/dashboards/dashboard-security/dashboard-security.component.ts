@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {SecurityService} from "../../../service/security/security.service";
+import {ISecurity} from '../../../entity/ISecurity';
 
 @Component({
   selector: 'app-dashboard-security',
@@ -6,10 +8,27 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dashboard-security.component.scss']
 })
 export class DashboardSecurityComponent implements OnInit {
+  textChanged = false;
 
-  constructor() { }
+  security = {} as ISecurity;
+
+  constructor(private securityService: SecurityService) { }
 
   ngOnInit(): void {
+    document.querySelectorAll('.text-changer').forEach(element => {
+      element.addEventListener('input', ev => {
+        this.textChanged = true;
+      });
+    });
   }
 
+  save(): void {
+    this.securityService.updateSecurityInformation(this.security).subscribe(code => {
+      console.log(code);
+    });
+  }
+
+  dismiss(): void {
+
+  }
 }

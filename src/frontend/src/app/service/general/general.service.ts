@@ -18,6 +18,6 @@ export class GeneralService {
   }
 
   updateAboutInformation(about: IAbout): Observable<object> {
-    return this.http.put<object>(this.url + '/about', about);
+    return this.http.put<IAbout>(this.url + '/about', about);
   }
 }

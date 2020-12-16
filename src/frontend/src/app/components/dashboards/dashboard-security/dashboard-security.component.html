@@ -1,1 +1,15 @@
-<p>dashboard-security works!</p>
+<form class="center">
+  <div class="form-group">
+    <label for="inputUsername">Username</label>
+    <input type="text" class="form-control text-changer" id="inputUsername" placeholder="admin" [(ngModel)]="security.username" name="name">
+  </div>
+  <div class="form-group">
+    <label for="inputPassword">New Password</label>
+    <input type="password" class="form-control text-changer" id="inputPassword" placeholder="Leave empty to keep current" [(ngModel)]="security.password" name="password">
+  </div>
+  <div class="d-flex flex-row-reverse">
+    <button type="button" class="col-0 btn btn-secondary" (click)="dismiss()" [disabled]="!textChanged">Dismiss</button>
+    <button type="submit" class="col-0 btn btn-primary" (click)="save()" [disabled]="!textChanged">Save</button>
+  </div>
+</form>
+

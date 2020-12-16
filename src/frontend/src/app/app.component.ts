@@ -8,5 +8,5 @@ import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 })
 export class AppComponent{
   title = 'frontend';
-  loggedIn = true;
+  loggedIn = false;
 }

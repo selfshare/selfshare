@@ -16,8 +16,10 @@ export class DashboardAboutMeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    document.getElementById('inputDescription').addEventListener('input', ev => {
-      this.textChanged = true;
+    document.querySelectorAll('.text-changer').forEach(element => {
+      element.addEventListener('input', ev => {
+        this.textChanged = true;
+      });
     });
 
     this.generalService.getAboutInformation().subscribe(about => {

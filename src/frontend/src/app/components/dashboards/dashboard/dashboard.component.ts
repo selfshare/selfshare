@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {ActivatedRoute} from "@angular/router";
+import {Location} from "@angular/common";
 
 @Component({
   selector: 'app-dashboard',
@@ -9,15 +11,25 @@ export class DashboardComponent implements OnInit {
 
   selectedIndex = 0;
 
-  constructor() { }
+  urls = ['content', 'about', 'security', 'design'];
+
+  constructor(private route: ActivatedRoute, private location: Location) { }
 
   ngOnInit(): void {
+
+    const view = this.route.snapshot.paramMap.get('view');
+    if (view != null){
+      const found = this.urls.find(str => str === view);
+      this.selectedIndex = this.urls.indexOf(found);
+    }
+
     this.updateActive();
   }
 
   changeView(index: number): void{
    this.selectedIndex = index;
    this.updateActive();
+   this.location.go('dashboard/' + this.urls[index]);
   }
 
   private updateActive(): void {

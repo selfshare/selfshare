@@ -3,12 +3,17 @@
   cursor: pointer;
 }
 
+.small-img{
+  margin-left: 15px;
+}
+
 .gallery-title{
   font-size: large;
   font-weight: bold;
 }
 
 .gallery-desc{
+  margin-bottom: 5px;
   margin-top: 5px;
   font-size: small;
   font-style: italic;
@@ -45,17 +50,13 @@
   display: none;
 }
 
-.image-counter{
-  margin-left: 10px;
-  color: gray;
-}
-
 .image-title{
   font-weight: bold;
 }
 
 .image-desc{
   margin-top: 3px;
+  margin-bottom: 3px;
   font-size: small;
   font-style: italic;
 }

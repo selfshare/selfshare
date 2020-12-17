@@ -35,13 +35,13 @@ Share your images on your own server. Sort them by galleries and tags.
     - change look of the site (color, background)
     - enable/disable watermark/lower quality/copyright stuff
     - allow / disable download button
-    - edit author page
+    - edit author page ✓
     
 (optional ideas)
 - list view
 - comments, likes, (users?)
 - secured password https://www.npmjs.com/package/password-hash
-- custom order images
+- custom order images ✓
 - statistics dashboard
 - multiple pages
 - multiple languages
@@ -51,14 +51,14 @@ TODOs:
 - db column size too small for big images? (TEXT)
     - seems ok, with longtext
 - gallery navigation (back button)
-- Dashboard content: Keep galleries open when updating
+- Dashboard content: Keep galleries open when updating ✓
 - loading animation when opening images in full size
 - think about where to put the title and description (and tags) on full size 
 - restrict title with special characters
 - https://getbootstrap.com/docs/5.0/components/carousel/ for full size
 - Remove duplicated upload code and make one (compress) image service
 - In dashboard-content replace currentGallery with something better
-- Secure post and put request
+- Secure post and put requests
 
 - Implement disclaimer editing:
   Idea: One blank page in dashboard which supports html code. This is already used in the about page description. Basicly most of it can be copy and pasted. Dont forget change activated Save and Decline buttons.

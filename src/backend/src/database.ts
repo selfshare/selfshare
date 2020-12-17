@@ -34,9 +34,10 @@ const DELETE_GALLERY_ROW = 'DELETE from Galleries';
 
 export function connectDB() {
     connection = mysql.createConnection({
-        host: process.env.db_host || "docker",
+        host: process.env.db_host || 'docker',
+        port: Number(process.env.db_port) || 3306,
         user: 'selfshare',
-        password: 'xs6HZKdc5YEi6', // it's recommended to change the password for production builds (here and inside the db)
+        password: 'xs6HZKdc5YEi6', // it's recommended to change the password for production builds (here and inside the sql script)
         database: 'selfshare'
     });
     connection.connect((err: any) => {

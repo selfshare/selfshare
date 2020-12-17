@@ -40,7 +40,7 @@ Share your images on your own server. Sort them by galleries and tags.
 (optional ideas)
 - list view
 - comments, likes, (users?)
-- secured password https://www.npmjs.com/package/password-hash
+- secured password https://www.npmjs.com/package/password-hash ✓
 - custom order images ✓
 - statistics dashboard
 - multiple pages

@@ -1,0 +1,19 @@
+{
+  "name": "selfshare",
+  "version": "1.0.0",
+  "description": "Share your images on your own server. Sort them by galleries and tags.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/selfshare/selfshare.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/selfshare/selfshare/issues"
+  },
+  "homepage": "https://github.com/selfshare/selfshare#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-shell": "^0.8.0"
+  }
+}

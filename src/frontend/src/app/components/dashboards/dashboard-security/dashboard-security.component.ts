@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {SecurityService} from "../../../service/security/security.service";
+import {SecurityService} from '../../../service/security/security.service';
 import {ISecurity} from '../../../entity/ISecurity';
 
 @Component({
@@ -16,9 +16,13 @@ export class DashboardSecurityComponent implements OnInit {
 
   ngOnInit(): void {
     document.querySelectorAll('.text-changer').forEach(element => {
-      element.addEventListener('input', ev => {
+      element.addEventListener('input', () => {
         this.textChanged = true;
       });
+    });
+
+    this.securityService.authenticate().subscribe(response => {
+      this.security.username = response.body;
     });
   }
 

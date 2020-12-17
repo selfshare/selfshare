@@ -1,7 +1,12 @@
-<h1>Login</h1>
 <form>
-<div class="card center" style="width: 18rem;">
+<img class="login-icon center" [ngClass]="moveImage" src="assets/login-icon.svg" alt="login icon">
+<div class="card center" style="width: 20rem;">
+  <div class="card-img-top"></div>
   <div class="card-body">
+    <button type="button" class="close text-primary" routerLink="/home">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4>Login</h4>
     <div class="form-group">
       <label for="inputUsername">Username</label>
       <input type="text" class="form-control text-changer" id="inputUsername" [(ngModel)]="security.username" name="name">
@@ -11,6 +16,9 @@
       <input type="password" class="form-control text-changer" id="inputPassword" [(ngModel)]="security.password" name="password">
     </div>
     <input type="submit" class="btn btn-primary" (click)="login()" value="Login"/>
+    <div class="text-danger" [ngClass]="hideError">
+      The credentials are wrong. Please try again!
+    </div>
   </div>
 </div>
 </form>

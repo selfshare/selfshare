@@ -3,7 +3,7 @@ import {IImage} from './entity/IImage';
 import {IGallery} from './entity/IGallery';
 import {IAbout} from "./entity/IAbout";
 import {ISecurity} from "./entity/ISecurity";
-import {PRIVATE_KEY} from  './key';
+import crypto from 'crypto';
 
 let connection: any;
 const GET_ALL_IMAGES = 'SELECT * from Images';
@@ -11,23 +11,26 @@ const GET_ALL_GALLERIES = 'SELECT * from Galleries';
 const GET_ALL_SETTINGS = 'SELECT * from Settings';
 
 const GET_ABOUT_INFOS = 'SELECT author_name AS name, author_description AS description, author_pic_base64 AS picture, author_email as email FROM Settings';
-
+const GET_LOGIN_HASH = 'SELECT login_hash FROM Settings'
+const GET_USERNAME = 'SELECT username FROM Settings'
+const GET_PASSWORD_HASH = 'SELECT password_hash from Settings';
 
 const GET_ALL_IMAGES_LARGE = 'SELECT image_id, title, description, tag, upload_timestamp, base64_large AS base64, order_nr, gallery_id FROM Images';
 const GET_ALL_IMAGES_MEDIUM = 'SELECT image_id, title, description, tag, upload_timestamp, base64_medium AS base64, order_nr, gallery_id FROM Images';
-const GET_ALL_IMAGES_SMALL = 'SELECT image_id, title, description, tag, upload_timestamp, base64_small AS base64, order_nr, gallery_id FROM Images';
 
+const GET_ALL_IMAGES_SMALL = 'SELECT image_id, title, description, tag, upload_timestamp, base64_small AS base64, order_nr, gallery_id FROM Images';
 const GET_ALL_GALLERIES_INFO = 'SELECT gallery_id, title, description FROM Galleries';
 const GET_ALL_GALLERIES_MEDIUM = 'SELECT gallery_id, title, description, base64_medium as base64, order_nr FROM Galleries ORDER BY order_nr';
-const GET_ALL_GALLERIES_SMALL = 'SELECT gallery_id, title, description, base64_small as base64, order_nr FROM Galleries ORDER BY order_nr';
 
+const GET_ALL_GALLERIES_SMALL = 'SELECT gallery_id, title, description, base64_small as base64, order_nr FROM Galleries ORDER BY order_nr';
 const CREATE_IMAGES_TABLE = 'CREATE TABLE Images (image_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, gallery_id INT UNSIGNED, CONSTRAINT fk_gallery FOREIGN KEY (gallery_id) REFERENCES Galleries(gallery_id), title VARCHAR(64), description VARCHAR(512), tag VARCHAR(32), upload_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, base64_large LONGTEXT not null, base64_medium LONGTEXT not null, base64_small LONGTEXT not null, order_nr INT DEFAULT 0)';
 const CREATE_GALLERIES_TABLE = 'CREATE TABLE Galleries (gallery_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, title VARCHAR(64) UNIQUE, description VARCHAR(512), base64_medium LONGTEXT, base64_small LONGTEXT, order_nr INT DEFAULT 0)';
-const CREATE_SETTINGS_TABLE = 'CREATE TABLE Settings (settings_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, site_title VARCHAR(64), site_description VARCHAR(2048), username VARCHAR(32) NOT NULL, password_hash BINARY(64) NOT NULL, author_name VARCHAR(64), author_description VARCHAR(2048), author_pic_base64 LONGTEXT, author_email VARCHAR(320), site_background_base64 LONGTEXT, site_color VARCHAR(32), allow_download BIT, water_mark_base64 LONGTEXT, login_hash BINARY(64))';
 
+const CREATE_SETTINGS_TABLE = 'CREATE TABLE Settings (settings_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, site_title VARCHAR(64), site_description VARCHAR(2048), username VARCHAR(32) NOT NULL, password_hash BINARY(161) NOT NULL, author_name VARCHAR(64), author_description VARCHAR(2048), author_pic_base64 LONGTEXT, author_email VARCHAR(320), site_background_base64 LONGTEXT, site_color VARCHAR(32), allow_download BIT, water_mark_base64 LONGTEXT, login_hash BINARY(32))';
 const DELETE_IMAGE_ROW = 'DELETE from Images';
-const DELETE_GALLERY_ROW = 'DELETE from Galleries';
 
+
+const DELETE_GALLERY_ROW = 'DELETE from Galleries';
 
 export function connectDB() {
     connection = mysql.createConnection({
@@ -41,6 +44,7 @@ export function connectDB() {
         console.log("Successfully connected to database!");
         checkIfAllTablesExist();
     });
+
 }
 
 export function checkIfAllTablesExist() {
@@ -62,12 +66,13 @@ export function checkIfAllTablesExist() {
             createSettingsTable();
         }
     });
+
+
 }
 
-
 // private
-
 function doesImageTableExist(callback: { (exists: any): void; (arg0: boolean): any; }) {
+
     connection.query(GET_ALL_IMAGES, (error: any) => {
         return callback(!error);
     });
@@ -78,25 +83,30 @@ function doesGalleryTableExist(callback: { (exists: any): void; (arg0: boolean):
     connection.query(GET_ALL_GALLERIES, (error: any) => {
         return callback(!error);
     });
+
 }
 
 function doesSettingsTableExist(callback: (exists: any) => void) {
     connection.query(GET_ALL_SETTINGS, (error: any) => {
         return callback(!error);
     });
+
 }
 
 function createImageTable() {
     connection.query(CREATE_IMAGES_TABLE);
-}
 
+
+}
 
 function createGalleryTable() {
     connection.query(CREATE_GALLERIES_TABLE);
+
 }
 
 function createSettingsTable() {
     connection.query(CREATE_SETTINGS_TABLE);
+
 }
 
 function getMaxOrderGalleries(callback: (max: number) => any) {
@@ -106,6 +116,7 @@ function getMaxOrderGalleries(callback: (max: number) => any) {
         }
         return callback(res.length - 1);
     });
+
 }
 
 function getMaxOrderImages(galleryId: string, callback: (max: number) => any) {
@@ -115,6 +126,7 @@ function getMaxOrderImages(galleryId: string, callback: (max: number) => any) {
         }
         return callback(res.length - 1);
     });
+
 }
 
 function getGalleryByOrderNr(orderNr: number, callback: (gallery: IGallery) => any) {
@@ -124,6 +136,7 @@ function getGalleryByOrderNr(orderNr: number, callback: (gallery: IGallery) => a
         }
         return callback(null);
     });
+
 }
 
 function getGalleryById(id: number, callback: (gallery: IGallery) => any) {
@@ -133,12 +146,14 @@ function getGalleryById(id: number, callback: (gallery: IGallery) => any) {
         }
         return callback(null);
     });
+
 }
 
 export function getFullImageById(id: number, callback: (arg0: any) => any) {
     connection.query(GET_ALL_IMAGES + ` WHERE image_id=${id}`, (err: any, res: any) => {
         return callback(res[0]);
     });
+
 }
 
 function getImageByOrderNrAndGalleryId(orderNr: number, galleryId: string, callback: (image: IImage) => any) {
@@ -148,10 +163,31 @@ function getImageByOrderNrAndGalleryId(orderNr: number, galleryId: string, callb
         }
         return callback(null);
     });
+
+}
+
+function hashPassword(password: string, callback: (hashed: string) => any) {
+    const salt = crypto.randomBytes(16).toString('hex');
+
+    crypto.scrypt(password, salt ,64, ((err, derivedKey) => {
+        if (err){
+            console.log(err);
+        }
+        return callback(salt + ':' + derivedKey.toString('hex'));
+    }))
+}
+
+function verify(password: string, hash: string, callback: (valid: boolean) => any) {
+    const [salt, key] = hash.split(':');
+    crypto.scrypt(password, salt, 64, (err, derivedKey) => {
+        if(err){
+            console.log(err);
+        }
+        return callback(key === derivedKey.toString('hex'));
+    });
 }
 
 // General
-
 export function getAboutInfos(callback: (response: IAbout) => any) {
     connection.query(GET_ABOUT_INFOS, (err: any, res: any) => {
         if (res.length > 0) {
@@ -159,6 +195,7 @@ export function getAboutInfos(callback: (response: IAbout) => any) {
         }
         return callback(null);
     });
+
 }
 
 export function updateAboutInfos(about: IAbout, callback: (response: any) => any) {
@@ -169,24 +206,20 @@ export function updateAboutInfos(about: IAbout, callback: (response: any) => any
         }
         return callback({code: 200});
     });
+
 }
 
 export function updateSecurityInfo(security: ISecurity, callback: (response: any) => any) {
     if (security.password != null && security.password.length > 0) {
-        const privateKey = Buffer.from(PRIVATE_KEY);
-        const buffer = Buffer.from(security.password);
-        for (let i = 0; i < buffer.length; i++) {
-            // tslint:disable-next-line:no-bitwise
-            buffer[i] = buffer[i] ^ privateKey[buffer[i]];
-        }
-        const hash = buffer.toString('base64');
-
-        connection.query(`UPDATE Settings SET username="${security.username}", password_hash="${hash}"`, (err: any, res: any) => {
-            if (err !== null) {
-                console.log(err.message);
-                return callback(null);
-            }
-            return callback({code: 200});
+        hashPassword(security.password, hashed => {
+            console.log(hashed);
+            connection.query(`UPDATE Settings SET username="${security.username}", password_hash="${hashed}"`, (err: any, res: any) => {
+                if (err !== null) {
+                    console.log(err.message);
+                    return callback(null);
+                }
+                return callback({code: 200});
+            });
         });
     } else {
         connection.query(`UPDATE Settings SET username="${security.username}"`, (err: any, res: any) => {
@@ -197,6 +230,51 @@ export function updateSecurityInfo(security: ISecurity, callback: (response: any
             return callback({code: 200});
         });
     }
+
+}
+
+export function loginAndGetHash(authHeader: string, callback: (response: any) => any) {
+    const decoded = Buffer.from(authHeader.replace('Basic ', ''), 'base64').toString();
+    const [username, password] = decoded.split(':');
+
+    connection.query(GET_PASSWORD_HASH + ` WHERE username="${username}"`, (err: any, res: any) => {
+        if (res.length > 0) {
+            const fromDb = res[0].password_hash.toString();
+
+            verify(password, fromDb, valid => {
+                if(valid){
+                    const hash = crypto.randomBytes(16).toString('hex');
+                    connection.query(`UPDATE Settings SET login_hash="${hash}"`, (err2: any, res2: any) => {
+                        return callback({code: 200, body: hash});
+                    });
+                }else{
+                    return callback({code: 403});
+                }
+            });
+        } else {
+            return callback({code: 403});
+        }
+    });
+}
+
+export function authenticate(authHeader: string, callback: (response: any) => any) {
+    connection.query(GET_LOGIN_HASH, (err: any, res: any) => {
+        if (res.length > 0) {
+            connection.query(GET_USERNAME, (err1: any, res2: any) => {
+                const username = res2[0].username
+                const decoded = Buffer.from(authHeader.replace('Bearer ', ''), 'base64').toString();
+                const fromDb = res[0].login_hash.toString();
+                if (fromDb === decoded) {
+                    return callback({code: 200, body: username});
+                } else {
+                    return callback({code: 403});
+                }
+            });
+        } else {
+            return callback({code: 500});
+        }
+
+    });
 }
 
 

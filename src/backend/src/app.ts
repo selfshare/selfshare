@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import {
-    addGallery,
+    addGallery, authenticate,
     connectDB,
     deleteGalleryById,
     deleteImageById,
@@ -11,7 +11,7 @@ import {
     getGalleryByTitle,
     getImageById,
     getMediumImagesByGalleryId,
-    getSmallImagesByGalleryId,
+    getSmallImagesByGalleryId, loginAndGetHash,
     setGalleryThumbnailById,
     updateAboutInfos,
     updateGalleryById,
@@ -66,6 +66,28 @@ app.put(backendPath + '/about', (req, res) => {
 app.put(backendPath + '/security', (req, res) => {
     logIncoming(req);
     updateSecurityInfo(req.body, response => {
+        if (response != null) {
+            res.send(response);
+        } else {
+            res.sendStatus(505);
+        }
+    });
+});
+
+app.get(backendPath + '/security/login', (req, res) => {
+    logIncoming(req);
+    loginAndGetHash(req.headers.authorization, response => {
+        if (response != null) {
+            res.send(response);
+        } else {
+            res.sendStatus(505);
+        }
+    });
+});
+
+app.get(backendPath + '/security/auth', (req, res) => {
+    logIncoming(req);
+    authenticate(req.headers.authorization, response => {
         if (response != null) {
             res.send(response);
         } else {

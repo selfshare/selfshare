@@ -8,7 +8,6 @@
   display: none;
 }
 
-
 .col-0{
   margin-left: 1em;
 }
@@ -41,6 +40,5 @@
 }
 
 form{
-  width: 70%;
   white-space: pre-line;
 }

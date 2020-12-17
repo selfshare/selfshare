@@ -1,0 +1,31 @@
+<h1>Setup</h1>
+<p>All settings can be changed later.</p>
+<form>
+  <h4>About you</h4>
+  <div class="form-group">
+    <label for="uploadFile">Profile picture</label>
+    <input type="file" class="hidden text-changer" id="uploadFile">
+    <div class="center images-box">
+      <img class="upload-click" src="assets/upload_image.png" (click)="uploadImage()"/>
+      <img class="profile-pic" [src]="about.picture">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputFullName">Full name</label>
+    <input type="text" class="form-control text-changer" id="inputFullName" placeholder="e.g. John Doe" [(ngModel)]="about.name" name="name">
+  </div>
+  <div class="form-group">
+    <label for="inputEmail">Email address</label>
+    <input type="email" class="form-control text-changer" id="inputEmail" aria-describedby="emailHelp" placeholder="Enter email" [(ngModel)]="about.email" name="email">
+    <small id="emailHelp" class="form-text text-muted">Leaving this empty will not show your email address on the <a routerLink="/about">about page</a>.</small>
+  </div>
+  <div class="form-group">
+    <label for="inputDescription">Description</label>
+    <textarea class="form-control text-changer" id="inputDescription" placeholder="e.g. I like dogs" rows="20" [(ngModel)]="about.description" name="description" maxlength="2048"></textarea>
+    <small id="DescHelp" class="form-text text-muted">HTML code is possible. Emails and URLs (format: http:// and https://) will be formatted automatically.</small>
+  </div>
+  <div class="d-flex flex-row-reverse">
+    <button type="button" class="col-0 btn btn-secondary" (click)="dismiss()" [disabled]="!textChanged">Dismiss</button>
+    <button type="submit" class="col-0 btn btn-primary" (click)="save()" [disabled]="!textChanged">Save</button>
+  </div>
+</form>

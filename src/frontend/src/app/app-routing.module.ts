@@ -7,11 +7,13 @@ import {AboutComponent} from './components/about/about.component';
 import {DisclaimerComponent} from './components/disclaimer/disclaimer.component';
 import {LoginComponent} from './components/login/login.component';
 import {AdminGuard} from './admin-guard/admin.guard';
+import {SetupComponent} from "./components/setup/setup.component";
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'login', component: LoginComponent, canActivate: [AdminGuard]},
   {path: 'about', component: AboutComponent},
+  {path: 'setup', component: SetupComponent},
   {path: 'dashboard', component: DashboardComponent, canActivate: [AdminGuard]},
   {path: 'dashboard/:view', component: DashboardComponent, canActivate: [AdminGuard]},
   {path: 'disclaimer', component: DisclaimerComponent},

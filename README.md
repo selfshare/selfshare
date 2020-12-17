@@ -5,10 +5,16 @@ Share your images on your own server. Sort them by galleries and tags.
 - Clone the project
 - If not already installed, download Node.js at https://nodejs.org/en/download
 
-### 1. MySQL Database
+### 1. MySQL Database (Manual)
 - If needed refer to [How to install MySQL Server in Docker Container](DOCKER_MYSQL.md)
 - add user and database called selfshare (with all rights)
 - do this inside MYSQL console: ``ALTER USER 'selfshare' IDENTIFIED WITH mysql_native_password BY 'xs6HZKdc5YEi6';`` and ``flush privileges;`` to allow password authentication.
+
+### 1.5. MySQL Database (Production build)
+- Make sure NodeJs and Gulp are installed https://gulpjs.com/docs/en/getting-started/quick-start/
+- Navigate to the root directory which contains the ``Dockerfile`` and ``gulpfile.js``
+- Run ``gulp db-build`` to build the database image
+- Run ``gulp db-run`` to start the database container on port 3366
 
 ### 2. Backend
 - Navigate to ``src/backend``
@@ -20,11 +26,20 @@ Share your images on your own server. Sort them by galleries and tags.
 - Run ``npm install`` to download all dependencies
 - Run ``npm start`` in terminal or add it to your IDE's run config
 
-## Production Build (With Docker)
+## First Production Build (With Gulp)
 - Clone the project
-- Navigate to the root directory which contains the ``Dockerfile``
-- Run ``sudo docker build -t selfshare .`` to build the docker image
-- Run ``docker run --name selfshare -p <PORT>:3000 -d selfshare`` (replace <PORT> with preferred port) to start the docker container 
+- Make sure NodeJs and Gulp are installed https://gulpjs.com/docs/en/getting-started/quick-start/
+- Navigate to the root directory which contains the ``Dockerfile`` and ``gulpfile.js``
+- Run ``gulp db-build`` to build the database image
+- Run ``gulp db-run`` to start the database container
+- Run ``gulp build`` to build the main image
+- Run ``gulp run --port <PORT>`` to start the main image on the preferred port (default: 80)
+- Navigate to ``http://localhost:<PORT>``
+
+## Update Production Build and keep Database
+- Run ``gulp exit`` to stop and remove the main container
+- Run ``gulp build`` to build the main image
+- Run ``gulp run --port <PORT>`` to start the main image on the preferred port (default: 80)
 - Navigate to ``http://localhost:<PORT>``
 
 ## Features

@@ -58,3 +58,7 @@ TODOs:
 - https://getbootstrap.com/docs/5.0/components/carousel/ for full size
 - Remove duplicated upload code and make one (compress) image service
 - In dashboard-content replace currentGallery with something better
+- Secure post and put request
+
+- Implement disclaimer editing:
+  Idea: One blank page in dashboard which supports html code. This is already used in the about page description. Basicly most of it can be copy and pasted. Dont forget change activated Save and Decline buttons.

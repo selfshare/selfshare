@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {Location} from "@angular/common";
+import {ActivatedRoute} from '@angular/router';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,7 +11,7 @@ export class DashboardComponent implements OnInit {
 
   selectedIndex = 0;
 
-  urls = ['content', 'about', 'security', 'design'];
+  urls = ['content', 'about', 'security', 'design', 'disclaimer'];
 
   constructor(private route: ActivatedRoute, private location: Location) { }
 

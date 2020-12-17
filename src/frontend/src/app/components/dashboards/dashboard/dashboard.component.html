@@ -16,6 +16,10 @@
     <a class="nav-link" (click)="changeView(3)">Design</a>
     <!--    site_color, site_background, -->
   </li>
+  <li class="nav-item">
+    <a class="nav-link" (click)="changeView(4)">Disclaimer</a>
+    <!--    site_color, site_background, -->
+  </li>
 </ul>
 <br>
 <div [ngSwitch]="selectedIndex">
@@ -24,6 +28,7 @@
 <app-dashboard-about-me *ngSwitchCase="1"></app-dashboard-about-me>
 <app-dashboard-security *ngSwitchCase="2"></app-dashboard-security>
 <app-dashboard-design *ngSwitchCase="3"></app-dashboard-design>
+<app-dashboard-disclaimer *ngSwitchCase="4"></app-dashboard-disclaimer>
 <app-dashboard-content *ngSwitchDefault></app-dashboard-content>
 </div>
 

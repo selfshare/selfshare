@@ -1,67 +1,67 @@
-.btn-link:hover{
+.btn-link:hover {
   text-decoration: none;
   cursor: pointer;
 }
 
-.small-img{
+.small-img {
   margin-left: 15px;
 }
 
-.gallery-title{
+.gallery-title {
   font-size: large;
   font-weight: bold;
 }
 
-.gallery-desc{
+.gallery-desc {
   margin-bottom: 5px;
   margin-top: 5px;
   font-size: small;
   font-style: italic;
 }
 
-.material-icons{
+.material-icons {
   user-select: none;
 }
 
-.row{
-  margin: 10px 0px;
+.row {
+  margin: 10px 0;
 }
 
-.add-new{
-  margin: 4.75px 0px;
+.add-new {
+  margin: 4.75px 0;
 }
 
-.add-btn{
-  padding-left: 0px;
-  padding-right: 0px;
-  margin: 6px 0px;
+.add-btn {
+  padding-left: 0;
+  padding-right: 0;
+  margin: 6px 0;
 }
 
-.save-clear-btn{
-  margin: 6px 0px;
+.save-clear-btn {
+  margin: 6px 0;
 }
 
-.unclickable{
+.unclickable {
   pointer-events: none;
   color: lightgray
 }
 
-.hidden{
+.hidden {
   display: none;
 }
 
-.image-title{
+.image-title {
   font-weight: bold;
 }
 
-.image-desc{
+.image-desc {
   margin-top: 3px;
   margin-bottom: 3px;
   font-size: small;
   font-style: italic;
 }
 
-.no-effect:hover{
+.no-effect:hover {
   cursor: default;
   color: #18bc9c;
 }

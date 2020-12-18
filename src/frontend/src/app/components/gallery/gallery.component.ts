@@ -1,11 +1,10 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {GalleryService} from '../../service/gallery/gallery.service';
 import {IGallery} from '../../entity/IGallery';
 import {IImage} from '../../entity/IImage';
 import {ImageService} from '../../service/image/image.service';
 import {Location} from '@angular/common';
-import * as jQuery from 'jquery';
 
 declare var $: any;
 
@@ -18,7 +17,16 @@ export class GalleryComponent implements OnInit {
 
   gallery: IGallery = {images: [], gallery_id: 0, order_nr: 0, base64: '', title: '', description: ''};
   images: IImage[] = [];
-  currentImage: IImage = {order_nr: 0, description: '', gallery_id: 0, image_id: 0, tag: '', title: '', upload_timestamp: 0, base64: ''};
+  currentImage: IImage = {
+    order_nr: 0,
+    description: '',
+    gallery_id: 0,
+    image_id: 0,
+    tag: '',
+    title: '',
+    upload_timestamp: 0,
+    base64: ''
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -40,7 +48,7 @@ export class GalleryComponent implements OnInit {
     }, error => {
       if (error.status === 404) {
         console.log(error.statusText);
-        this.router.navigate(['/']);
+        this.router.navigate(['/']).then();
       }
     });
   }
@@ -51,11 +59,11 @@ export class GalleryComponent implements OnInit {
       this.hideSpinner();
       this.checkIfEmptyShowText();
 
-      if (imageId != null){
-        if (this.images.find(i => i.image_id.toString() === imageId)){
+      if (imageId != null) {
+        if (this.images.find(i => i.image_id.toString() === imageId)) {
           this.setCurrentImage(Number(imageId));
           $('#largeImageModal').modal('show');
-        }else{
+        } else {
           this.location.go(galleryTitle);
         }
       }
@@ -71,20 +79,20 @@ export class GalleryComponent implements OnInit {
     });
   }
 
-  private getImageTitleAndResize(imageIndex: number): string {
-    if (imageIndex === 0){
+  getImageTitleAndResize(imageIndex: number): string {
+    if (imageIndex === 0) {
       this.resizeImages();
     }
     return this.images[imageIndex].title;
   }
 
-  private hideSpinner(): void{
+  private hideSpinner(): void {
     const spinner: any = document.getElementById('loading-spinner');
     spinner.style.display = 'none';
   }
 
-  private checkIfEmptyShowText(): void{
-    if (this.images.length === 0){
+  private checkIfEmptyShowText(): void {
+    if (this.images.length === 0) {
       const text: any = document.getElementById('emptyText');
       text.style.display = 'block';
     }
@@ -97,7 +105,7 @@ export class GalleryComponent implements OnInit {
     });
   }
 
-  private openLargeImage(imageId: number): void {
+  openLargeImage(imageId: number): void {
     this.currentImage = this.images.find(value => value.image_id === imageId);
     this.imageService.getLargeImageById(imageId).subscribe(image => {
       this.currentImage = image;

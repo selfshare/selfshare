@@ -1,12 +1,12 @@
 const gulp = require('gulp')
 const shell = require('gulp-shell')
 
-var port, i = process.argv.indexOf("--port");
+let port, i = process.argv.indexOf("--port");
 if(i>-1) {
     port = process.argv[i+1];
 }
 
-if(port == undefined){
+if(port === undefined){
 	port = '80';
 }
  

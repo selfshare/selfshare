@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {GalleryService} from '../../service/gallery/gallery.service';
 import {IGallery} from '../../entity/IGallery';
 
@@ -11,7 +11,8 @@ import {IGallery} from '../../entity/IGallery';
 
 export class HomeComponent implements OnInit {
 
-  constructor(private galleryService: GalleryService) { }
+  constructor(private galleryService: GalleryService) {
+  }
 
   galleries: IGallery[];
 
@@ -37,20 +38,20 @@ export class HomeComponent implements OnInit {
   }
 
 
-  private getGalleryTitleAndResize(galleryIndex: number): string {
-    if (galleryIndex === 0){
+  getGalleryTitleAndResize(galleryIndex: number): string {
+    if (galleryIndex === 0) {
       this.resizeImages();
     }
     return this.galleries[galleryIndex].title;
   }
 
-  private hideSpinner(): void{
+  private hideSpinner(): void {
     const spinner: any = document.getElementById('loading-spinner');
     spinner.style.display = 'none';
   }
 
-  private checkIfEmptyShowText(): void{
-    if (this.galleries.length === 0){
+  private checkIfEmptyShowText(): void {
+    if (this.galleries.length === 0) {
       const text: any = document.getElementById('emptyText');
       text.style.display = 'block';
     }
@@ -68,7 +69,7 @@ export class HomeComponent implements OnInit {
   }
 
   showGalleryImage(gallery: IGallery): string {
-    if (gallery.base64 == null){
+    if (gallery.base64 == null) {
       return 'visibility: hidden';
     }
     if (gallery.base64.match(/data:image(.)*;base64/)) {

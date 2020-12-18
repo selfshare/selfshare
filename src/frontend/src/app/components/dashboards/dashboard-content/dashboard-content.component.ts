@@ -77,7 +77,8 @@ export class DashboardContentComponent implements OnInit {
     gallery.title = this.addGalleryTitle;
     gallery.description = this.addGalleryDesc;
 
-    this.galleryService.addGallery(gallery).subscribe(resp => {
+    this.galleryService.addGallery(gallery).subscribe(response => {
+      console.log(response.code);
       this.loadGalleries();
       this.addGalleryTitle = '';
       this.addGalleryDesc = '';

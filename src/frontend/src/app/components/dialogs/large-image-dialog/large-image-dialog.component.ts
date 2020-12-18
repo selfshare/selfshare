@@ -4,6 +4,8 @@ import {PlatformLocation} from '@angular/common';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
 
+declare var $: any;
+
 @Component({
   selector: 'app-large-image-dialog',
   templateUrl: './large-image-dialog.component.html',

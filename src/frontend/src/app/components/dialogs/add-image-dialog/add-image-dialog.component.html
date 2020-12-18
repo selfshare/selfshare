@@ -21,7 +21,7 @@
             <label for="fileUpload">Image Upload</label>
             <input type="file" class="form-control-file" id="fileUpload" required>
           </div>
-          <img id="image" src="{{imageSource}}" alt="uploaded image">
+          <img id="image" src="{{imageSource}}" alt="">
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             <div *ngIf="imageSource; else elseBlock">

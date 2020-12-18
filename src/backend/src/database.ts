@@ -4,12 +4,14 @@ import {IGallery} from './entity/IGallery';
 import {IAbout} from "./entity/IAbout";
 import {ISecurity} from "./entity/ISecurity";
 import crypto from 'crypto';
+import {IGeneral} from "./entity/IGeneral";
 
 let connection: any;
 const GET_ALL_IMAGES = 'SELECT * from Images';
 const GET_ALL_GALLERIES = 'SELECT * from Galleries';
 const GET_ALL_SETTINGS = 'SELECT * from Settings';
 
+const GET_GENERAL_INFO = 'SELECT site_title AS title, site_description AS description, site_theme AS theme FROM Settings';
 const GET_ABOUT_INFOS = 'SELECT author_name AS name, author_description AS description, author_pic_base64 AS picture, author_email as email FROM Settings';
 const GET_LOGIN_HASH = 'SELECT login_hash FROM Settings'
 const GET_USERNAME = 'SELECT username FROM Settings'
@@ -25,11 +27,9 @@ const GET_ALL_GALLERIES_SMALL = 'SELECT gallery_id, title, description, base64_s
 
 const CREATE_IMAGES_TABLE = 'CREATE TABLE Images (image_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, gallery_id INT UNSIGNED, CONSTRAINT fk_gallery FOREIGN KEY (gallery_id) REFERENCES Galleries(gallery_id), title VARCHAR(64), description VARCHAR(512), tag VARCHAR(32), upload_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, base64_large LONGTEXT not null, base64_medium LONGTEXT not null, base64_small LONGTEXT not null, order_nr INT DEFAULT 0)';
 const CREATE_GALLERIES_TABLE = 'CREATE TABLE Galleries (gallery_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, title VARCHAR(64) UNIQUE, description VARCHAR(512), base64_medium LONGTEXT, base64_small LONGTEXT, order_nr INT DEFAULT 0)';
-const CREATE_SETTINGS_TABLE = 'CREATE TABLE Settings (settings_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, site_title VARCHAR(64), site_description VARCHAR(2048), username VARCHAR(32) NOT NULL, password_hash BINARY(161) NOT NULL, author_name VARCHAR(64), author_description VARCHAR(2048), author_pic_base64 LONGTEXT, author_email VARCHAR(320), site_background_base64 LONGTEXT, site_color VARCHAR(32), allow_download BIT, water_mark_base64 LONGTEXT, login_hash BINARY(32))';
+const CREATE_SETTINGS_TABLE = 'CREATE TABLE Settings (settings_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, site_title VARCHAR(64), site_description VARCHAR(2048), username VARCHAR(32) NOT NULL, password_hash BINARY(161) NOT NULL, author_name VARCHAR(64), author_description VARCHAR(2048), author_pic_base64 LONGTEXT, author_email VARCHAR(320), site_background_base64 LONGTEXT, site_theme VARCHAR(128), allow_download BIT, water_mark_base64 LONGTEXT, login_hash BINARY(32))';
 
 const DELETE_IMAGE_ROW = 'DELETE from Images';
-
-
 const DELETE_GALLERY_ROW = 'DELETE from Galleries';
 
 export function connectDB() {
@@ -45,7 +45,6 @@ export function connectDB() {
         console.log("Successfully connected to database!");
         checkIfAllTablesExist();
     });
-
 }
 
 export function checkIfAllTablesExist() {
@@ -67,8 +66,6 @@ export function checkIfAllTablesExist() {
             createSettingsTable();
         }
     });
-
-
 }
 
 // private
@@ -77,37 +74,30 @@ function doesImageTableExist(callback: { (exists: any): void; (arg0: boolean): a
     connection.query(GET_ALL_IMAGES, (error: any) => {
         return callback(!error);
     });
-
 }
 
 function doesGalleryTableExist(callback: { (exists: any): void; (arg0: boolean): any; }) {
     connection.query(GET_ALL_GALLERIES, (error: any) => {
         return callback(!error);
     });
-
 }
 
 function doesSettingsTableExist(callback: (exists: any) => void) {
     connection.query(GET_ALL_SETTINGS, (error: any) => {
         return callback(!error);
     });
-
 }
 
 function createImageTable() {
     connection.query(CREATE_IMAGES_TABLE);
-
-
 }
 
 function createGalleryTable() {
     connection.query(CREATE_GALLERIES_TABLE);
-
 }
 
 function createSettingsTable() {
     connection.query(CREATE_SETTINGS_TABLE);
-
 }
 
 function getMaxOrderGalleries(callback: (max: number) => any) {
@@ -117,7 +107,6 @@ function getMaxOrderGalleries(callback: (max: number) => any) {
         }
         return callback(res.length - 1);
     });
-
 }
 
 function getMaxOrderImages(galleryId: string, callback: (max: number) => any) {
@@ -127,7 +116,6 @@ function getMaxOrderImages(galleryId: string, callback: (max: number) => any) {
         }
         return callback(res.length - 1);
     });
-
 }
 
 function getGalleryByOrderNr(orderNr: number, callback: (gallery: IGallery) => any) {
@@ -137,7 +125,6 @@ function getGalleryByOrderNr(orderNr: number, callback: (gallery: IGallery) => a
         }
         return callback(null);
     });
-
 }
 
 function getGalleryById(id: number, callback: (gallery: IGallery) => any) {
@@ -147,14 +134,12 @@ function getGalleryById(id: number, callback: (gallery: IGallery) => any) {
         }
         return callback(null);
     });
-
 }
 
 export function getFullImageById(id: number, callback: (arg0: any) => any) {
     connection.query(GET_ALL_IMAGES + ` WHERE image_id=${id}`, (err: any, res: any) => {
         return callback(res[0]);
     });
-
 }
 
 function getImageByOrderNrAndGalleryId(orderNr: number, galleryId: string, callback: (image: IImage) => any) {
@@ -164,24 +149,23 @@ function getImageByOrderNrAndGalleryId(orderNr: number, galleryId: string, callb
         }
         return callback(null);
     });
-
 }
 
 function hashPassword(password: string, callback: (hashed: string) => any) {
     const salt = crypto.randomBytes(16).toString('hex');
 
-    crypto.scrypt(password, salt ,64, ((err, derivedKey) => {
-        if (err){
+    crypto.scrypt(password, salt, 64, ((err, derivedKey) => {
+        if (err) {
             console.log(err);
         }
         return callback(salt + ':' + derivedKey.toString('hex'));
-    }))
+    }));
 }
 
 function verify(password: string, hash: string, callback: (valid: boolean) => any) {
     const [salt, key] = hash.split(':');
     crypto.scrypt(password, salt, 64, (err, derivedKey) => {
-        if(err){
+        if (err) {
             console.log(err);
         }
         return callback(key === derivedKey.toString('hex'));
@@ -195,6 +179,27 @@ function doesSettingsEntryExists(callback: (exists: boolean) => any) {
 }
 
 // General
+
+export function getGeneralInfos(callback: (response: IGeneral) => any) {
+    connection.query(GET_GENERAL_INFO, (err: any, res: any) => {
+        if (res.length > 0) {
+            return callback(res[0] as IGeneral);
+        }
+        return callback(null);
+    });
+
+}
+
+export function updateGeneralInfos(general: IGeneral, callback: (response: any) => any) {
+    connection.query(`UPDATE Settings SET site_title="${general.title}", site_description="${general.description}", site_theme="${general.theme}"`, (err: any, res: any) => {
+        if (err !== null) {
+            console.log(err.message);
+            return callback(null);
+        }
+        return callback({code: 200});
+    });
+}
+
 export function getAboutInfos(callback: (response: IAbout) => any) {
     connection.query(GET_ABOUT_INFOS, (err: any, res: any) => {
         if (res.length > 0) {
@@ -213,12 +218,11 @@ export function updateAboutInfos(about: IAbout, callback: (response: any) => any
         }
         return callback({code: 200});
     });
-
 }
 
 export function updateSecurityInfo(security: ISecurity, callback: (response: any) => any) {
     doesSettingsEntryExists(exists => {
-        if(exists){
+        if (exists) {
             if (security.password != null && security.password.length > 0) {
                 hashPassword(security.password, hashed => {
                     connection.query(`UPDATE Settings SET username="${security.username}", password_hash="${hashed}", login_hash=""`, (err: any, res: any) => {
@@ -238,7 +242,7 @@ export function updateSecurityInfo(security: ISecurity, callback: (response: any
                     return callback({code: 200});
                 });
             }
-        }else{
+        } else {
             hashPassword(security.password, hashed => {
                 connection.query(`INSERT INTO Settings (username, password_hash, login_hash) VALUES ("${security.username}", "${hashed}", "")`, (err: any, res: any) => {
                     if (err !== null) {
@@ -250,7 +254,6 @@ export function updateSecurityInfo(security: ISecurity, callback: (response: any
             });
         }
     });
-
 }
 
 export function loginAndGetHash(authHeader: string, callback: (response: any) => any) {
@@ -262,12 +265,12 @@ export function loginAndGetHash(authHeader: string, callback: (response: any) =>
             const fromDb = res[0].password_hash.toString();
 
             verify(password, fromDb, valid => {
-                if(valid){
+                if (valid) {
                     const hash = crypto.randomBytes(16).toString('hex');
                     connection.query(`UPDATE Settings SET login_hash="${hash}"`, (err2: any, res2: any) => {
                         return callback({code: 200, body: hash});
                     });
-                }else{
+                } else {
                     return callback({code: 403});
                 }
             });
@@ -299,9 +302,9 @@ export function authenticate(authHeader: string, callback: (response: any) => an
 
 export function isSetupAvailable(callback: (exists: any) => void) {
     doesSettingsEntryExists(exists => {
-        if(exists){
+        if (exists) {
             callback({code: 200, body: false});
-        }else{
+        } else {
             callback({code: 200, body: true});
         }
     });

@@ -8,13 +8,13 @@ import {
     getAboutInfos,
     getAllGalleriesMedium,
     getAllGalleriesSmall,
-    getGalleryByTitle,
+    getGalleryByTitle, getGeneralInfos,
     getImageById,
     getMediumImagesByGalleryId,
     getSmallImagesByGalleryId, isSetupAvailable, loginAndGetHash,
     setGalleryThumbnailById,
     updateAboutInfos,
-    updateGalleryById,
+    updateGalleryById, updateGeneralInfos,
     updateImageById, updateSecurityInfo,
     uploadImageToGallery
 } from './database';
@@ -44,6 +44,24 @@ function logIncoming(req: any){
 }
 
 // General
+
+app.get(backendPath + '/general', (req, res) => {
+    logIncoming(req);
+    getGeneralInfos(response => {
+        res.send(response);
+    });
+});
+
+app.put(backendPath + '/general', (req, res) => {
+    logIncoming(req);
+    updateGeneralInfos(req.body, response => {
+        if (response != null) {
+            res.send(response);
+        } else {
+            res.sendStatus(505);
+        }
+    });
+});
 
 app.get(backendPath + '/about', (req, res) => {
     logIncoming(req);

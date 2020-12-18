@@ -35,4 +35,30 @@ export class ImageService {
   updateImageById(id: number, image: IImage): Observable<object> {
     return this.http.put<object>(this.url + '/' + id, image);
   }
+
+  compressImage(base64: string, size: number, callback: any): any {
+    const canvas = document.createElement('canvas');
+    canvas.height = size;
+    canvas.width = size;
+    canvas.style.display = 'none';
+    const context = canvas.getContext('2d');
+    const image = new Image();
+
+    image.src = base64;
+    image.onload = () => {
+      if (image.width > image.height) {
+        const ratio = size / image.height;
+        const width = image.width * ratio;
+        const startX = (width - size) / 2;
+        context.drawImage(image, -startX, 0, width, size);
+        return callback(canvas.toDataURL());
+      } else {
+        const ratio = size / image.width;
+        const height = image.height * ratio;
+        const startY = (height - size) / 2;
+        context.drawImage(image, 0, -startY, size, height);
+        return callback(canvas.toDataURL());
+      }
+    };
+  }
 }

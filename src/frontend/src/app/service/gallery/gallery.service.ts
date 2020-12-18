@@ -4,6 +4,7 @@ import {environment} from '../../../environments/environment';
 import {Observable} from 'rxjs';
 import {IGallery} from '../../entity/IGallery';
 import {IImage} from '../../entity/IImage';
+import {IResponse} from "../../entity/IResponse";
 
 @Injectable({
   providedIn: 'root'
@@ -25,19 +26,19 @@ export class GalleryService {
     return this.http.get<IGallery>(this.url + '/info/' + name);
   }
 
-  addGallery(gallery: IGallery): Observable<object> {
-    return this.http.post<object>(this.url, gallery);
+  addGallery(gallery: IGallery): Observable<IResponse> {
+    return this.http.post<IResponse>(this.url, gallery);
   }
 
-  updateGalleryById(id: number, gallery: IGallery): Observable<object> {
-    return this.http.put<object>(this.url + '/' + id, gallery);
+  updateGalleryById(id: number, gallery: IGallery): Observable<IResponse> {
+    return this.http.put<IResponse>(this.url + '/' + id, gallery);
   }
 
-  setGalleryThumbnailById(id: number, image: IImage): Observable<object>  {
-    return this.http.put<object>(this.url + '/thumbnail/' + id, image);
+  setGalleryThumbnailById(id: number, image: IImage): Observable<IResponse>  {
+    return this.http.put<IResponse>(this.url + '/thumbnail/' + id, image);
   }
 
-  deleteGalleryById(id: number): Observable<object> {
-    return this.http.delete<object>(this.url + '/' + id);
+  deleteGalleryById(id: number): Observable<IResponse> {
+    return this.http.delete<IResponse>(this.url + '/' + id);
   }
 }

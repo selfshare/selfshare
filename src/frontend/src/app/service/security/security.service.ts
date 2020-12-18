@@ -20,10 +20,9 @@ export class SecurityService {
     return this.http.get<IResponse>(this.url + '/login', {headers});
   }
 
-  updateSecurityInformation(security: ISecurity): Observable<object> {
-    return this.http.put<ISecurity>(this.url, security);
+  updateSecurityInformation(security: ISecurity): Observable<IResponse> {
+    return this.http.put<IResponse>(this.url, security);
   }
-
 
   authenticate(): Observable<IResponse> {
     const hash = localStorage.getItem('loginHash');
@@ -32,5 +31,9 @@ export class SecurityService {
       return this.http.get<IResponse>(this.url + '/auth', {headers});
     }
     return of({code: 401, body: null});
+  }
+
+  checkSetupAvailable(): Observable<IResponse> {
+    return this.http.get<IResponse>(this.url + '/setup');
   }
 }

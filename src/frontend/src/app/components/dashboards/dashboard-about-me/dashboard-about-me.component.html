@@ -4,8 +4,8 @@
     <label for="uploadFile">Profile picture</label>
     <input type="file" class="hidden text-changer" id="uploadFile">
     <div class="center images-box">
-      <img class="upload-click" src="assets/upload_image.png" (click)="uploadImage()"/>
-      <img class="profile-pic" [src]="about.picture">
+      <img class="upload-click" src="assets/upload_image.png" (click)="uploadImage()" alt="upload image"/>
+      <img class="profile-pic" [src]="about.picture" alt="current image">
     </div>
   </div>
   <div class="form-group">

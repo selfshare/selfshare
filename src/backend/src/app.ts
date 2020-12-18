@@ -11,7 +11,7 @@ import {
     getGalleryByTitle,
     getImageById,
     getMediumImagesByGalleryId,
-    getSmallImagesByGalleryId, loginAndGetHash,
+    getSmallImagesByGalleryId, isSetupAvailable, loginAndGetHash,
     setGalleryThumbnailById,
     updateAboutInfos,
     updateGalleryById,
@@ -88,6 +88,17 @@ app.get(backendPath + '/security/login', (req, res) => {
 app.get(backendPath + '/security/auth', (req, res) => {
     logIncoming(req);
     authenticate(req.headers.authorization, response => {
+        if (response != null) {
+            res.send(response);
+        } else {
+            res.sendStatus(505);
+        }
+    });
+});
+
+app.get(backendPath + '/security/setup', (req, res) => {
+    logIncoming(req);
+    isSetupAvailable(response => {
         if (response != null) {
             res.send(response);
         } else {

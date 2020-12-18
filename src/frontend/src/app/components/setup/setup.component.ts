@@ -1,13 +1,14 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {SecurityService} from '../../../service/security/security.service';
-import {ISecurity} from '../../../entity/ISecurity';
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {ISecurity} from '../../entity/ISecurity';
+import {SecurityService} from '../../service/security/security.service';
 
 @Component({
-  selector: 'app-dashboard-security',
-  templateUrl: './dashboard-security.component.html',
-  styleUrls: ['./dashboard-security.component.scss']
+  selector: 'app-setup',
+  templateUrl: './setup.component.html',
+  styleUrls: ['./setup.component.scss']
 })
-export class DashboardSecurityComponent implements OnInit {
+export class SetupComponent implements AfterViewInit {
+
   @ViewChild('inputUsername') inputUsername: ElementRef;
   @ViewChild('inputPassword') inputPassword: ElementRef;
   @ViewChild('repeatPassword') repeatPassword: ElementRef;
@@ -17,41 +18,32 @@ export class DashboardSecurityComponent implements OnInit {
   hideUsernameError = 'hidden';
   hidePasswordError = 'hidden';
   hideRepeatError = 'hidden';
-  textChanged = false;
 
   constructor(private securityService: SecurityService) {
   }
 
-  ngOnInit(): void {
-    document.querySelectorAll('.text-changer').forEach(element => {
-      element.addEventListener('input', () => {
-        this.textChanged = true;
-      });
-    });
+  ngAfterViewInit(): void {
+    this.inputUsername.nativeElement.addEventListener('input', () => this.hideUsernameError = 'hidden');
 
-    this.securityService.authenticate().subscribe(response => {
-      this.security.username = response.body;
-    });
+    this.inputPassword.nativeElement.addEventListener('input', () => this.hidePasswordError = 'hidden');
+
+    this.repeatPassword.nativeElement.addEventListener('input', () => this.hideRepeatError = 'hidden');
   }
 
-  save(): void {
+  submit(): void {
     if (this.checkInputValid()) {
       this.securityService.updateSecurityInformation(this.security).subscribe(response => {
-        console.log(response);
-        window.location.reload();
+        if (response.code === 200) {
+          this.securityService.login(this.security).subscribe(response2 => {
+            if (response2.code === 200) {
+              console.log(response2);
+              localStorage.setItem('loginHash', response2.body);
+              window.location.reload();
+            }
+          });
+        }
       });
     }
-  }
-
-  dismiss(): void {
-    this.securityService.authenticate().subscribe(response => {
-      this.security.username = response.body;
-      this.security.password = '';
-      this.repeatPassword.nativeElement.value = '';
-      this.hideUsernameError = 'hidden';
-      this.hidePasswordError = 'hidden';
-      this.hideRepeatError = 'hidden';
-    });
   }
 
   private checkInputValid(): boolean {
@@ -74,7 +66,6 @@ export class DashboardSecurityComponent implements OnInit {
   }
 
   generatePassword(): void {
-    this.textChanged = true;
     this.security.password = this.getRandomPassword(8);
     this.repeatPassword.nativeElement.value = this.security.password;
     this.showPassword = true;

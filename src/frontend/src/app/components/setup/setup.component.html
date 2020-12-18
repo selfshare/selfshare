@@ -1,7 +1,14 @@
-<form class="center">
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">welcome to selfshare!</h1>
+    <p class="lead">Create and host your own image portfolio.</p>
+  </div>
+</div>
+<h1>Setup</h1>
+<form>
   <div class="form-group">
     <label for="inputUsername">Account name</label>
-    <input #inputUsername type="text" class="form-control text-changer" id="inputUsername" aria-describedby="emailHelp" placeholder="e.g. admin" [(ngModel)]="security.username" name="username">
+    <input #inputUsername type="text" class="form-control" id="inputUsername" aria-describedby="emailHelp" placeholder="e.g. admin" [(ngModel)]="security.username" name="username">
     <div class="text-danger" [ngClass]="hideUsernameError">
       Please specify a valid username!
     </div>
@@ -9,7 +16,7 @@
   <div class="form-group">
     <label for="inputPassword">Password</label>
     <div class="input-group mb-3">
-      <input #inputPassword id="inputPassword" [type]="showPassword ? 'text' : 'password'" class="form-control text-changer" aria-describedby="basic-addon2"  [(ngModel)]="security.password" name="password">
+      <input #inputPassword id="inputPassword" [type]="showPassword ? 'text' : 'password'" class="form-control" aria-describedby="basic-addon2"  [(ngModel)]="security.password" name="password">
       <div class="input-group-append">
         <button class="btn btn-outline-secondary" type="button" (click)="generatePassword()" tabindex="33">Generate</button>
       </div>
@@ -20,14 +27,12 @@
   </div>
   <div class="form-group">
     <label for="inputRepeatPassword">Repeat Password</label>
-    <input #repeatPassword type="password" class="form-control text-changer" id="inputRepeatPassword" name="repeatPassword">
+    <input #repeatPassword type="password" class="form-control" id="inputRepeatPassword" name="repeatPassword">
     <div class="text-danger" [ngClass]="hideRepeatError">
       The passwords do not match!
     </div>
   </div>
   <div class="d-flex flex-row-reverse">
-    <button type="button" class="col-0 btn btn-secondary" (click)="dismiss()" [disabled]="!textChanged">Dismiss</button>
-    <button type="submit" class="col-0 btn btn-primary" (click)="save()" [disabled]="!textChanged">Save</button>
+    <button type="submit" class="col-0 btn btn-primary" (click)="submit()">Submit</button>
   </div>
 </form>
-

@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {IAbout} from '../../../entity/IAbout';
 import {GeneralService} from '../../../service/general/general.service';
+import {ImageService} from '../../../service/image/image.service';
 
 @Component({
   selector: 'app-dashboard-about-me',
@@ -12,18 +13,21 @@ export class DashboardAboutMeComponent implements OnInit {
   about: IAbout = {} as IAbout;
   textChanged = false;
 
-  constructor(private generalService: GeneralService) {
+  constructor(private generalService: GeneralService, private imageService: ImageService) {
   }
 
   ngOnInit(): void {
     document.querySelectorAll('.text-changer').forEach(element => {
-      element.addEventListener('input', ev => {
+      element.addEventListener('input', () => {
         this.textChanged = true;
       });
     });
 
     this.generalService.getAboutInformation().subscribe(about => {
       this.about = about;
+      if (about.picture == null) {
+        this.about.picture = 'assets/login_icon.svg';
+      }
     });
 
     document.getElementById('uploadFile').addEventListener('change', event => {
@@ -42,35 +46,9 @@ export class DashboardAboutMeComponent implements OnInit {
       const base64 = ev.target.result.toString();
       const type = base64.substring(5, 15);
       if (type === 'image/png;' || type === 'image/jpeg') {
-        this.compressImage(base64, 500, (compressed) => {
+        this.imageService.compressImage(base64, 500, (compressed) => {
           this.about.picture = compressed;
         });
-      }
-    };
-  }
-
-  private compressImage(base64: string, size: number, callback: any): any {
-    const canvas = document.createElement('canvas');
-    canvas.height = size;
-    canvas.width = size;
-    canvas.style.display = 'none';
-    const context = canvas.getContext('2d');
-    const image = new Image();
-
-    image.src = base64;
-    image.onload = () => {
-      if (image.width > image.height) {
-        const ratio = size / image.height;
-        const width = image.width * ratio;
-        const startX = (width - size) / 2;
-        context.drawImage(image, -startX, 0, width, size);
-        return callback(canvas.toDataURL());
-      } else {
-        const ratio = size / image.width;
-        const height = image.height * ratio;
-        const startY = (height - size) / 2;
-        context.drawImage(image, 0, -startY, size, height);
-        return callback(canvas.toDataURL());
       }
     };
   }
@@ -90,7 +68,10 @@ export class DashboardAboutMeComponent implements OnInit {
   save(): void {
     const about: IAbout = {} as IAbout;
     Object.assign(about, this.about);
-    about.description = about.description.replace(/"/g, '\\"');
+    if (about.description) {
+      about.description = about.description.replace(/"/g, '\\"');
+    }
+
     this.generalService.updateAboutInformation(about).subscribe(code => {
       console.log(code);
       this.textChanged = false;

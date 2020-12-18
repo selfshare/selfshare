@@ -1,11 +1,29 @@
 <form class="center">
   <div class="form-group">
-    <label for="inputUsername">Username</label>
-    <input type="text" class="form-control text-changer" id="inputUsername" placeholder="admin" [(ngModel)]="security.username" name="name">
+    <label for="inputUsername">Account name</label>
+    <input #inputUsername type="text" class="form-control text-changer" id="inputUsername" aria-describedby="emailHelp" placeholder="e.g. admin" [(ngModel)]="security.username" name="username">
+    <div class="text-danger" [ngClass]="hideUsernameError">
+      Please specify a valid username!
+    </div>
   </div>
   <div class="form-group">
-    <label for="inputPassword">New Password</label>
-    <input type="password" class="form-control text-changer" id="inputPassword" placeholder="Leave empty to keep current" [(ngModel)]="security.password" name="password">
+    <label for="inputPassword">Password</label>
+    <div class="input-group mb-3">
+      <input #inputPassword id="inputPassword" [type]="showPassword ? 'text' : 'password'" class="form-control text-changer" aria-describedby="basic-addon2"  [(ngModel)]="security.password" name="password">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" (click)="generatePassword()" tabindex="33">Generate</button>
+      </div>
+    </div>
+    <div class="text-danger" [ngClass]="hidePasswordError">
+      The password has to be at least 8 character long!
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputRepeatPassword">Repeat Password</label>
+    <input #repeatPassword type="password" class="form-control text-changer" id="inputRepeatPassword" name="repeatPassword">
+    <div class="text-danger" [ngClass]="hideRepeatError">
+      The passwords do not match!
+    </div>
   </div>
   <div class="d-flex flex-row-reverse">
     <button type="button" class="col-0 btn btn-secondary" (click)="dismiss()" [disabled]="!textChanged">Dismiss</button>

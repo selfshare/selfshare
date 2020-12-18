@@ -63,8 +63,7 @@ Share your images on your own server. Sort them by galleries and tags.
 
 
 TODOs:
-- db column size too small for big images? (TEXT)
-    - seems ok, with longtext
+- db column size too small for big images? (TEXT) - seems ok ✓
 - gallery navigation (back button)
 - Dashboard content: Keep galleries open when updating ✓
 - loading animation when opening images in full size

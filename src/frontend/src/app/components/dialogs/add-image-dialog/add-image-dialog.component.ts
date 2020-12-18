@@ -32,7 +32,7 @@ export class AddImageDialogComponent implements OnInit {
       }
     });
 
-    $('#addImageModal').on('hide.bs.modal', ev => {
+    $('#addImageModal').on('hide.bs.modal', () => {
       const fileUpload = document.getElementById('fileUpload') as HTMLInputElement;
       fileUpload.value = null;
       this.imageSource = null;
@@ -48,9 +48,9 @@ export class AddImageDialogComponent implements OnInit {
       if (type === 'image/png;' || type === 'image/jpeg' || type === 'image/gif;') {
         this.imageSource = base64;
 
-        this.compressImage(this.imageSource, 350, (compressed1) => {
+        this.imageService.compressImage(this.imageSource, 350, (compressed1) => {
           this.mediumSource = compressed1;
-          this.compressImage(this.imageSource, 25, (compressed2) => {
+          this.imageService.compressImage(this.imageSource, 25, (compressed2) => {
             this.smallSource = compressed2;
             this.conversionsDone = true;
           });
@@ -75,31 +75,5 @@ export class AddImageDialogComponent implements OnInit {
       console.log(status);
       location.reload();
     });
-  }
-
-  private compressImage(base64: string, size: number, callback: any): any {
-    const canvas = document.createElement('canvas');
-    canvas.height = size;
-    canvas.width = size;
-    canvas.style.display = 'none';
-    const context = canvas.getContext('2d');
-    const image = new Image();
-
-    image.src = base64;
-    image.onload = () => {
-      if (image.width > image.height) {
-        const ratio = size / image.height;
-        const width = image.width * ratio;
-        const startX = (width - size) / 2;
-        context.drawImage(image, -startX, 0, width, size);
-        return callback(canvas.toDataURL());
-      } else {
-        const ratio = size / image.width;
-        const height = image.height * ratio;
-        const startY = (height - size) / 2;
-        context.drawImage(image, 0, -startY, size, height);
-        return callback(canvas.toDataURL());
-      }
-    };
   }
 }

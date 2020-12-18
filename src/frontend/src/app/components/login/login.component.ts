@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
       } else {
         this.hideError = '';
         this.moveImage = 'move-icon';
-        this.security = {} as ISecurity;
+        this.security.password = '';
       }
     });
   }

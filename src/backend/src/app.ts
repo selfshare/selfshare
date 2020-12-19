@@ -8,14 +8,19 @@ import {
     getAboutInfos,
     getAllGalleriesMedium,
     getAllGalleriesSmall,
+    getDisclaimerInfos,
     getGalleryByTitle,
     getImageById,
     getMediumImagesByGalleryId,
-    getSmallImagesByGalleryId, isSetupAvailable, loginAndGetHash,
+    getSmallImagesByGalleryId,
+    isSetupAvailable,
+    loginAndGetHash,
     setGalleryThumbnailById,
     updateAboutInfos,
+    updateDisclaimerInfos,
     updateGalleryById,
-    updateImageById, updateSecurityInfo,
+    updateImageById,
+    updateSecurityInfo,
     uploadImageToGallery
 } from './database';
 import path from 'path';
@@ -55,6 +60,24 @@ app.get(backendPath + '/about', (req, res) => {
 app.put(backendPath + '/about', (req, res) => {
     logIncoming(req);
     updateAboutInfos(req.body, response => {
+        if (response != null) {
+            res.send(response);
+        } else {
+            res.sendStatus(505);
+        }
+    });
+});
+
+app.get(backendPath + '/disclaimer', (req, res) => {
+    logIncoming(req);
+    getDisclaimerInfos(response => {
+        res.send(response);
+    });
+});
+
+app.put(backendPath + '/disclaimer', (req, res) => {
+    logIncoming(req);
+    updateDisclaimerInfos(req.body, response => {
         if (response != null) {
             res.send(response);
         } else {

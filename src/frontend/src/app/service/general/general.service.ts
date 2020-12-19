@@ -3,6 +3,7 @@ import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {IAbout} from '../../entity/IAbout';
+import {IResponse} from "../../entity/IResponse";
 
 @Injectable({
   providedIn: 'root'
@@ -19,5 +20,13 @@ export class GeneralService {
 
   updateAboutInformation(about: IAbout): Observable<object> {
     return this.http.put<IAbout>(this.url + '/about', about);
+  }
+
+  getDisclaimerInformation(): Observable<IResponse> {
+    return this.http.get<IResponse>(this.url + '/disclaimer');
+  }
+
+  updateDisclaimerInformation(disclaimer: IResponse): Observable<IResponse> {
+    return this.http.put<IResponse>(this.url + '/disclaimer', disclaimer);
   }
 }

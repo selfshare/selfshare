@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {map} from 'rxjs/operators';
 import {SecurityService} from '../../service/security/security.service';
 
+// noinspection JSUnusedLocalSymbols
 @Injectable({
   providedIn: 'root'
 })

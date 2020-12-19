@@ -86,7 +86,7 @@ export class DashboardContentComponent implements OnInit {
   }
 
   updateGalleryChanges(): void {
-    this.galleryService.updateGalleryById(this.currentGallery.gallery_id, this.currentGallery).subscribe(resp => {
+    this.galleryService.updateGalleryById(this.currentGallery.gallery_id, this.currentGallery).subscribe(() => {
       this.loadGalleries();
     });
   }
@@ -211,16 +211,9 @@ export class DashboardContentComponent implements OnInit {
     document.getElementById('image_row_edit_' + image.image_id).classList.add('hidden');
 
     if (save) {
-      const newImage: IImage = {
-        tag: '',
-        upload_timestamp: image.upload_timestamp,
-        base64: null,
-        gallery_id: image.gallery_id,
-        image_id: image.image_id,
-        order_nr: image.order_nr,
-        title: this.editTitle,
-        description: this.editDesc
-      };
+      const newImage = {} as IImage;
+      Object.assign(newImage, image);
+      newImage.base64 = null;
       console.log(newImage);
 
       this.imageService.updateImageById(newImage.gallery_id, newImage).subscribe(code => {

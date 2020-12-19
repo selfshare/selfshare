@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {GeneralService} from "../../../service/general/general.service";
-import {IResponse} from "../../../entity/IResponse";
-import {IAbout} from "../../../entity/IAbout";
+import {Component, OnInit} from '@angular/core';
+import {GeneralService} from '../../../service/general/general.service';
+import {IResponse} from '../../../entity/IResponse';
 
 @Component({
   selector: 'app-dashboard-disclaimer',
@@ -10,10 +9,11 @@ import {IAbout} from "../../../entity/IAbout";
 })
 export class DashboardDisclaimerComponent implements OnInit {
 
-  disclaimer: string = '';
-  textChanged: boolean = false;
+  disclaimer = '';
+  textChanged = false;
 
-  constructor(private generalService: GeneralService) { }
+  constructor(private generalService: GeneralService) {
+  }
 
   ngOnInit(): void {
     document.querySelectorAll('.text-changer').forEach(element => {
@@ -36,7 +36,7 @@ export class DashboardDisclaimerComponent implements OnInit {
   }
 
   save(): void {
-    let disclaimer: IResponse = {body: this.disclaimer, code: 200};
+    const disclaimer: IResponse = {body: this.disclaimer, code: 200};
     if (disclaimer.body) {
       disclaimer.body = disclaimer.body.replace(/"/g, '\\"');
     }

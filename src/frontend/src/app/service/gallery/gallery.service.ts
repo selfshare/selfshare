@@ -4,7 +4,7 @@ import {environment} from '../../../environments/environment';
 import {Observable} from 'rxjs';
 import {IGallery} from '../../entity/IGallery';
 import {IImage} from '../../entity/IImage';
-import {IResponse} from "../../entity/IResponse";
+import {IResponse} from '../../entity/IResponse';
 
 @Injectable({
   providedIn: 'root'

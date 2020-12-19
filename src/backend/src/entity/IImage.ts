@@ -5,7 +5,6 @@ export interface IImage {
     gallery_id: IGallery;
     title: string;
     description: string;
-    tag: string;
     upload_timestamp: number;
     base64_large: string;
     base64_medium: string;

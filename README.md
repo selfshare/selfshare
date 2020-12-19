@@ -1,5 +1,21 @@
 # selfshare
-Share your images on your own server. Sort them by galleries and tags.
+Share your images on your own server.
+
+![Home screenshot](screenshots/home.png)
+
+## Features
+- There is a main view for guests, and an admin view for the admin.
+- Admin can:
+  - Upload images into galleries ✓
+  - create, remove, edit, organize galleries ✓
+  - change look of the site (color, background)
+  - enable/disable watermark/lower quality/copyright stuff
+  - allow / disable download button
+  - edit author page ✓
+
+(optional ideas)
+- secured password https://www.npmjs.com/package/password-hash ✓
+- custom order images ✓
 
 ## Development Environment
 - Clone the project
@@ -26,6 +42,9 @@ Share your images on your own server. Sort them by galleries and tags.
 - Run ``npm install`` to download all dependencies
 - Run ``npm start`` in terminal or add it to your IDE's run config
 
+### 4. Setup
+- See 'Setup Page'
+
 ## First Production Build (With Gulp)
 - Clone the project
 - Make sure NodeJs and Gulp are installed https://gulpjs.com/docs/en/getting-started/quick-start/
@@ -34,7 +53,7 @@ Share your images on your own server. Sort them by galleries and tags.
 - Run ``gulp db-run`` to start the database container
 - Run ``gulp build`` to build the main image
 - Run ``gulp run --port <PORT>`` to start the main image on the preferred port (default: 80)
-- Navigate to ``http://localhost:<PORT>``
+- Navigate to ``http://localhost:<PORT>/setup``
 
 ## Update Production Build and keep Database
 - Run ``gulp exit`` to stop and remove the main container
@@ -42,37 +61,16 @@ Share your images on your own server. Sort them by galleries and tags.
 - Run ``gulp run --port <PORT>`` to start the main image on the preferred port (default: 80)
 - Navigate to ``http://localhost:<PORT>``
 
-## Features
-- There is a main view for guests, and an admin view for the admin.
-- Admin can:
-    - Upload images into galleries ✓
-    - create, remove, edit, organize galleries ✓
-    - change look of the site (color, background)
-    - enable/disable watermark/lower quality/copyright stuff
-    - allow / disable download button
-    - edit author page ✓
-    
-(optional ideas)
-- list view
-- comments, likes, (users?)
-- secured password https://www.npmjs.com/package/password-hash ✓
-- custom order images ✓
-- statistics dashboard
-- multiple pages
-- multiple languages
+## Setup Page
+- Navigate to ``http://localhost:<PORT>/setup``
+- After setup, you can change settings, create galleries, upload images and more on ``http://localhost:<PORT>/dashboard``
 
 
 TODOs:
-- db column size too small for big images? (TEXT) - seems ok ✓
 - gallery navigation (back button)
-- Dashboard content: Keep galleries open when updating ✓
 - loading animation when opening images in full size
 - think about where to put the title and description (and tags) on full size 
 - restrict title with special characters
 - https://getbootstrap.com/docs/5.0/components/carousel/ for full size
-- Remove duplicated upload code and make one (compress) image service
 - In dashboard-content replace currentGallery with something better
 - Secure post and put requests
-
-- Implement disclaimer editing:
-  Idea: One blank page in dashboard which supports html code. This is already used in the about page description. Basicly most of it can be copy and pasted. Dont forget change activated Save and Decline buttons.

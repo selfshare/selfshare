@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Location} from '@angular/common';
 
@@ -7,7 +7,9 @@ import {Location} from '@angular/common';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements AfterViewInit, OnInit {
+
+  @ViewChild('tabs') tabs: ElementRef;
 
   selectedIndex = 0;
 
@@ -17,13 +19,14 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     const view = this.route.snapshot.paramMap.get('view');
     if (view != null) {
       const found = this.urls.find(str => str === view);
       this.selectedIndex = this.urls.indexOf(found);
     }
+  }
 
+  ngAfterViewInit(): void {
     this.updateActive();
   }
 
@@ -34,14 +37,14 @@ export class DashboardComponent implements OnInit {
   }
 
   private updateActive(): void {
-    const tabs = document.getElementById('tabs').children;
-    for (const i in tabs) {
-      if (tabs.hasOwnProperty(i)) {
-        if (tabs[i] instanceof HTMLElement) {
+    const children = this.tabs.nativeElement.children;
+    for (const i in children) {
+      if (children.hasOwnProperty(i)) {
+        if (children[i] instanceof HTMLElement) {
           if (+i === this.selectedIndex) {
-            tabs[i].children[0].classList.add('active');
+            children[i].children[0].classList.add('active');
           } else {
-            tabs[i].children[0].classList.remove('active');
+            children[i].children[0].classList.remove('active');
           }
         }
       }

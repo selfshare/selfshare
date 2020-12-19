@@ -1,8 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {IImage} from '../../../entity/IImage';
-import {PlatformLocation} from '@angular/common';
-import {Router} from '@angular/router';
-import {Location} from '@angular/common';
+import {Location, PlatformLocation} from '@angular/common';
 
 declare var $: any;
 
@@ -15,22 +13,14 @@ export class LargeImageDialogComponent implements OnInit {
 
   @Input() image: IImage;
 
-  constructor(private platformLocation: PlatformLocation, private location: Location, private router: Router) {
+  constructor(private platformLocation: PlatformLocation, private location: Location) {
   }
 
   ngOnInit(): void {
-
-    $('#largeImageModal').on('hide.bs.modal', ev => {
+    $('#largeImageModal').on('hide.bs.modal', () => {
       const replacement = '/' + this.image.image_id;
       this.location.go(this.location.path().replace(replacement, ''));
     });
-
-
-    // this.location.onUrlChange(url => {
-    //   console.log('url change');
-    //   this.manualHide = true;
-    //   $('#largeImageModal').modal('hide');
-    // });
   }
 
 }

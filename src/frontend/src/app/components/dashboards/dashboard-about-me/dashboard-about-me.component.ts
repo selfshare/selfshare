@@ -11,7 +11,7 @@ import {ImageService} from '../../../service/image/image.service';
 export class DashboardAboutMeComponent implements OnInit {
 
   about: IAbout = {} as IAbout;
-  textChanged: boolean = false;
+  textChanged = false;
 
   constructor(private generalService: GeneralService, private imageService: ImageService) {
   }

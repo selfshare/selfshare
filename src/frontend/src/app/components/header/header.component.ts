@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
 import {SecurityService} from '../../service/security/security.service';
-import {GeneralService} from "../../service/general/general.service";
+import {GeneralService} from '../../service/general/general.service';
 
 @Component({
   selector: 'app-header',

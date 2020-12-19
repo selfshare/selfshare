@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {ElementRef, Injectable} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
@@ -35,5 +35,36 @@ export class SecurityService {
 
   checkSetupAvailable(): Observable<IResponse> {
     return this.http.get<IResponse>(this.url + '/setup');
+  }
+
+  checkInputValid(
+    security: ISecurity,
+    repeatPassword: ElementRef):
+    { valid: boolean; hideUsernameError: string; hideRepeatError: string; hidePasswordError: string } {
+
+    let valid = true;
+    let hideUsernameError = 'hidden';
+    let hidePasswordError = 'hidden';
+    let hideRepeatError = 'hidden';
+
+    if (security.username == null || security.username.length === 0) {
+      hideUsernameError = '';
+      valid = false;
+    }
+    if (security.password == null || security.password.length < 8) {
+      hidePasswordError = '';
+      valid = false;
+
+    }
+    if (repeatPassword.nativeElement.value == null || repeatPassword.nativeElement.value !== security.password) {
+      hideRepeatError = '';
+      valid = false;
+    }
+    return {
+      valid,
+      hideUsernameError,
+      hidePasswordError,
+      hideRepeatError
+    };
   }
 }

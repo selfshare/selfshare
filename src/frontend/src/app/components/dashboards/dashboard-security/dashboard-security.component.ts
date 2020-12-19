@@ -35,7 +35,11 @@ export class DashboardSecurityComponent implements OnInit {
   }
 
   save(): void {
-    if (this.checkInputValid()) {
+    const res = this.securityService.checkInputValid(this.security, this.repeatPassword);
+    this.hideUsernameError = res.hideUsernameError;
+    this.hidePasswordError = res.hidePasswordError;
+    this.hideRepeatError = res.hideRepeatError;
+    if (res.valid) {
       this.securityService.updateSecurityInformation(this.security).subscribe(response => {
         console.log(response);
         window.location.reload();
@@ -52,25 +56,6 @@ export class DashboardSecurityComponent implements OnInit {
       this.hidePasswordError = 'hidden';
       this.hideRepeatError = 'hidden';
     });
-  }
-
-  private checkInputValid(): boolean {
-    let valid = true;
-    if (this.security.username == null || this.security.username.length === 0) {
-      this.hideUsernameError = '';
-      valid = false;
-    }
-
-    if (this.security.password == null || this.security.password.length < 8) {
-      this.hidePasswordError = '';
-      valid = false;
-    }
-
-    if (this.repeatPassword.nativeElement.value == null || this.repeatPassword.nativeElement.value !== this.security.password) {
-      this.hideRepeatError = '';
-      valid = false;
-    }
-    return valid;
   }
 
   generatePassword(): void {

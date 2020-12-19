@@ -3,6 +3,7 @@ import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {IImage} from '../../entity/IImage';
+import {IResponse} from '../../entity/IResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -24,16 +25,16 @@ export class ImageService {
     return this.http.get<IImage[]>(this.url + '/s/' + id);
   }
 
-  uploadImage(image: IImage): Observable<object>{
-    return this.http.post<object>(this.url, image);
+  uploadImage(image: IImage): Observable<IResponse>{
+    return this.http.post<IResponse>(this.url, image);
   }
 
-  deleteImageById(id: number): Observable<object>{
-    return this.http.delete<object>(this.url + '/' + id);
+  deleteImageById(id: number): Observable<IResponse>{
+    return this.http.delete<IResponse>(this.url + '/' + id);
   }
 
-  updateImageById(id: number, image: IImage): Observable<object> {
-    return this.http.put<object>(this.url + '/' + id, image);
+  updateImageById(id: number, image: IImage): Observable<IResponse> {
+    return this.http.put<IResponse>(this.url + '/' + id, image);
   }
 
   compressImage(base64: string, size: number, callback: any): any {

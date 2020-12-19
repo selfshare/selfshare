@@ -19,7 +19,7 @@ export class DashboardDesignComponent implements OnInit {
 
   ngOnInit(): void {
     document.querySelectorAll('.text-changer').forEach(element => {
-      element.addEventListener('input', event => {
+      element.addEventListener('input', () => {
         this.textChanged = true;
       });
     });

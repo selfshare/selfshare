@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {GalleryService} from '../../service/gallery/gallery.service';
 import {IGallery} from '../../entity/IGallery';
@@ -15,18 +15,12 @@ declare var $: any;
 })
 export class GalleryComponent implements OnInit {
 
-  gallery: IGallery = {images: [], gallery_id: 0, order_nr: 0, base64: '', title: '', description: ''};
+  @ViewChild('emptyText') emptyText: ElementRef;
+  @ViewChild('loadingSpinner') loadingSpinner: ElementRef;
+
+  gallery: IGallery = {} as IGallery;
   images: IImage[] = [];
-  currentImage: IImage = {
-    order_nr: 0,
-    description: '',
-    gallery_id: 0,
-    image_id: 0,
-    tag: '',
-    title: '',
-    upload_timestamp: 0,
-    base64: ''
-  };
+  currentImage = {} as IImage;
 
   constructor(
     private route: ActivatedRoute,
@@ -70,31 +64,13 @@ export class GalleryComponent implements OnInit {
     });
   }
 
-  resizeImages(): void {
-    const cardWidth: number = document.getElementsByClassName('card')[0].clientWidth;
-    const galleryImages: any = document.querySelectorAll('.modalImage');
-    galleryImages.forEach((img) => {
-      img.style.minHeight = cardWidth + 'px';
-      img.style.maxHeight = cardWidth + 'px';
-    });
-  }
-
-  getImageTitleAndResize(imageIndex: number): string {
-    if (imageIndex === 0) {
-      this.resizeImages();
-    }
-    return this.images[imageIndex].title;
-  }
-
   private hideSpinner(): void {
-    const spinner: any = document.getElementById('loading-spinner');
-    spinner.style.display = 'none';
+    this.loadingSpinner.nativeElement.style.display = 'none';
   }
 
   private checkIfEmptyShowText(): void {
     if (this.images.length === 0) {
-      const text: any = document.getElementById('emptyText');
-      text.style.display = 'block';
+      this.emptyText.nativeElement.style.display = 'block';
     }
   }
 

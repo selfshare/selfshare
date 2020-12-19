@@ -1,6 +1,9 @@
+// noinspection JSUnresolvedFunction
 const gulp = require('gulp')
+// noinspection JSUnresolvedFunction
 const shell = require('gulp-shell')
 
+// noinspection JSUnresolvedVariable
 let port, i = process.argv.indexOf("--port");
 if(i>-1) {
     port = process.argv[i+1];

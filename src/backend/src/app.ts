@@ -1,21 +1,29 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import {
-    addGallery, authenticate,
+    addGallery,
+    authenticate,
     connectDB,
     deleteGalleryById,
     deleteImageById,
     getAboutInfos,
     getAllGalleriesMedium,
     getAllGalleriesSmall,
-    getGalleryByTitle, getGeneralInfos,
+    getDisclaimerInfos,
+    getGalleryByTitle,
+    getGeneralInfos,
     getImageById,
     getMediumImagesByGalleryId,
-    getSmallImagesByGalleryId, isSetupAvailable, loginAndGetHash,
+    getSmallImagesByGalleryId,
+    isSetupAvailable,
+    loginAndGetHash,
     setGalleryThumbnailById,
     updateAboutInfos,
-    updateGalleryById, updateGeneralInfos,
-    updateImageById, updateSecurityInfo,
+    updateDisclaimerInfos,
+    updateGalleryById,
+    updateGeneralInfos,
+    updateImageById,
+    updateSecurityInfo,
     uploadImageToGallery
 } from './database';
 import path from 'path';
@@ -28,7 +36,6 @@ const jsonParser = bodyParser.json();
 connectDB();
 
 
-
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json({
@@ -37,7 +44,7 @@ app.use(bodyParser.json({
 
 app.listen(port, () => console.log(`${process.env.npm_package_name} ${process.env.npm_package_version} running on http://localhost:${port}${backendPath}`));
 
-function logIncoming(req: any){
+function logIncoming(req: any) {
     const date = new Date();
     const time = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
     console.log(`${time} - ${req.method} request on ${req.originalUrl} from ${req.hostname}`);
@@ -173,8 +180,8 @@ app.get(backendPath + '/gallery/info/:title', (req, res) => {
 });
 
 app.post(backendPath + '/gallery', (req, res) => {
-   logIncoming(req);
-   addGallery(req.body, response => {
+    logIncoming(req);
+    addGallery(req.body, response => {
         if (response != null) {
             res.send(response);
         } else {

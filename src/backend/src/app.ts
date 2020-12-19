@@ -28,6 +28,8 @@ import {
 } from './database';
 import path from 'path';
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
+import yaml from 'yamljs';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -35,12 +37,14 @@ const backendPath = process.env.backend_path || "";
 const jsonParser = bodyParser.json();
 connectDB();
 
-
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json({
     limit: '50mb'
 }));
+const swaggerFile = yaml.load('swagger.yaml');
+swaggerFile.host = `localhost:${port}${backendPath}`;
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.listen(port, () => console.log(`${process.env.npm_package_name} ${process.env.npm_package_version} running on http://localhost:${port}${backendPath}`));
 

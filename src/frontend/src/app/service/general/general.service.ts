@@ -3,8 +3,8 @@ import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {IAbout} from '../../entity/IAbout';
-import {IGeneral} from '../../entity/IGeneral';
 import {IResponse} from '../../entity/IResponse';
+import {IGeneral} from '../../entity/IGeneral';
 
 @Injectable({
   providedIn: 'root'
@@ -32,5 +32,13 @@ export class GeneralService {
 
   updateGeneralInformation(general: IGeneral): Observable<IResponse> {
     return this.http.put<IResponse>(this.url + '/general', general);
+  }
+
+  getDisclaimerInformation(): Observable<IResponse> {
+    return this.http.get<IResponse>(this.url + '/disclaimer');
+  }
+
+  updateDisclaimerInformation(disclaimer: IResponse): Observable<IResponse> {
+    return this.http.put<IResponse>(this.url + '/disclaimer', disclaimer);
   }
 }

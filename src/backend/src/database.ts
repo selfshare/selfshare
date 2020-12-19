@@ -5,6 +5,7 @@ import {IAbout} from "./entity/IAbout";
 import {ISecurity} from "./entity/ISecurity";
 import crypto from 'crypto';
 import {IGeneral} from "./entity/IGeneral";
+import {IResponse} from "../../frontend/src/app/entity/IResponse";
 
 let connection: any;
 const GET_ALL_IMAGES = 'SELECT * from Images';
@@ -13,6 +14,8 @@ const GET_ALL_SETTINGS = 'SELECT * from Settings';
 
 const GET_GENERAL_INFO = 'SELECT site_title AS title, site_description AS description, site_theme AS theme FROM Settings';
 const GET_ABOUT_INFOS = 'SELECT author_name AS name, author_description AS description, author_pic_base64 AS picture, author_email as email FROM Settings';
+const GET_DISCLAIMER_INFOS = 'SELECT disclaimer FROM Settings'
+
 const GET_LOGIN_HASH = 'SELECT login_hash FROM Settings'
 const GET_USERNAME = 'SELECT username FROM Settings'
 const GET_PASSWORD_HASH = 'SELECT password_hash from Settings';
@@ -22,12 +25,12 @@ const GET_ALL_IMAGES_MEDIUM = 'SELECT image_id, title, description, tag, upload_
 
 const GET_ALL_IMAGES_SMALL = 'SELECT image_id, title, description, tag, upload_timestamp, base64_small AS base64, order_nr, gallery_id FROM Images';
 const GET_ALL_GALLERIES_INFO = 'SELECT gallery_id, title, description FROM Galleries';
-const GET_ALL_GALLERIES_MEDIUM = 'SELECT gallery_id, title, description, base64_medium as base64, order_nr FROM Galleries ORDER BY order_nr';
-const GET_ALL_GALLERIES_SMALL = 'SELECT gallery_id, title, description, base64_small as base64, order_nr FROM Galleries ORDER BY order_nr';
+const GET_ALL_GALLERIES_MEDIUM = 'SELECT gallery_id, title, description, base64_medium AS base64, order_nr FROM Galleries ORDER BY order_nr';
+const GET_ALL_GALLERIES_SMALL = 'SELECT gallery_id, title, description, base64_small AS base64, order_nr FROM Galleries ORDER BY order_nr';
 
-const CREATE_IMAGES_TABLE = 'CREATE TABLE Images (image_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, gallery_id INT UNSIGNED, CONSTRAINT fk_gallery FOREIGN KEY (gallery_id) REFERENCES Galleries(gallery_id), title VARCHAR(64), description VARCHAR(512), tag VARCHAR(32), upload_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, base64_large LONGTEXT not null, base64_medium LONGTEXT not null, base64_small LONGTEXT not null, order_nr INT DEFAULT 0)';
+const CREATE_IMAGES_TABLE = 'CREATE TABLE Images (image_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, gallery_id INT UNSIGNED, CONSTRAINT fk_gallery FOREIGN KEY (gallery_id) REFERENCES Galleries(gallery_id), title VARCHAR(64), description VARCHAR(512), tag VARCHAR(32), upload_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, base64_large LONGTEXT NOT NULL, base64_medium LONGTEXT NOT NULL, base64_small LONGTEXT NOT NULL, order_nr INT DEFAULT 0)';
 const CREATE_GALLERIES_TABLE = 'CREATE TABLE Galleries (gallery_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, title VARCHAR(64) UNIQUE, description VARCHAR(512), base64_medium LONGTEXT, base64_small LONGTEXT, order_nr INT DEFAULT 0)';
-const CREATE_SETTINGS_TABLE = 'CREATE TABLE Settings (settings_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, site_title VARCHAR(64), site_description VARCHAR(2048), username VARCHAR(32) NOT NULL, password_hash BINARY(161) NOT NULL, author_name VARCHAR(64), author_description VARCHAR(2048), author_pic_base64 LONGTEXT, author_email VARCHAR(320), site_background_base64 LONGTEXT, site_theme VARCHAR(128), allow_download BIT, water_mark_base64 LONGTEXT, login_hash BINARY(32))';
+const CREATE_SETTINGS_TABLE = 'CREATE TABLE Settings (settings_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, site_title VARCHAR(64), site_description VARCHAR(2048), username VARCHAR(32) NOT NULL, password_hash BINARY(161) NOT NULL, author_name VARCHAR(64), author_description VARCHAR(2048), author_pic_base64 LONGTEXT, author_email VARCHAR(320), disclaimer LONGTEXT, site_theme VARCHAR(128), allow_download BIT, water_mark_base64 LONGTEXT, login_hash BINARY(32))';
 
 const DELETE_IMAGE_ROW = 'DELETE from Images';
 const DELETE_GALLERY_ROW = 'DELETE from Galleries';
@@ -212,6 +215,26 @@ export function getAboutInfos(callback: (response: IAbout) => any) {
 
 export function updateAboutInfos(about: IAbout, callback: (response: any) => any) {
     connection.query(`UPDATE Settings SET author_name="${about.name}", author_description="${about.description}", author_pic_base64="${about.picture}", author_email="${about.email}"`, (err: any, res: any) => {
+        if (err !== null) {
+            console.log(err.message);
+            return callback(null);
+        }
+        return callback({code: 200});
+    });
+
+}
+
+export function getDisclaimerInfos(callback: (response: any) => any) {
+    connection.query(GET_DISCLAIMER_INFOS, (err: any, res: any) => {
+        if (res.length > 0) {
+            return callback({body: res[0].disclaimer, code: 200});
+        }
+        return callback(null);
+    });
+}
+
+export function updateDisclaimerInfos(disclaimer: IResponse, callback: (response: any) => any) {
+    connection.query(`UPDATE Settings SET disclaimer="${disclaimer.body}"`, (err: any, res: any) => {
         if (err !== null) {
             console.log(err.message);
             return callback(null);

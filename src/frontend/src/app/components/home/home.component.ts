@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {GalleryService} from '../../service/gallery/gallery.service';
 import {IGallery} from '../../entity/IGallery';
+import {GeneralService} from "../../service/general/general.service";
+import {IGeneral} from "../../entity/IGeneral";
 
 @Component({
   selector: 'app-home',
@@ -11,12 +13,17 @@ import {IGallery} from '../../entity/IGallery';
 
 export class HomeComponent implements OnInit {
 
-  constructor(private galleryService: GalleryService) {
+  constructor(private galleryService: GalleryService, private generalService: GeneralService) {
   }
 
   galleries: IGallery[];
+  general = {} as IGeneral;
 
   ngOnInit(): void {
+    this.generalService.getGeneralInformation().subscribe(general => {
+      this.general = general;
+    });
+
     this.galleryService.getAllGalleriesMedium().subscribe(galleries => {
       this.galleries = galleries;
       this.hideSpinner();
@@ -40,7 +47,7 @@ export class HomeComponent implements OnInit {
 
   getGalleryTitleAndResize(galleryIndex: number): string {
     if (galleryIndex === 0) {
-      this.resizeImages();
+      //this.resizeImages();
     }
     return this.galleries[galleryIndex].title;
   }

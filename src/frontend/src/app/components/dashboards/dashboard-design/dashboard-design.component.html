@@ -1,1 +1,22 @@
-<p>dashboard-design works!</p>
+<form>
+  <div class="form-group">
+    <label for="inputSiteTheme">Theme</label>
+    <select #inputSiteTheme id="inputSiteTheme" class="form-control text-changer" [(ngModel)]="general.theme" name="theme">
+      <option *ngFor="let theme of availableThemes">{{theme}}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="inputSiteTitle">Site title</label>
+    <input #inputSiteTitle type="text" class="form-control text-changer" id="inputSiteTitle" placeholder="e.g. selfshare" [(ngModel)]="general.title" name="title">
+  </div>
+  <div class="form-group">
+    <label for="inputSiteDescription">Description</label>
+    <textarea #inputSiteDescription class="form-control text-changer" id="inputSiteDescription" placeholder="e.g. I like dogs" rows="20" [(ngModel)]="general.description" name="description" maxlength="2048"></textarea>
+    <small id="DescHelp" class="form-text text-muted">HTML code is possible. Emails and URLs (format: http:// and https://) will be formatted automatically.</small>
+  </div>
+  <div class="d-flex flex-row-reverse">
+    <button type="button" class="col-0 btn btn-secondary" (click)="dismiss()" [disabled]="!textChanged">Dismiss</button>
+    <button type="submit" class="col-0 btn btn-primary" (click)="save()" [disabled]="!textChanged">Save</button>
+  </div>
+</form>
+

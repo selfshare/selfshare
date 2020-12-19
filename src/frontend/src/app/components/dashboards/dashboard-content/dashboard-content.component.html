@@ -4,7 +4,7 @@
       <div class="row default-row" [id]="'gallery_row_default_' + gallery.gallery_id">
         <img [src]="getGalleryImage(gallery)" height="25px" width="25px" class="small-img" [style]="showGalleryImage(gallery)" alt="gallery thumbnail">
         <a class="btn-link col-auto gallery-title" data-toggle="collapse" [attr.data-target]="'#gallery_' + i">{{gallery.title}} ({{getImageCount(gallery)}})</a>
-        <a class="btn-link col-auto gallery-desc no-effect" data-toggle="collapse" [attr.data-target]="'#gallery_' + i">{{gallery.description}}</a>
+        <p class=" col-auto gallery-desc no-effect" data-toggle="collapse" [attr.data-target]="'#gallery_' + i">{{gallery.description}}</p>
         <div class="ml-auto col-auto">
           <a class="btn-link col-auto material-icons" title="Edit Gallery" (click)="editGallery(gallery)">edit</a>
           <a class="btn-link col-auto material-icons" title="Upload Image" data-toggle="modal" data-target="#addImageModal" (click)="changeCurrentGallery(gallery)">add_photo_alternate</a>
@@ -35,7 +35,7 @@
               <div class="row default-row" [id]="'image_row_default_' + image.image_id">
                 <img src="{{image.base64}}" height="25px" width="25px" class="small-img" alt="image thumbnail">
                 <a class="btn-link col-auto image-title no-effect">{{image.title}}</a>
-                <a class="btn-link col-auto image-desc no-effect">{{image.description}}</a>
+                <p class="col-auto image-desc no-effect">{{image.description}}</p>
                 <a class="btn-link col-auto ml-auto material-icons" (click)="editImage(image)">edit</a>
                 <a class="btn-link col-auto material-icons" title="Set as Gallery Image" (click)="setAsGalleryImage(gallery, image)">wallpaper</a>
                 <a class="btn-link col-auto material-icons" [ngClass]="isImageNotClickableUp(image)" title="Move Image Down" (click)="moveImageDown(image)" >keyboard_arrow_down</a>

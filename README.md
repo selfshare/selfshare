@@ -24,10 +24,7 @@ Create your portfolio and share your images on your own server. Customize it to 
   - Admin client will keep logged in without saving of the raw credentials
   - Images are stored in 3 sizes to increase loading performance
   - Images without a title will not have the hover effect
-
-(optional ideas)
-- secured password https://www.npmjs.com/package/password-hash ✓
-- custom order images ✓
+  
 
 ## Development Environment
 - Clone the project
@@ -77,12 +74,8 @@ Create your portfolio and share your images on your own server. Customize it to 
 - Navigate to ``http://localhost:<PORT>/setup``
 - After setup, you can change settings, create galleries, upload images and more on ``http://localhost:<PORT>/dashboard``
 
-
-TODOs:
-- gallery navigation (back button)
-- loading animation when opening images in full size
-- think about where to put the title and description (and tags) on full size 
-- restrict title with special characters
-- https://getbootstrap.com/docs/5.0/components/carousel/ for full size
-- In dashboard-content replace currentGallery with something better
-- Secure post and put requests
+## Testing
+### Backend
+- Run ``npm test``
+### Frontend (e2e)
+- Run ``ng e2e``

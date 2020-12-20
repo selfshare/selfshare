@@ -5,7 +5,6 @@ import {IAbout} from "./entity/IAbout";
 import {ISecurity} from "./entity/ISecurity";
 import crypto from 'crypto';
 import {IGeneral} from "./entity/IGeneral";
-import {IResponse} from "../../frontend/src/app/entity/IResponse";
 
 let connection: any;
 const GET_ALL_IMAGES = 'SELECT * from Images';
@@ -241,7 +240,7 @@ export function getDisclaimerInfos(callback: (response: any) => any) {
     });
 }
 
-export function updateDisclaimerInfos(disclaimer: IResponse, callback: (response: any) => any) {
+export function updateDisclaimerInfos(disclaimer: any, callback: (response: any) => any) {
     connection.query(`UPDATE Settings SET disclaimer="${disclaimer.body}"`, (err: any) => {
         if (err !== null) {
             console.log(err.message);

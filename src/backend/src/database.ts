@@ -30,7 +30,7 @@ const GET_ALL_GALLERIES_SMALL = 'SELECT gallery_id, title, description, base64_s
 
 const CREATE_IMAGES_TABLE = 'CREATE TABLE Images (image_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, gallery_id INT UNSIGNED, CONSTRAINT fk_gallery FOREIGN KEY (gallery_id) REFERENCES Galleries(gallery_id), title VARCHAR(64), description VARCHAR(512), upload_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, base64_large LONGTEXT NOT NULL, base64_medium LONGTEXT NOT NULL, base64_small LONGTEXT NOT NULL, order_nr INT DEFAULT 0)';
 const CREATE_GALLERIES_TABLE = 'CREATE TABLE Galleries (gallery_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, title VARCHAR(64) UNIQUE, description VARCHAR(512), base64_medium LONGTEXT, base64_small LONGTEXT, order_nr INT DEFAULT 0)';
-const CREATE_SETTINGS_TABLE = 'CREATE TABLE Settings (settings_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, site_title VARCHAR(64), site_description VARCHAR(2048), username VARCHAR(32) NOT NULL, password_hash BINARY(161) NOT NULL, author_name VARCHAR(64), author_description VARCHAR(2048), author_pic_base64 LONGTEXT, author_email VARCHAR(320), disclaimer LONGTEXT, site_theme VARCHAR(128), allow_download BIT, water_mark_base64 LONGTEXT, login_hash BINARY(32))';
+const CREATE_SETTINGS_TABLE = 'CREATE TABLE Settings (settings_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, site_title VARCHAR(64), site_description VARCHAR(2048), username VARCHAR(32) NOT NULL, password_hash BINARY(161) NOT NULL, author_name VARCHAR(64), author_description VARCHAR(2048), author_pic_base64 LONGTEXT, author_email VARCHAR(320), disclaimer LONGTEXT, site_theme VARCHAR(128), login_hash BINARY(32))';
 
 const DELETE_IMAGE_ROW = 'DELETE from Images';
 const DELETE_GALLERY_ROW = 'DELETE from Galleries';
@@ -278,7 +278,7 @@ export function updateSecurityInfo(security: ISecurity, callback: (response: any
             }
         } else {
             hashPassword(security.password, hashed => {
-                connection.query(`INSERT INTO Settings (username, password_hash, login_hash) VALUES ("${security.username}", "${hashed}", "")`, (err: any) => {
+                connection.query(`INSERT INTO Settings (username, password_hash, login_hash, site_title, site_description, author_name, author_description, author_pic_base64, author_email, disclaimer, site_theme) VALUES ("${security.username}", "${hashed}", "", "my selfshare page", "", "", "", "", "", "", "Flatly")`, (err: any) => {
                     if (err !== null) {
                         console.log(err.message);
                         return callback({code: 500});

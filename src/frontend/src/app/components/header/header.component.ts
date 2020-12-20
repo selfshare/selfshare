@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit {
     this.generalService.getGeneralInformation().subscribe(info => {
       header[1].innerHTML = info.title; // title
       this.title = info.title;
-      if (info.theme) {
+      if (info.theme != null && info.theme.length > 0) {
         (header[6] as HTMLAnchorElement).href = 'https://bootswatch.com/4/' + info.theme.toLowerCase() + '/bootstrap.min.css'; // style
       }
 

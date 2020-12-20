@@ -25,7 +25,7 @@ describe("selfshare backend", () => {
         chai
             .request(app)
             .put("/general")
-            .send({"title": "selfshare", "description": "description", "theme": "flatly"})
+            .send({"title": "selfshare", "description": "description", "theme": "Flatly"})
             .end((err: any, res: any) => {
                 expect(res).to.have.status(200);
                 chai
@@ -36,7 +36,7 @@ describe("selfshare backend", () => {
                         expect(res1.body).to.not.equal(null);
                         expect(res1.body.title).to.equal('selfshare');
                         expect(res1.body.description).to.equal('description');
-                        expect(res1.body.theme).to.equal('flatly');
+                        expect(res1.body.theme).to.equal('Flatly');
                         done();
                     });
             });

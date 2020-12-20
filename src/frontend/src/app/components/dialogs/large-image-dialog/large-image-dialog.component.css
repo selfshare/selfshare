@@ -4,3 +4,18 @@
   object-fit: contain;
   overflow: hidden;
 }
+
+.image-desc{
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  bottom: 1em;
+  display: none;
+}
+
+#large-loading-spinner{
+  position: absolute;
+  top: calc(50% - 17px);
+  left: calc(50% - 16px);
+  color: white;
+}

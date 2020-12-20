@@ -1,8 +1,23 @@
 <!-- Modal -->
 <div class="modal fade" id="largeImageModal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 100%">
-    <img class="img-responsive" src="{{image.base64}}" alt="image">
-
-
+    <div class="modal-body">
+        <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div id="large-loading-spinner" class="justify-content-center">
+                <div class="spinner-border" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
+              <img id="largeImage" src="{{image.base64}}" class="w-100 img-responsive" alt="...">
+              <div class="carousel-caption d-none d-md-block">
+                <h5>{{image.title}}</h5>
+                <p>{{image.description}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
   </div>
 </div>

@@ -1,17 +1,29 @@
 # selfshare
-Share your images on your own server.
+Create your portfolio and share your images on your own server. Customize it to your preferences.
 
 ![Home screenshot](screenshots/home.png)
 
 ## Features
-- There is a main view for guests, and an admin view for the admin.
+- There is a main view for guests, and an admin view for the admin (dashboard)
 - Admin can:
-  - Upload images into galleries ✓
-  - create, remove, edit, organize galleries ✓
-  - change look of the site (color, background)
-  - enable/disable watermark/lower quality/copyright stuff
-  - allow / disable download button
-  - edit author page ✓
+  - Create, remove, edit and organize galleries (with name and description)
+  - Upload images (with name and description, both optional) into galleries
+  - Edit, remove and organize images
+  - Set uploaded images as gallery thumbnail
+  - Edit author page
+  - Change admin username and password, automatic generation is possible
+  - Change look of the site (title, theme and description)
+  - Edit disclaimer page
+  - Author, disclaimer and design page contain 
+- Users can:
+  - Navigate through homepage, galleries, view images in large view
+  - Have a look on the about and disclaimer page
+- Functional:
+  - Bookmarking and sharing: every page, gallery and image is uniquely defined with an url
+  - Passwords are hashed in database
+  - Admin client will keep logged in without saving of the raw credentials
+  - Images are stored in 3 sizes to increase loading performance
+  - Images without a title will not have the hover effect
 
 (optional ideas)
 - secured password https://www.npmjs.com/package/password-hash ✓

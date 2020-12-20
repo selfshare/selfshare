@@ -25,7 +25,7 @@ export class DashboardAboutMeComponent implements OnInit {
 
     this.generalService.getAboutInformation().subscribe(about => {
       this.about = about;
-      if (about.picture == null) {
+      if (about.picture == null || about.picture.length === 0) {
         this.about.picture = 'assets/login_icon.svg';
       }
     });

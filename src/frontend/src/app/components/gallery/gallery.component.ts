@@ -15,13 +15,6 @@ declare var $: any;
 })
 export class GalleryComponent implements OnInit {
 
-  @ViewChild('emptyText') emptyText: ElementRef;
-  @ViewChild('loadingSpinner') loadingSpinner: ElementRef;
-
-  gallery: IGallery = {} as IGallery;
-  images: IImage[] = [];
-  currentImage = {} as IImage;
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -29,6 +22,23 @@ export class GalleryComponent implements OnInit {
     private imageService: ImageService,
     private location: Location
   ) {
+  }
+
+  @ViewChild('emptyText') emptyText: ElementRef;
+  @ViewChild('loadingSpinner') loadingSpinner: ElementRef;
+
+  gallery: IGallery = {} as IGallery;
+  images: IImage[] = [];
+  currentImage = {} as IImage;
+
+  private static hideLargeImageSpinner(): void {
+    document.getElementById('large-loading-spinner').style.display = 'none';
+    document.getElementById('largeImage').style.opacity = '1';
+  }
+
+  private static showLargeImageSpinner(): void {
+    document.getElementById('large-loading-spinner').style.display = 'block';
+    document.getElementById('largeImage').style.opacity = '0';
   }
 
   ngOnInit(): void {
@@ -75,17 +85,21 @@ export class GalleryComponent implements OnInit {
   }
 
   private setCurrentImage(imageId: number): void {
+    GalleryComponent.showLargeImageSpinner();
     this.currentImage = this.images.find(value => value.image_id === imageId);
     this.imageService.getLargeImageById(imageId).subscribe(image => {
       this.currentImage = image;
+      GalleryComponent.hideLargeImageSpinner();
     });
   }
 
   openLargeImage(imageId: number): void {
+    GalleryComponent.showLargeImageSpinner();
     this.currentImage = this.images.find(value => value.image_id === imageId);
     this.imageService.getLargeImageById(imageId).subscribe(image => {
       this.currentImage = image;
       this.location.go(this.location.path() + '/' + image.image_id);
+      GalleryComponent.hideLargeImageSpinner();
     });
   }
 }

@@ -73,16 +73,19 @@ export class DashboardContentComponent implements OnInit {
   }
 
   addGallery(): void {
-    const gallery = {} as IGallery;
-    gallery.title = this.addGalleryTitle;
-    gallery.description = this.addGalleryDesc;
+    if (this.addGalleryTitle.length >= 1 && this.addGalleryTitle.match(/^[a-zA-Z0-9]+$/)) {
+      const gallery = {} as IGallery;
+      gallery.title = this.addGalleryTitle;
+      gallery.description = this.addGalleryDesc;
 
-    this.galleryService.addGallery(gallery).subscribe(response => {
-      console.log(response.code);
-      this.loadGalleries();
-      this.addGalleryTitle = '';
-      this.addGalleryDesc = '';
-    });
+      this.galleryService.addGallery(gallery).subscribe(response => {
+        console.log(response.code);
+        this.loadGalleries();
+        this.addGalleryTitle = '';
+        this.addGalleryDesc = '';
+      });
+    }
+
   }
 
   updateGalleryChanges(): void {
@@ -190,19 +193,21 @@ export class DashboardContentComponent implements OnInit {
     console.log(this.currentGallery);
 
     if (save) {
-      const newGallery: IGallery = {
-        base64: '',
-        description: this.editDesc,
-        gallery_id: gallery.gallery_id,
-        images: [],
-        order_nr: gallery.order_nr,
-        title: this.editTitle
-      };
+      if (this.editTitle.length >= 1 && this.editTitle.match(/^[a-zA-Z0-9]+$/)) {
+        const newGallery: IGallery = {
+          base64: '',
+          description: this.editDesc,
+          gallery_id: gallery.gallery_id,
+          images: [],
+          order_nr: gallery.order_nr,
+          title: this.editTitle
+        };
 
-      this.galleryService.updateGalleryById(newGallery.gallery_id, newGallery).subscribe(code => {
-        console.log(code);
-        this.loadGalleries();
-      });
+        this.galleryService.updateGalleryById(newGallery.gallery_id, newGallery).subscribe(code => {
+          console.log(code);
+          this.loadGalleries();
+        });
+      }
     }
   }
 
@@ -211,15 +216,17 @@ export class DashboardContentComponent implements OnInit {
     document.getElementById('image_row_edit_' + image.image_id).classList.add('hidden');
 
     if (save) {
-      const newImage = {} as IImage;
-      Object.assign(newImage, image);
-      newImage.base64 = null;
-      console.log(newImage);
+      if (this.editTitle.length >= 1 && this.editTitle.match(/^[a-zA-Z0-9]+$/)) {
+        const newImage = {} as IImage;
+        Object.assign(newImage, image);
+        newImage.base64 = null;
+        console.log(newImage);
 
-      this.imageService.updateImageById(newImage.gallery_id, newImage).subscribe(code => {
-        console.log(code);
-        this.updateGalleries();
-      });
+        this.imageService.updateImageById(newImage.gallery_id, newImage).subscribe(code => {
+          console.log(code);
+          this.updateGalleries();
+        });
+      }
     }
   }
 

@@ -1,4 +1,9 @@
 # selfshare
+
+By
+- Max Ermackov - 7055197
+- Makss Golubs - 1871161
+
 Create your portfolio and share your images on your own server. Customize it to your preferences.
 
 ![Home screenshot](screenshots/home.png)

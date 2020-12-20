@@ -38,7 +38,8 @@ ENV db_port=3366
 
 WORKDIR /app
 COPY --from=build_backend /app/backend/package*.json ./
-COPY --from=build_backend /app/backend/dist/ ./dist
+COPY --from=build_backend /app/backend/swagger.yaml ./
+COPY --from=build_backend /app/backend/dist/src ./dist
 COPY --from=build_frontend /app/frontend/dist/frontend/ dist/public
 RUN npm install --prod
 
@@ -47,4 +48,4 @@ RUN npm install --prod
 
 
 EXPOSE 3000
-CMD service mysql start ; node ./dist/app.js
+CMD node ./dist/app.js

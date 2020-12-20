@@ -35,6 +35,7 @@ ENV npm_package_version=1.0.1
 ENV backend_path="/api"
 ENV db_host="docker"
 ENV db_port=3366
+ENV activate_swagger=true
 
 WORKDIR /app
 COPY --from=build_backend /app/backend/package*.json ./

@@ -45,9 +45,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json({
     limit: '50mb'
 }));
-const swaggerFile = yaml.load('swagger.yaml');
-swaggerFile.host = `localhost:${port}${backendPath}`;
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
+if(process.env.activate_swagger === "true" || process.env.backend_path == null){
+    const swaggerFile = yaml.load('swagger.yaml');
+    swaggerFile.host = `localhost:${port}${backendPath}`;
+    app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+}
 
 app.listen(port, () => console.log(`${process.env.npm_package_name} ${process.env.npm_package_version} running on http://localhost:${port}${backendPath}`));
 

@@ -35,6 +35,9 @@ const app = express();
 const port = process.env.PORT || 3000;
 const backendPath = process.env.backend_path || "";
 const jsonParser = bodyParser.json();
+
+export = app;
+
 connectDB();
 
 app.use(cors());
@@ -69,7 +72,7 @@ app.put(backendPath + '/general', (req, res) => {
         if (response != null) {
             res.send(response);
         } else {
-            res.sendStatus(505);
+            res.sendStatus(500);
         }
     });
 });
@@ -87,7 +90,7 @@ app.put(backendPath + '/about', (req, res) => {
         if (response != null) {
             res.send(response);
         } else {
-            res.sendStatus(505);
+            res.sendStatus(500);
         }
     });
 });
@@ -105,7 +108,7 @@ app.put(backendPath + '/disclaimer', (req, res) => {
         if (response != null) {
             res.send(response);
         } else {
-            res.sendStatus(505);
+            res.sendStatus(500);
         }
     });
 });
@@ -116,7 +119,7 @@ app.put(backendPath + '/security', (req, res) => {
         if (response != null) {
             res.send(response);
         } else {
-            res.sendStatus(505);
+            res.sendStatus(500);
         }
     });
 });
@@ -127,7 +130,7 @@ app.get(backendPath + '/security/login', (req, res) => {
         if (response != null) {
             res.send(response);
         } else {
-            res.sendStatus(505);
+            res.sendStatus(500);
         }
     });
 });
@@ -138,7 +141,7 @@ app.get(backendPath + '/security/auth', (req, res) => {
         if (response != null) {
             res.send(response);
         } else {
-            res.sendStatus(505);
+            res.sendStatus(500);
         }
     });
 });
@@ -149,7 +152,7 @@ app.get(backendPath + '/security/setup', (req, res) => {
         if (response != null) {
             res.send(response);
         } else {
-            res.sendStatus(505);
+            res.sendStatus(500);
         }
     });
 });
@@ -189,7 +192,7 @@ app.post(backendPath + '/gallery', (req, res) => {
         if (response != null) {
             res.send(response);
         } else {
-            res.sendStatus(505);
+            res.sendStatus(500);
         }
     });
 });
@@ -200,7 +203,7 @@ app.put(backendPath + '/gallery/:id', (req, res) => {
         if (response != null) {
             res.send(response);
         } else {
-            res.sendStatus(505);
+            res.sendStatus(500);
         }
     });
 });
@@ -211,7 +214,7 @@ app.put(backendPath + '/gallery/thumbnail/:id', (req, res) => {
         if (response != null) {
             res.send(response);
         } else {
-            res.sendStatus(505);
+            res.sendStatus(500);
         }
     });
 });
@@ -252,7 +255,7 @@ app.post(backendPath + '/image', jsonParser, (req, res) => {
         if (response != null) {
             res.send(response);
         } else {
-            res.sendStatus(505);
+            res.sendStatus(500);
         }
     });
 });
@@ -263,7 +266,7 @@ app.put(backendPath + '/image/:id', (req, res) => {
         if (response != null) {
             res.send(response);
         } else {
-            res.sendStatus(505);
+            res.sendStatus(500);
         }
     });
 });

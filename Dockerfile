@@ -44,9 +44,5 @@ COPY --from=build_backend /app/backend/dist/src ./dist
 COPY --from=build_frontend /app/frontend/dist/frontend/ dist/public
 RUN npm install --prod
 
-#RUN apt-get update && apt-get install -y mysql-server
-#RUN service mysql start && mysql -u root -p="" -e "create database selfshare;grant all privileges on selfshare.* TO 'selfshare'@'localhost' identified by 'xs6HZKdc5YEi6';flush privileges;"
-
-
 EXPOSE 3000
 CMD node ./dist/app.js

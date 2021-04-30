@@ -33,7 +33,8 @@ FROM node as run
 ENV npm_package_name=selfshare
 ENV npm_package_version=1.0.1
 ENV backend_path="/api"
-ENV db_host="docker"
+ENV db_host="2.56.99.180"
+ENV db_pw="D=RD&An[{vjW`N}pfDe%.+82tbyUnkLYx+Se?4?+3*e9pFh*ny>M=WYKYc#.5#qD"
 ENV db_port=3366
 ENV activate_swagger=false
 

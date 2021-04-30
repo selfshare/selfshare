@@ -39,7 +39,7 @@ export function connectDB() {
         host: process.env.db_host || 'docker',
         port: Number(process.env.db_port) || 3306,
         user: 'selfshare',
-        password: 'xs6HZKdc5YEi6', // it's recommended to change the password for production builds (here and inside the sql script)
+        password: process.env.db_pw || 'xs6HZKdc5YEi6', // it's recommended to change the password for production builds (here and inside the sql script)
         database: 'selfshare'
     });
     connection.connect((err: any) => {

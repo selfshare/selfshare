@@ -284,6 +284,7 @@ app.delete(backendPath + '/image/:id', jsonParser, (req, res) => {
 // Redirect to frontend
 
 app.get('*', (req, res) => {
+    logIncoming(req);
     res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 

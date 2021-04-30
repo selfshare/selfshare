@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  backend_url: '/api'
+  backend_url: '/selfshare/api'
 };
